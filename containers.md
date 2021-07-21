@@ -137,3 +137,19 @@ Restore the snapshot
 ```bash
 lxc restore test1 test1-snap1
 ```
+
+## Networking
+
+By default, LXC has a NAT-like networking configuration. You can forward a port from the host to the container using iptables or another firewall.
+
+The following tutorial will allow you to configure the container as you use the *bridged* configuration in VirtualBox or VMWare.
+
+```bash
+# Duplicate the default profile
+lxc profile copy default bridged-network
+
+# Configure the new profile with the following settings
+# nictype: macvlan
+# parent: <host-interface-name>
+lxc profile edit bridged-network
+```
