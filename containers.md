@@ -31,6 +31,12 @@ This command will launch an instance of Ubuntu 16.04 and will assign the name *t
 lxc launch ubuntu:16.04 test1
 ```
 
+Launch CentOS 7 container
+
+```bash
+lxc launch images:centos/7
+```
+
 ## Delete an instance
 
 Make sure that the instance is stopped before deleting it.
