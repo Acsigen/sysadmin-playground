@@ -159,3 +159,12 @@ lxc profile copy default bridged-network
 # parent: <host-interface-name>
 lxc profile edit bridged-network
 ```
+
+### Forward port to the container
+
+On host configure iptables the following way:
+
+```bash
+iptables -t nat -I PREROUTING -p tcp -d <host-ip> --dport 80 -j DNAT --to-destination <container-ip>:80
+iptables -A FORWARD -m state -d <container-ip> --state NEW,RELATED,ESTABLISHED -j ACCEPT
+```
