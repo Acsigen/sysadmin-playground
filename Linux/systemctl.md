@@ -1,4 +1,4 @@
-# SystemD
+# SystemCTL
 
 ## Services control
 
