@@ -1,9 +1,10 @@
 # LXC / LXD
 
-## Initializare LXD
+## Initialise LXD
+
+Use the default answer except for storage type where you will pick ```dir```
 
 ```bash
-# Use the default answer except for storage type where you will pick dir
 lxd init
 ```
 
@@ -62,7 +63,7 @@ lxc start test2
 
 ## Move / Rename an instance
 
-To rename an instance use the move command as you use it in terminal to rename files.
+To rename an instance use the move command the same way you use it in terminal to rename files.
 
 ```bash
 lxc stop test1
@@ -148,7 +149,7 @@ lxc restore test1 test1-snap1
 
 By default, LXC has a NAT-like networking configuration. You can forward a port from the host to the container using iptables or another firewall.
 
-The following tutorial will allow you to configure the container as you use the *bridged* configuration in VirtualBox or VMWare.
+The following tutorial will allow you to configure the container the same as the *bridged* configuration in VirtualBox or VMWare.
 
 ```bash
 # Duplicate the default profile
