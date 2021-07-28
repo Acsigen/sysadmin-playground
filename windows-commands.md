@@ -1,21 +1,3 @@
-## Disk Health Check
-In powershell (with admin) run:
-```powershell
-Get-PhysicalDisk
-```  
-Check the Serual Number of the target disk  
-```powershell
-Get-PhysicalDisk -SerialNumber 'DiskName' | Get-StorageReliabilityCounter | Select *
-```
-Check for
-* ReadErrorsCorrected
-* ReadErrorsTotal
-* ReadErrorsUncorrected
-* Wear
-* Temperature
-
-For better precision and more data use __HDD Sentinel__ software.
-
 ## Configurare RDP prin UDP
 ### Statia locala
 In __PowerShell cu Admin__ executa urmatoarea comanda.
