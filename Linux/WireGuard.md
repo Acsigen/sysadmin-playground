@@ -24,8 +24,8 @@ Create a file called ```wg0.conf``` in ```/etc/wireguard``` with the following c
 
 ```conf
 [Interface]
-# Location of the private key file or type the key directly
-PrivateKey = /etc/wireguard/keys/private
+# Server private key
+PrivateKey = <server-private-key>
 # Server VPN address
 Address = 10.0.0.1/32
 # Listening port, by default WireGuard uses 51820
