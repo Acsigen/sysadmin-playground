@@ -31,7 +31,11 @@ Create a ```TXT``` record with the name ```_dmarc.example.com``` and give it the
 * ```sp=none```: Sub-domain Policy. Requested Mail Receiver policy for all subdomains. Valid values can be *none*, *quarantine*, or *reject*
 * ```adkim=s```: Alignment Mode DKIM. Indicates whether strict or relaxed DKIM Identifier Alignment mode is required by the Domain Owner. Valid values can be *r* (relaxed) or *s* (strict mode)
 * ```aspf=r```: Alignment Mode SPF. Indicates whether strict or relaxed SPF Identifier Alignment mode is required by the Domain Owner. Valid values can be *r* (relaxed) or *s* (strict mode)
-* ```fo=0```: Forensic reporting. Provides requested options for generation of failure reports. Valid values are any combination of characters ```01ds``` seperated by ```:```.
+* ```fo=0```: Forensic reporting. Provides requested options for generation of failure reports. Valid values are any combination of characters ```01ds``` seperated by ```:```
+  * fo=0: Generate a DMARC failure report if all underlying authentication mechanisms (SPF and DKIM) fail to produce an aligned “pass” result. (Default)
+  * fo=1: Generate a DMARC failure report if any underlying authentication mechanism (SPF or DKIM) produced something other than an aligned “pass” result. (Recommended)
+  * fo=d: Generate a DKIM failure report if the message had a signature that failed evaluation, regardless of its alignment.
+  * fo=s: Generate an SPF failure report if the message failed SPF evaluation, regardless of its alignment.
 * ```rf=afrf```: Forensic Format. Format to be used for message-specific failure reports. Valid values are *afrf* and *iodef*
 * ```ri=86400```: Reporting Interval. Indicates a request to Receivers to generate aggregate reports separated by no more than the requested number of seconds. Valid value is a 32-bit unsigned integer.
 * ```ruf=mailto:postmaster@example.com```: Forensic Receivers. Addresses to which message-specific failure information is to be reported. Comma separated values
