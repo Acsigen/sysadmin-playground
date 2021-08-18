@@ -35,5 +35,8 @@ Create a ```TXT``` record with the name ```_dmarc.example.com``` and give it the
 * ```rf=afrf```: Forensic Format. Format to be used for message-specific failure reports. Valid values are *afrf* and *iodef*
 * ```ri=86400```: Reporting Interval. Indicates a request to Receivers to generate aggregate reports separated by no more than the requested number of seconds. Valid value is a 32-bit unsigned integer.
 * ```ruf=mailto:postmaster@example.com```: Forensic Receivers. Addresses to which message-specific failure information is to be reported. Comma separated values
+* ```rua=mailto:postmaster@example.com```: Receivers. Addresses to which aggregate feedback is to be sent. Comma separated values
+
+Example: ```v=DMARC1;p=reject;sp=none;adkim=s;aspf=r;pct=100;fo=0;rf=afrf;ri=86400;ruf=mailto:postmaster@example.com```
 
 *This will be updated soon*
