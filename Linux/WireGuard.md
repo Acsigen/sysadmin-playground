@@ -119,8 +119,11 @@ Wireguard also supports pre-shared keys. Each peer has its own pre-shared key.
 To use them just add ```PresharedKey = <pre-shared-key>``` inside ```[Peer]``` for server and client configurations.  
 __The key must be the same in client and server configuration files.__
 
-Generate the keys on the server or on the client:
+Generate the keys on the server then transfer it to the client. __DO THIS IN A SECURE FASHION. DO NOT EXPOSE THE PRE-SHARED KEY!__
 
-* Generate the preshared key on the server: ```cd /etc/wireguard/keys; umask 077 ; wg genpsk > presharedkey ; cat presharedkey```
-* On Android, the WireGuard app can generate the preshared key.
-* Transfer the key from one place to another. __DO THIS THROUGH A SECURE CHANNEL. DO NOT EXPOSE THE PRE-SHARED KEY!__
+```bash
+cd /etc/wireguard/keys
+umask 077
+wg genpsk > presharedkey
+cat presharedkey
+```
