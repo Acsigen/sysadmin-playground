@@ -1,5 +1,9 @@
 # Docker
 
+## Prerequisites
+
+I do not use Docker in production at this point so this guide will not be translated from Romanian to English anytime soon.
+
 ## __Comenzi de bază__
 
 Run all as ROOT or with sudo rights.
