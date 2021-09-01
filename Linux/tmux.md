@@ -6,7 +6,8 @@ Create session
 tmux new -s session-name
 ```
 
-Kill background session. __Be careful when doing this. Depending on what task that specific background session is running, it might even crash the entire system.__
+Kill background session.  
+__Be careful when doing this. Depending on what task that specific background session is running, it might even crash the entire system.__
 
 ```bash
 tmux kill-session -t session-name
