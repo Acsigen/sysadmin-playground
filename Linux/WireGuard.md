@@ -50,7 +50,7 @@ AllowedIPs = 10.0.0.2/32, fc00::2/128
 
 If you want to route all client traffic through the VPN server please add the following lines into the ```[Interface]``` section of the config file and replace ```ens2``` with the name of your interface:
 
-I have separated the ```PostUp``` and ```PostDown``` commands with ```\``` for an easier readability in this guide. __I do not know if it will work if you type them like this so please type all of them on a single line.___
+I have separated the ```PostUp``` and ```PostDown``` commands with ```\``` for an easier readability in this guide. ```%i``` can be replaced by ```ens2```. __I do not know if it will work if you type them like this so please type all of them on a single line.___
 
 ```conf
 PostUp = sysctl -w net.ipv4.ip_forward=1;\
