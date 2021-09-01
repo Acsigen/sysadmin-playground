@@ -31,14 +31,17 @@ Create a file called ```wg0.conf``` in ```/etc/wireguard``` with the following c
 [Interface]
 # Server private key
 PrivateKey = <server-private-key>
+
 # Server VPN address
 Address = 10.0.0.1/32, fc00::1/128
+
 # Listening port, by default WireGuard uses 51820
 ListenPort = 51820
 
 [Peer]
 # Client Public Key
 PublicKey = <client-public-key>
+
 # IP Address of the client
 AllowedIPs = 10.0.0.2/32, fc00::2/128
 ```
