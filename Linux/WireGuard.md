@@ -7,7 +7,7 @@
 * Private IPv6 class for the VPN: ```fc00::/24```
 * Server name: ```wireguard.example.com```
 * Server VPN IPs: ```10.0.0.1, fc00:1```
-* Client VPN IPs: ```10.0.0.1, fc00::2```
+* Client VPN IPs: ```10.0.0.2, fc00::2```
 
 ## Server Configuration
 
