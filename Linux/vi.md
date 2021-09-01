@@ -12,7 +12,7 @@ Create/Edit file
 vi filename.txt
 ```
 
-Edit the file by pressint __INSERT__.  
+Edit the file by pressing __INSERT__.  
 Exit the editing mode by pressing __ESC__.  
 To save the changes exit the edit mode and type ```:wq!``` and press __Enter__.
 
