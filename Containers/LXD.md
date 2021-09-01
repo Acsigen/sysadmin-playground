@@ -182,3 +182,5 @@ On host configure iptables the following way:
 iptables -t nat -I PREROUTING -p tcp -d <host-ip> --dport 80 -j DNAT --to-destination <container-ip>:80
 iptables -A FORWARD -m state -d <container-ip> --state NEW,RELATED,ESTABLISHED -j ACCEPT
 ```
+
+On the container a simple ufw/firewalld configuration is more than enough since the heavy lifting is done by the host firewall.
