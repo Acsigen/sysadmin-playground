@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-This guide shows you the basic of basics, I usually use ```nano``` but if you find yourself in a situation where nano, or any other editor is not available, you can use the commands in this guide.
+This guide shows you the basic of basics. I usually use ```nano``` but if you find yourself in a situation where nano, or any other editor is not available, you can use the commands in this guide.
 
 ## Basic commands
 
