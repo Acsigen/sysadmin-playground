@@ -1,5 +1,9 @@
 # Server Hardening
 
+## Prerequisites
+
+This guide is highly opinionated and, in my honest opinion, these are the minimum requirements that a server must comply to. At least for a server that is exposed to the internet.
+
 ## IPTables - recommended rules
 
 ```bash
@@ -9,6 +13,7 @@
 -P OUTPUT ACCEPT
 
 # Allow incoming ping packets
+# For IPv6 is "-p ipv6-icmp", the rest is the same
 -A INPUT -p icmp -j ACCEPT
 
 # Accept traffic on loopback interface
@@ -32,24 +37,22 @@
 
 ## OSCAP OS hardening
 
-OSCAP este un instrument creat de NIST pentru a evalua configurația diferitelor servere.  
-Următorul script scanează sistemul de operare (CentOS 7) și aplică profilul standard, apoi remediază problemele acolo unde este posibil. De asemenea, generează un raport frumos în format HTML.  
-Pentru a găsi profilurile disponibile, utilizați: ```oscap info <*-ds.xml file-path>```.  
-Pentru versiuni mai vechi, cum ar fi Debian 8, găsiți o versiune mai veche pe github care are fișierele corespunzătoare versiunii sistemului de operare.
-Pentru a scana sistemul fără a modifica configurația, eliminați opțiunea ```--remediate``` din comanda de mai jos.
+SCAP is a tool created by NIST to evaluate the configuration of different servers.  
+The following script scans the operating system (CentOS 7) and applies the standard profile, then fixes problems where possible. It also generates a nice report in HTML format.  
+To find available profiles, use: ```oscap info scap-security-guide-0.1.55/ssg-centos7-ds.xml```.  
+For older versions, such as Debian 8, find an older version on github which has the files corresponding to the operating system version.
+To scan the system without changing the configuration, remove the ``--remediate`` option from the command below.
 
 ```bash
-#!/bin/bash
-
 yum -y install epel-release
 yum -y install openscap-scanner unzip wget
-cd /tmp || echo "cd command failed" ; exit
+cd /tmp
 wget https://github.com/ComplianceAsCode/content/releases/download/v0.1.55/scap-security-guide-0.1.55.zip
 unzip scap-security-guide-0.1.55.zip
 oscap xccdf eval --remediate --fetch-remote-resources --profile xccdf_org.ssgproject.content_profile_standard --results-arf results.xml --report report.html --oval-results scap-security-guide-0.1.55/ssg-centos7-ds.xml
 ```
 
-## Ascunde versiunile de programe pentru un server web
+## Hide software versions for a web server
 
 ### __Apache__
 
@@ -59,8 +62,8 @@ nano /etc/httpd/conf/httpd.conf
 
 Set:
 
-* ServerTokens Prod
-* ServerSignature Off
+* ```ServerTokens Prod```
+* ```ServerSignature Off```
 
 ### __PHP__
 
@@ -84,17 +87,15 @@ Reload Apache server:
 
 ```bash
 systemctl reload httpd
-# or
-service httpd reload
 ```
 
-## Instalare & Configurare OSSEC-HIDS
+## Install & Configure OSSEC-HIDS
 
-Instalează ```wget``` și ```epel-release``` apoi descarcă și instalează Atomicorp Repo
+Install ```wget``` and ```epel-release``` then download and install Atomicorp Repo.
 
 ```bash
 # RHEL/CentOS
-yum install wget epel-release
+dnf install wget epel-release
 #wget -q -O - http://www.atomicorp.com/installers/atomic | sh
 wget -q -O - https://updates.atomicorp.com/installers/atomic | bash
 
@@ -103,39 +104,28 @@ wget -q -O - https://updates.atomicorp.com/installers/atomic | bash
 apt update
 ```
 
-Editează repository-ul astfel încât să se folosească doar pachetele aferente OSSEC-HIDS (Doar pentru distribuțiile bazate pe RHEL)
-
-```bash
-vi /etc/yum.repos.d/atomic.repo
-# INSERT
-# includepkgs = ossec* inotify-tools
-# Esc
-# :wq!
-```
-
-Instalare pachete
+Install packages
 
 ```bash
 # RHEL/CentOS
-yum install ossec-hids-server ossec-hids inotify-tools
+dnf install ossec-hids-server ossec-hids inotify-tools
 
 # Debian/Ubuntu
 apt install ossec-hids-server
 ```
 
-Fișierul de configurare este în ```/var/ossec/etc/ossec.conf```. Aplică următoarele setări:
+The config file is located at ```/var/ossec/etc/ossec.conf```. The following settings are mandatory:
 
 Global Settings
 
 ```xml
 <global>
   <email_notification>yes</email_notification>  
-  <email_to>sysadmin@flashnet.ro</email_to>
+  <email_to>sysadmin@yourdomain.com</email_to>
   <smtp_server>127.0.0.1</smtp_server> 
-  <email_from>root@yourwebserverdomain.com</email_from>
-  <email_maxperhour>12</email_maxperhour>
+  <email_from>root@yourdomain.com</email_from>
+  <email_maxperhour>4</email_maxperhour>
   <white_list>127.0.0.1</white_list>
-  <white_list>91.207.217.1</white_list>
 </global>
 ```
 
@@ -168,7 +158,7 @@ Alerts configurations (email level 7 is fine, maybe even higher)
 ```xml
 <alerts>
   <log_alert_level>3</log_alert_level>
-  <email_alert_level>7</email_alert_level>
+  <email_alert_level>11</email_alert_level>
 </alerts>
 ```
 
@@ -195,7 +185,7 @@ Standard log locations for CentOS 7
 * /var/log/mariadb/mariadb.log
 * /var/log/tomcat/localhost_access (apache format)
 
-Activează serviciul OSSEC la start și pornește serviciul
+Enable OSSEC service at boot and start the service.
 
 ```bash
 # RHEL/CentOS
@@ -209,7 +199,7 @@ systemctl start ossec
 
 __WARNING!__ IF AFTER THE SERVER START YOU DO NOT RECEIVE AN EMAIL FROM THE SERVER, YOU MIGHT NEED TO INSTALL POSTFIX AND CONFIGURE IT AS INTERNET SITE!
 
-## Sanitizare bash history
+## Sanitise bash history
 
 ```bash
 function sterile() {
