@@ -110,3 +110,16 @@ AllowedIPs = 0.0.0.0/0, ::/0
 # Send UDP packet every 25 seconds to keep the connection alive if you are behind a NAT
 PersistentKeepalive = 25
 ```
+
+## Optional
+
+### Pre-shared Keys (PSK)
+
+Wireguard also supports pre-shared keys. Each peer has its own pre-shared key.  
+To use them just add ```PresharedKey = <pre-shared-key>``` inside ```[Peer]``` for server and client configurations.  
+__The key must be the same in client and server configuration files.__
+
+Generate the keys:
+
+* Generate he preshared key on the server: ```cd /etc/wireguard/keys; umask 077 ; wg genpsk > presharedkey ; cat presharedkey```
+* On Android, the WireGuard app can generate the preshared key.
