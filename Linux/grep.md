@@ -1,6 +1,10 @@
-# Grep commands
+# Grep
 
-# Find text in file contents
+## Prerequisites
+
+This guid will show you how to find text in file contents.
+
+## Find text in file contents
 
 ```bash
 grep -ril "pattern" /location/
