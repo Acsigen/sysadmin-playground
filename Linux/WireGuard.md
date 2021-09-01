@@ -2,10 +2,12 @@
 
 ## Prerequisites
 
-* Interface name: ens2
-* Private IPv4 class for the VPN: 10.0.0.0/24
-* Private IPv6 class for the VPN: fc00::/24
-* Server name: wireguard.example.com
+* Interface name: ```ens2```
+* Private IPv4 class for the VPN: ```10.0.0.0/24```
+* Private IPv6 class for the VPN: ```fc00::/24```
+* Server name: ```wireguard.example.com```
+* Server VPN IPs: ```10.0.0.1, fc00:1```
+* Client VPN IPs: ```10.0.0.1, fc00::2```
 
 ## Server Configuration
 
