@@ -9,7 +9,7 @@ tmux new -s session-name
 Kill background session
 
 ```bash
-tmux kill-session -t <session-name>
+tmux kill-session -t session-name
 ```
 
 Move active session to background: __CTRL+B D__.
