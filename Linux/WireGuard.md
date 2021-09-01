@@ -9,6 +9,8 @@
 * Server VPN IPs: ```10.0.0.1, fc00:1```
 * Client VPN IPs: ```10.0.0.2, fc00::2```
 
+This configuration will route the entire traffic of the client through the VPN but I have added some comments in the configuration guide on how to route only some classes.
+
 ## Server Configuration
 
 Install wireguard package according to your OS distribution.
@@ -100,8 +102,8 @@ PublicKey = <server-public-key>
 # Server address:port
 Endpoint = wireguard.example.com:51820
 
-# If 0.0.0.0/0 is set, the entire traffic of the client will be routed through the VPN, we do not want that so please input the VPN IP class 10.0.0.0/24
-# If you want multiple classes separate them by commas:
+# If 0.0.0.0/0 and ::/0 are set, the entire traffic of the client will be routed through the VPN.
+# If you want to just route some classes, separate them by commas:
 # Allowed IPs = 10.0.0.1/32, fc00::1/128, 192.168.0.1/24
 AllowedIPs = 0.0.0.0/0, ::/0
 
