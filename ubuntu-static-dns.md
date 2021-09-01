@@ -6,7 +6,7 @@ The DNS settings are managed by systemd-resolved. And there are two ways of sett
 
 ## Edit the ```resolved.conf``` file
 
-Edit /etc/systemd/resolved.conf
+Edit ```/etc/systemd/resolved.conf```
 ```conf
 [Resolve]
 DNS=1.1.1.1 8.8.8.8
