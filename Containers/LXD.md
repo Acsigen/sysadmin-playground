@@ -3,6 +3,7 @@
 ## Initialise LXD
 
 Use the default answer except for storage type where you will pick ```dir```
+For the best performance pick ```zfs`` and use an entire separate drive as storage for containers.
 
 ```bash
 lxd init
@@ -145,6 +146,18 @@ Restore the snapshot
 lxc restore test1 test1-snap1
 ```
 
+Export container to an archive
+
+```bash
+# The archive will be created in current directory unless you specify the full path for the archive
+lxc export <container-name> container-exported.tar.gz
+```
+
+Import a container from an archive
+
+```bash
+lxc import container-exported.tar.gz <container-name>
+```
 ## Networking
 
 By default, LXC has a NAT-like networking configuration. You can forward a port from the host to the container using iptables or another firewall.
