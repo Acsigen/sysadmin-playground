@@ -121,5 +121,6 @@ __The key must be the same in client and server configuration files.__
 
 Generate the keys:
 
-* Generate he preshared key on the server: ```cd /etc/wireguard/keys; umask 077 ; wg genpsk > presharedkey ; cat presharedkey```
+* Generate the preshared key on the server: ```cd /etc/wireguard/keys; umask 077 ; wg genpsk > presharedkey ; cat presharedkey```
 * On Android, the WireGuard app can generate the preshared key.
+* Transfer the key from one place to another. __DO THIS THROUGH A SECURE CHANNEL. DO NOT EXPOSE THE PRE-SHARED KEY!___
