@@ -26,10 +26,10 @@ This guide is highly opinionated and, in my honest opinion, these are the minimu
 -A INPUT -m conntrack --ctstate INVALID -j DROP
 
 # Block an IP addres
--A INPUT -s 15.15.15.51 -j DROP
+-A INPUT -s 4.3.2.1 -j DROP
 
 # Allow incoming SSH from IP
--A INPUT -p tcp -s 91.207.217.1/32 --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+-A INPUT -p tcp -s 1.2.3.4/32 --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 
 # Allow incoming http/https
 -A INPUT -p tcp -m multiport --dports 80,443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
