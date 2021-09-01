@@ -112,7 +112,8 @@ lxc launch ubuntu:16.04 test3 --profile profileName
 Dynamic allocation of resources.
 
 * Limit memory: ```lxc config set test1 limits.memory 512MB```
-* Limit CPU: ```lxc config set test1 limits.cpu 1```
+* Limit CPU Cores: ```lxc config set test1 limits.cpu 1```
+* Limit CPU usage: ```lxc config set test1 limits.cpu.allowance 50%```
 
 Configure the limits inside a profile
 
