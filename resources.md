@@ -229,7 +229,7 @@ Open source SmartOS cloud management with a focus on availability.
 Cloud Foundry ( https://www.cloudfoundry.org/ )
 Cloud Foundry, similar to OpenShiftNEW
 
-Cloud Orchestration
+### Cloud Orchestration
 Mina ( http://nadarei.co/mina/ )
 Really fast deployer and server automation tool (rake based).
 
@@ -275,7 +275,7 @@ A cluster-wide init and control system for services in cgroups or Docker contain
 Xen Orchestra ( https://xen-orchestra.com )
 Xen Orchestra offers a powerful web UI for controlling a complete XenServer or Xen infrastructure.
 
-Cloud Storage
+### Cloud Storage
 sandstorm ( https://github.com/sandstorm-io/sandstorm )
 Personal Cloud Sandbox, install apps to create documents, spreadsheets, blogs, git repos, task lists and more.
 
@@ -306,7 +306,7 @@ Provides cloud storage and file synchronization services. By default, it uses Gi
 Minio ( https://minio.io/ )
 Minio is an object storage server built for cloud application developers and devops.
 
-Virtualization
+### Virtualization
 Ganeti ( https://code.google.com/p/ganeti/ )
 Cluster virtual server management software tool built on top of KVM and Xen.
 
@@ -337,7 +337,7 @@ Manages virtual machines, storage and virtual networks.
 VirtualBox ( https://www.virtualbox.org/ )
 Virtualization product from Oracle Corporation.
 
-Software Containers
+### Software Containers
 SmartOS ( https://smartos.org/ )
 SmartOS is a hypervisor.
 
@@ -365,8 +365,8 @@ The Developer Friendly Container and Microservices Platform
 Nomad ( https://www.nomadproject.io/ )
 Nomad is a tool for managing a cluster of machines and running applications on them.
 
-Messaging
-Log Management
+## Messaging
+### Log Management
 Octopussy ( http://www.octopussy.pm )
 Log Management Solution (Visualize / Alert / Report).
 
@@ -397,7 +397,7 @@ A Lucene Based Document store mainly used for log indexing, storage and analysis
 redash ( https://redash.io/ )
 Visualize any data and share it.
 
-Queuing
+### Queuing
 Gearman ( http://gearman.org/ )
 Fast multi-language queuing/job processing platform.
 
@@ -428,8 +428,8 @@ Memcached is an in-memory key-value store for small chunks of arbitrary data (st
 QPid ( https://qpid.apache.org/ )
 Apache QPid, open source AMQP 1.0 Server and framework.
 
-Storage
-Cloning
+## Storage
+### Cloning
 Redo Backup ( http://redobackup.org/ )
 Easy Backup, Recovery and Restore.
 
@@ -442,7 +442,7 @@ Partition and disk imaging/cloning program.
 OPSI ( http://www.opsi.org )
 OPSI is an open source Client Management System for Windows clients and is based on Linux servers
 
-Backups
+### Backups
 Elkarbackup ( https://github.com/elkarbackup/elkarbackup )
 Backup solution based on RSnapshot with a simple web interface.
 
@@ -533,7 +533,7 @@ Very efficient backup system based on the git packfile format, providing fast in
 Ugarit ( https://www.kitten-technologies.co.uk/project/ugarit/doc/trunk/README.wiki )
 Ugarit is a backup/archival system based around content-addressible storage.
 
-Distributed Filesystems
+### Distributed Filesystems
 GlusterFS ( http://www.gluster.org/ )
 Scale-out network-attached storage file system.
 
@@ -579,7 +579,7 @@ A type of parallel distributed file system, generally used for large-scale clust
 seaweedfs ( https://github.com/chrislusf/seaweedfs )
 SeaweedFS is a simple and highly scalable distributed file system.NEW
 
-RDBMS
+### RDBMS
 Firebird ( http://www.firebirdsql.org/ )
 True universal open source database.
 
@@ -610,7 +610,7 @@ Enhanced, drop-in MySQL replacement.
 PostgreSQL ( http://www.postgresql.org/ )
 Object-relational database management system (ORDBMS).
 
-NoSQL
+### NoSQL
 MongoDB ( http://www.mongodb.org/ )
 Another document-oriented database system.
 
@@ -650,8 +650,8 @@ Multi-Model Database, mainly Graph Database.
 Cassandra ( http://cassandra.apache.org/ )
 Distributed DBMS designed to handle large amounts of data across many servers.
 
-Monitoring
-Statistics
+## Monitoring
+### Statistics
 Piwik ( http://piwik.org/ )
 Free and open source web analytics application.
 
