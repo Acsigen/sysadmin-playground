@@ -113,6 +113,7 @@ Dynamic allocation of resources.
 
 * Limit memory: ```lxc config set test1 limits.memory 512MB```
 * Limit CPU Cores: ```lxc config set test1 limits.cpu 1```
+  * To pin to a single CPU, you have to use the range syntax (e.g. 1-1) to differentiate it from a number of CPUs.
 * Limit CPU usage: ```lxc config set test1 limits.cpu.allowance 50%```
 
 Configure the limits inside a profile
