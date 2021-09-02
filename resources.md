@@ -1,138 +1,64 @@
 # SysAdmin Resources
 
-This list is a backup of https://sysadmin.it-landscape.info/ which no longer exists.
-
+This list is a backup of <https://sysadmin.it-landscape.info/> which no longer exists.
 
 ## Protocols
 
 ### IMAP/POP3
 
-|Name |Description  | Link|
+|Name | Description | Link|
 |--- | --- | ---|
-|**bold style**| `code block`|data3|
-|\|escape pipe|\`backtick|data13|
+|Dovecot|IMAP and POP3 server written primarily with security in mind.|<http://www.dovecot.org>|
+|Cyrus|Intended to be run on sealed servers, where normal users are not permitted to log in.|<http://cyrusimap.org>|
+|DBMail|Fast and scalable email services, storage of mail messages in a relational database.|<https://github.com/pjstevns/dbmail>|
+|Courier|Fast, scalable, enterprise IMAP and POP3 server.|<http://www.courier-mta.org/imap>|
+|Mailenable|MailEnable provides Windows Mail Server software with features comparable to Microsoft Exchange.NEW|<https://www.mailenable.com>|
+|Qpopper|One of the oldest and most popular server implementations of POP3.|<http://www.eudora.com/products/unsupported/qpopper>|
 
+### HTTP
 
-* Dovecot ( http://www.dovecot.org/
-IMAP and POP3 server written primarily with security in mind.
+|Name | Description | Link|
+|--- | --- | ---|
+|Nginx|Reverse proxy, load balancer, HTTP cache, and web server.|<http://nginx.org/>|
+|Varnish|HTTP based web application accelerator focusing on optimizing caching and compression.|<https://www.varnish-cache.org/>|
+|GWAN|Tiny, fast & efficient web & app server. All in one 300k executable.|<http://gwan.com>|
+|Apache|Most popular web server.|<http://httpd.apache.org/>|
+|Caddy|Caddy is a lightweight, general-purpose web server.|<https://caddyserver.com/>|
+|HAProxy|Software based load Balancing, SSL offloading and performance optimization, compression, and general web routing.|<http://www.haproxy.org/>|
+|Cherokee|Lightweight, high-performance web server/reverse proxy.|<http://cherokee-project.com/>|
+|Traefik|Traffik is a modern HTTP reverse proxy and load balancer made to deploy microservices with ease.|<https://traefik.io/>|
+|uWSGI|The uWSGI project aims at developing a full stack for building hosting services.|<https://github.com/unbit/uwsgi/>|
+|Apache TrafficServer|Apache Traffic Server software is a fast, scalable and extensible HTTP/1.1 compliant caching proxy server|<http://trafficserver.apache.org/>|
+|Lighttpd|Web server more optimized for speed-critical environments.|<http://www.lighttpd.net/>|
+|Tomcat|Apache Tomcat is an open source software implementation of the Java Servlet and JavaServer Pages technologies.|<http://tomcat.apache.org>|
+|Hiawatha|Hiawatha is an advanced and secure unix webserver.|<https://www.hiawatha-webserver.org/>|
+|WildFly|WildFly is a flexible, lightweight, open source Java application server which implements the latest in enterprise Java standards.|<http://wildfly.org/>|
+|Squid|Squid is a caching proxy for the Web supporting HTTP, HTTPS, FTP, and more.NEW|<http://www.squid-cache.org/>|
+|linkerd|A transparent proxy.NEW|<https://linkerd.io>|
 
-Cyrus ( http://cyrusimap.org/ )
-Intended to be run on sealed servers, where normal users are not permitted to log in.
+### SMTP
 
-DBMail ( https://github.com/pjstevns/dbmail )
-Fast and scalable email services, storage of mail messages in a relational database.
+|Name | Description | Link|
+|--- | --- | ---|
+|Maildrop|Open Source disposable email SMTP server, also useful for development.|( https://github.com/m242/maildrop )|
+|MailHog|Inspired by MailCatcher written in Go, SMTP MTA, web UI and retrieve them with the JSON API.|( https://github.com/mailhog/MailHog )|
+|Postfix|Fast, easy to administer, and secure Sendmail replacement.|( http://www.postfix.org/ )|
+|Haraka|A high-performance, pluginable SMTP server written in JavaScript.|( http://haraka.github.io/ )|
+|MailDev|SMTP Server + Web Interface for viewing and testing emails during development.|( http://djfarrelly.github.io/MailDev/ )|
+|iRedMail|An open source mailserver solution.|( http://www.iredmail.org/ )|
+|Mailcow|Mailcow is a mailserver suite.|( http://mailcow.email/ )|
+|ScrolloutF1|Email Gateway forsecurity.|( http://www.scrolloutf1.com )|
+|OpenSMTPD|Secure SMTP server implementation from the OpenBSD project.|( https://opensmtpd.org/ )|
+|VBoxAdm|Web based GUI for E-Mail servers like Postfix and Dovecot.|( http://www.vboxadm.net/ )|
+|Exim|Message transfer agent (MTA) developed at the University of Cambridge.|( http://www.exim.org/ )|
+|MailCatcher|Ruby gem that deploys a simply SMTP MTA gateway that accepts all mail and displays in web interface. Useful for debugging or development.|( http://mailcatcher.me/ )|
+|Qmail|Secure Sendmail replacement.|( http://cr.yp.to/qmail.html )|
+|hMailServer|hMailServer is a free, open source, e-mail server for Microsoft Windows.|( https://www.hmailserver.com )|
+|Sendmail|Message transfer agent (MTA).|( http://www.sendmail.com/sm/open_source/ )|
+|Zone|Modern outbound SMTP relay built on Node.js and LevelDB.|( https://github.com/zone-eu/zone-mta )|
+|AASP|Anti Spam SMTP Proxy.NEW|( https://sourceforge.net/projects/assp/ )|
 
-Qpopper ( http://www.eudora.com/products/unsupported/qpopper/ )
-One of the oldest and most popular server implementations of POP3.
-
-Courier ( http://www.courier-mta.org/imap/ )
-Fast, scalable, enterprise IMAP and POP3 server.
-
-mailenable ( https://www.mailenable.com/ )
-MailEnable provides Windows Mail Server software with features comparable to Microsoft Exchange.NEW
-
-HTTP
-Nginx ( http://nginx.org/ )
-Reverse proxy, load balancer, HTTP cache, and web server.
-
-Varnish ( https://www.varnish-cache.org/ )
-HTTP based web application accelerator focusing on optimizing caching and compression.
-
-GWAN ( http://gwan.com )
-Tiny, fast & efficient web & app server. All in one 300k executable.
-
-Apache ( http://httpd.apache.org/ )
-Most popular web server.
-
-Caddy ( https://caddyserver.com/ )
-Caddy is a lightweight, general-purpose web server.
-
-HAProxy ( http://www.haproxy.org/ )
-Software based load Balancing, SSL offloading and performance optimization, compression, and general web routing.
-
-Cherokee ( http://cherokee-project.com/ )
-Lightweight, high-performance web server/reverse proxy.
-
-Traefik ( https://traefik.io/ )
-Traffik is a modern HTTP reverse proxy and load balancer made to deploy microservices with ease.
-
-uWSGI ( https://github.com/unbit/uwsgi/ )
-The uWSGI project aims at developing a full stack for building hosting services.
-
-Apache TrafficServer ( http://trafficserver.apache.org/ )
-Apache Traffic Server software is a fast, scalable and extensible HTTP/1.1 compliant caching proxy server
-
-Lighttpd ( http://www.lighttpd.net/ )
-Web server more optimized for speed-critical environments.
-
-Tomcat ( http://tomcat.apache.org )
-Apache Tomcat is an open source software implementation of the Java Servlet and JavaServer Pages technologies.
-
-Hiawatha ( https://www.hiawatha-webserver.org/ )
-Hiawatha is an advanced and secure unix webserver.
-
-WildFly ( http://wildfly.org/ )
-WildFly is a flexible, lightweight, open source Java application server which implements the latest in enterprise Java standards.
-
-Squid ( http://www.squid-cache.org/ )
-Squid is a caching proxy for the Web supporting HTTP, HTTPS, FTP, and more.NEW
-
-linkerd ( https://linkerd.io )
-A transparent proxy.NEW
-
-SMTP
-Maildrop ( https://github.com/m242/maildrop )
-Open Source disposable email SMTP server, also useful for development.
-
-MailHog ( https://github.com/mailhog/MailHog )
-Inspired by MailCatcher written in Go, SMTP MTA, web UI and retrieve them with the JSON API.
-
-Postfix ( http://www.postfix.org/ )
-Fast, easy to administer, and secure Sendmail replacement.
-
-Haraka ( http://haraka.github.io/ )
-A high-performance, pluginable SMTP server written in JavaScript.
-
-MailDev ( http://djfarrelly.github.io/MailDev/ )
-SMTP Server + Web Interface for viewing and testing emails during development.
-
-iRedMail ( http://www.iredmail.org/ )
-An open source mailserver solution.
-
-Mailcow ( http://mailcow.email/ )
-Mailcow is a mailserver suite.
-
-ScrolloutF1 ( http://www.scrolloutf1.com )
-Email Gateway forsecurity.
-
-OpenSMTPD ( https://opensmtpd.org/ )
-Secure SMTP server implementation from the OpenBSD project.
-
-VBoxAdm ( http://www.vboxadm.net/ )
-Web based GUI for E-Mail servers like Postfix and Dovecot.
-
-Exim ( http://www.exim.org/ )
-Message transfer agent (MTA) developed at the University of Cambridge.
-
-MailCatcher ( http://mailcatcher.me/ )
-Ruby gem that deploys a simply SMTP MTA gateway that accepts all mail and displays in web interface. Useful for debugging or development.
-
-Qmail ( http://cr.yp.to/qmail.html )
-Secure Sendmail replacement.
-
-hMailServer ( https://www.hmailserver.com )
-hMailServer is a free, open source, e-mail server for Microsoft Windows.
-
-Sendmail ( http://www.sendmail.com/sm/open_source/ )
-Message transfer agent (MTA).
-
-Zone-MTA ( https://github.com/zone-eu/zone-mta )
-Modern outbound SMTP relay built on Node.js and LevelDB.
-
-AASP ( https://sourceforge.net/projects/assp/ )
-Anti Spam SMTP Proxy.NEW
-
-DNS
+### DNS
 PowerGate ( https://github.com/bobsta63/powergate )
 PowerGate is a simple web application built for managing PowerDNS records.
 
@@ -169,7 +95,7 @@ TinyDNS is an lightweight nameserver which is easy to setup.
 gdnsd ( http://gdnsd.org/ )
 gdnsd is an Authoritative-only DNS server which does geographic (or other sorts of) balancing, redirection, weighting, and service-state-conscious failover at the DNS layer.
 
-LDAP
+### LDAP
 Fusion Directory ( http://www.fusiondirectory.org )
 Improve the Management of the services and the company directory based on OpenLDAP.
 
@@ -194,7 +120,7 @@ Apache Software Foundation project written in Java.
 OpenDS ( https://opends.java.net/ )
 Another directory server written in Java.
 
-SSH
+### SSH
 autossh ( http://www.harding.motd.ca/autossh/ )
 Automatically respawn ssh session after network interruption.
 
@@ -222,7 +148,7 @@ Dropbear is a relatively small SSH server and client. It runs on a variety of PO
 mRemoteNG ( https://mremoteng.org/ )
 A fast, easy to use GUI using putty as its base.NEW
 
-VPN
+### VPN
 FreeLan ( https://github.com/freelan-developers/freelan )
 Full-mesh, secure, easy-to-setup, multi-platform, open-source, highly-configurable VPN software.
 
@@ -250,8 +176,8 @@ OpenConnect server is an SSL VPN server. Its purpose is to be a secure, small, f
 sshuttle ( https://github.com/sshuttle/sshuttle )
 Transparent proxy server that works as a poor man VPN.
 
-Cloud and Virtualization
-Cloud Computing
+## Cloud and Virtualization
+### Cloud Computing
 OpenNode ( http://opennodecloud.com )
 Builds open-source infrastructure management software and implements cloud systems.
 
