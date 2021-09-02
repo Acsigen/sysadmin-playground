@@ -664,7 +664,7 @@ Fast, free web server log file analysis program.
 Open Web Analytics ( http://www.openwebanalytics.com/ )
 Open Web Analytics is a professional tool.
 
-Monitoring
+### Monitoring
 Log.io ( http://logio.org/ )
 Real-time log monitoring.
 
@@ -785,7 +785,7 @@ SNMP monitoring for servers and networking devices. Runs on linux.
 alignak ( https://github.com/Alignak-monitoring/alignak )
 Alignak project is a monitoring framwork based on Shinken who tend to follow OpenStack standards and integrate with it.
 
-Metric and Metric Collection
+### Metric and Metric Collection
 Prometheus ( http://prometheus.io/ )
 An open-source service monitoring system and time series database.
 
@@ -849,8 +849,8 @@ Fast distributed scalable time series database, fork of OpenTSDB 1.x.
 Diamond ( https://github.com/python-diamond/Diamond )
 Diamond is a python daemon that collects system metrics and publishes them to Graphite.
 
-Automation
-Configuration Management
+## Automation
+### Configuration Management
 Boxstarter ( http://boxstarter.org )
 Config management for Windows OS
 
@@ -887,7 +887,7 @@ Automate any app, anywhere with Habitat. From containers to traditional services
 otter ( https://inedo.com/otter )
 Otter is modern infrastructure automation that utilizes infrastructure as code.NEW
 
-Configuration Management Database
+### Configuration Management Database
 Clusto ( https://github.com/clusto/clusto )
 Helps you keep track of your inventory, where it is, how it's connected, and provides an abstracted interface for interacting with the elements of the infrastructure.
 
@@ -897,7 +897,7 @@ Open Source IT Documentation and CMDB.
 iTop ( http://www.combodo.com/-Overview-.html )
 A complete open source, ITIL, web based service management tool.
 
-Service Discovery
+### Service Discovery
 Consul ( http://www.consul.io/ )
 Consul is a tool for service discovery, monitoring and configuration.
 
@@ -913,7 +913,7 @@ A highly-available key value store for shared configuration and service discover
 Nmap ( https://nmap.org/ )
 Nmap is a free and open source utility for network discovery and security auditing.
 
-Network Configuration Management
+### Network Configuration Management
 Oxidized ( https://github.com/ytti/oxidized )
 A modern take on network device configuration monitoring with web interace and GIT storage.
 
@@ -938,7 +938,7 @@ Light, modern and useful web IP address management application
 Netshot ( http://www.netfishers.onl/netshot )
 Configuration and Compliance Management Software
 
-Continuous Integration and Continuous Deployment
+### Continuous Integration and Continuous Deployment
 Go ( http://www.go.cd/ )
 Open source continuous delivery server.
 
@@ -960,8 +960,8 @@ Powerful Continuous Integration out of the box.
 Octopus Deploy ( https://octopus.com/ )
 Octopus is a friendly deployment automation tool for .NET developers.
 
-Support software
-Control Panels
+## Support software
+### Control Panels
 Cockpit Project ( http://cockpit-project.org )
 Cockpit makes it easy to administer your GNU/Linux servers via a web browser.
 
@@ -1064,7 +1064,7 @@ Another management for webhosting.
 Spacewalk ( http://spacewalk.redhat.com/ )
 Webinterface for configuration management.
 
-Webmails
+## Webmails
 Modoboa ( http://modoboa.org )
 Modoboa is a mail hosting and management platform including a modern and simplified Web User Interface. It provides useful components such as an administration panel or a webmail.
 
@@ -1083,7 +1083,7 @@ Webmail and groupware client.
 Roundcube ( http://roundcube.net/ )
 Browser-based IMAP client with an application-like user interface.
 
-Newsletters
+### Newsletters
 Servers for Hackers ( http://serversforhackers.com/ )
 Newsletter for programmers who find themselves needing to know their way around a server.
 
@@ -1108,7 +1108,7 @@ Sympa is an electronic mailing list manager.
 FreshRSS ( https://freshrss.org/ )
 FreshRSS is a self hosted RSS feed aggregator such as Leed or Kriss Feed.
 
-Project Management
+### Project Management
 OpenProject ( https://www.openproject.org )
 Project collaboration with open source.
 
@@ -1160,7 +1160,7 @@ ProjectLibre is the leading open source alternative to Microsoft Project
 Meister Task ( https://www.meistertask.com )
 Easy to use and prioritize tasks.
 
-Ticketing systems
+### Ticketing systems
 osTicket ( http://osticket.com/ )
 Open source support ticket system.
 
@@ -1188,7 +1188,7 @@ Open source ticket system with extremely complete users rights granularity.
 Bugzilla ( http://www.bugzilla.org/ )
 General-purpose bugtracker and testing tool originally developed and used by the Mozilla project.
 
-IT Asset Management
+### IT Asset Management
 Snipe IT ( http://snipeitapp.com/ )
 Asset & license management software.
 
@@ -1216,7 +1216,7 @@ CMDBuild is a web environment in which you can configure custom solutions for IT
 Tiswapt ( http://wapt.fr/en )
 WAPT automates software installation, configuration, updates and removal on a Windows computing equipment.
 
-Wikis
+### Wikis
 MoinMoin ( http://moinmo.in/ )
 An advanced, easy to use and extensible WikiEngine with a large community of users.
 
@@ -1256,14 +1256,14 @@ Used to power Wikipedia.
 BookStack ( https://www.bookstackapp.com )
 BookStack is a simple, self-hosted, platform for organising and storing information.NEW
 
-Code Review
+### Code Review
 Review Board ( https://www.reviewboard.org/ )
 Available as free software uner the MIT License.
 
 Gerrit ( https://code.google.com/p/gerrit/ )
 Based on the Git version control, it facilitates software developers to review modifications to the source code and approve or reject those changes.
 
-Collaborative Software
+### Collaborative Software
 SOGo ( https://www.sogo.nu/ )
 Collaborative software server with a focus on simplicity and scalability.
 
@@ -1291,7 +1291,7 @@ Tine is a groupware solution.
 KOPANO ( https://kopano.io/ )
 Kopano is a thoroughly modern communication stack.
 
-Communication
+### Communication
 Kandan ( http://getkandan.com/ )
 Open source self hosted Chat.
 
@@ -1382,8 +1382,8 @@ Yate is an advanced, mature, flexible telephony server that is used for VoIP.
 FusionPBX ( https://www.fusionpbx.com/ )
 FusionPBX, a highly available multi-tenant PBX, carrier grade switch, call center, fax, voip, voicemail, conference, voice application, appliance framework and more.
 
-Essentials
-Editors
+## Essentials
+### Editors
 neovim ( http://neovim.org/ )
 The Vim text editor has been loved by a generation of users. This is the next generation.
 
@@ -1447,7 +1447,7 @@ While aiming at simplicity and ease of use, gedit is a powerful general purpose 
 Spacemacs ( http://spacemacs.org/ )
 Popular distribution of Emacs focused on ergonomics. Excellent layers system essentially turns it into a simple to use IDE out of the box.
 
-Repositories
+### Repositories
 Dotdeb ( http://www.dotdeb.org/ )
 Repository with LAMP updated packages for Debian.
 
@@ -1478,7 +1478,7 @@ ex-RpmForge
 SCM Manager ( https://www.scm-manager.org/ )
 The easiest way to share and manage your Git, Mercurial and Subversion repositories.
 
-Security
+### Security
 Bro ( http://www.bro.org )
 Bro is a powerful framework for network analysis and security monitoring.
 
@@ -1639,7 +1639,7 @@ Client-server revision control system.
 GitLab CE ( https://gitlab.com/gitlab-org/gitlab-ce )
 Git repository
 
-Packaging
+### Packaging
 omnibus-ruby ( https://github.com/opscode/omnibus-ruby )
 Full stack, cross distro packaging software (Ruby).
 
@@ -1665,7 +1665,7 @@ Best tool to grep over the network
 Wireshark ( http://www.wireshark.org/ )
 The world's foremost network protocol analyzer.
 
-Books
+### Books
 UNIX and Linux System Administration Handbook ( http://www.admin.com/ )
 Approaches system administration from a practical perspective.
 
