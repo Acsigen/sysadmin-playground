@@ -26,3 +26,9 @@ Example output:
 ```
 
 Run the command again for ```/var/log/*``` then dig deeper until you find the log files that might take unnecessary space.
+
+## List top 5 folders by size from ```/``` directory
+
+```bash
+ du -Sh / | sort -hr | head -n 5
+ ```
