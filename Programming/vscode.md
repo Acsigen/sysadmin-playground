@@ -13,3 +13,4 @@ This guide is for basic shortcuts and commands related to Visual Studio Code.
 
 ## Keyboard Shortcuts
 
+* Show all commands: __CTRL + Shift + P__
