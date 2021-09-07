@@ -14,4 +14,6 @@ This guide is for basic shortcuts and commands related to Visual Studio Code.
 ## Keyboard Shortcuts
 
 * Show all commands: __CTRL + Shift + P__
-* Turn on Zen Mode (hide all clutter): __Ctrl + K Z__
+* Turn on Zen Mode (hide all clutter): __CTRL + K Z__
+* Find in file: __CTRL + F___
+* Replace in file: __CTRL + H__
