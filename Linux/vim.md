@@ -6,7 +6,7 @@
 To search for a string type ```/``` and then your text: ```/hello``` then press __Enter__.  
 The ```?``` command will parse the file backwards so the last entry will be shown: ```?hello```.
 
-To navigate the search use ```n``` to go forward and ```N``` to go backwards.  
+To navigate the search results use ```n``` to go forward and ```N``` to go backwards.  
 When using ```?``` the functions of ```n``` and ```N``` are inverted.
 
 ### Navigation
