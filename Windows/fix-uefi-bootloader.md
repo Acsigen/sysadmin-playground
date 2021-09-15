@@ -25,11 +25,14 @@ sel disk 0
 list vol
 ```
 
-Check which partition might contain the EFI flag, it is using the FAT32 file system, __be careful not to confuse it with the Windows installation USB Drive, this is also EFI__. If the drive doesn't already have a letter please run the following commands to assign one.
+Check which partition might contain the EFI flag, it is using the FAT32 file system, __be careful not to confuse it with the Windows installation USB Drive, this is also EFI__.  
+If the drive doesn't already have a letter please run the following commands to assign one.
 
 ```powershell
 sel vol 1
 assign letter=C:
+
+# Do not exit until you assign letters to the boot and Windows installation partitions.
 exit
 ```
 
