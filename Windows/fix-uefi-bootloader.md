@@ -57,7 +57,10 @@ bcdboot j:\Windows /l en-us /s c: /f All
 Use the same steps as above to reach Command Prompt
 
 ```powershell
+# If you run only bootrec, it will show you the available options
+
 bootrec /fixmbr
 bootrec /fixboot
 bootrec /rebuildbcd
+bootrec /ScanOs
 ```
