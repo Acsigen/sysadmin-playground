@@ -15,3 +15,5 @@ To remove the alias just execute:
 ```bash
 unalias ls
 ```
+
+To make it permanent append the command to ```~/.bash_aliases```
