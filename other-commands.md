@@ -41,7 +41,7 @@ The following formula stands in ```Employee Name``` column.
 INDEX(Employee-Column,MATCH(Criteria-Cell,ID-Column,0))
 ```
 
-Basically it means: Retreive ```Employee Name``` where ```ID``` matches ```Criteria-Cell```.  
+Basically it means: Retreive ```Employee``` where ```ID``` matches ```Criteria-Cell```.  
 
 __WARNING!__ If the ```ID-Column``` range in the formula is not the same size as the ```Employee-Column``` range, the formula won't be able to retrieve the employee names missing from the ```ID-Column``` range and it will return ```N/A```. To avoid this issue the table from which we retreive data should be __formated as a table__ for easier refference.
 
