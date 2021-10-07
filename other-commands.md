@@ -17,11 +17,31 @@ Run the command in powershell or terminal.
 VBoxManage modifyvm "YourVirtualBoxName" --nested-hw-virt on
 ```
 ## How to use INDEX & MATCH Excel functions
+
+I use INDEX & MATCH formula to overcome the limitations of VLOOKUP. INDEX & MATCH allows you to retreive data from any column not just the leftmost one.
+
+Let's consider the following table
+
+|Employee|ID|
+|---|---|
+|John|1|
+|Alice|2|
+|Bob|3|
+
+We want to create a formula to retrieve the name of the employee based on its ID. We have the following table for that:
+
+|Criteria|Employee Name|
+|---|---|
+|1|John|
+|5|N/A|
+
+The following formula stands in ```Employee Name``` column.
+
 ```excel
-INDEX(Table-1[Column-Title],MATCH(Table-2-cell,Table-1[Column-Title-2],0))
+INDEX(Employee-Column,MATCH(Criteria-Cell,ID-Column,0))
 ```
 
-Basically it means: Retreive ```Table-1[Column-Title]``` where ```Table-1[Column-Title-2]``` matches ```Table-2-cell```.  
-Example: Retreive ```Username``` from ```Users-Table``` where ```ID``` matches indicated cell value.
+Basically it means: Retreive ```Employee Name``` where ```ID``` matches ```Criteria-Cell```.  
 
-The table from which we retreive data should be formated as a table for easier refference.
+__WARNING!__ If the ```ID-Column``` range in the formula is not the same size as the ```Employee-Column``` range, the formula won't be able to retrieve the employee names missing from the ```ID-Column``` range and it will return ```N/A```. To avoid this issue the table from which we retreive data should be __formated as a table__ for easier refference.
+
