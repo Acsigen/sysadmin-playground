@@ -14,7 +14,7 @@ sudo apt install build-essential
 
 ## Compilation process
 
-Before you do anything, take a look at the README or INSTALL file inside the package. Sometimes there will be specific installation instructions.
+Before you do anything, take a look at the __README__ or __INSTALL__ file inside the package. Sometimes there will be specific installation instructions.
 
 Depending on what compile method that the developer used, you'll have to use different commands, such as cmake or something else.
 
