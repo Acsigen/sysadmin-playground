@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-Various imporovements of MySQL
+Various improvements of MySQL
 
 ## Fix "Too many connections" message
 
