@@ -6,7 +6,7 @@ Various improvements of MySQL
 
 ## Fix "Too many connections" message
 
-* Add ```max_timeout  = 180``` to close sleeping connections
+* Add ```wait_timeout  = 180``` to close sleeping connections
 * Add ```interactive_timeout = 200``` to close sleeping CLI connections
 
 These steps require a service restart of mysqld.
