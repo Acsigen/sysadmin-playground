@@ -178,6 +178,8 @@ lxc profile edit bridged-network
 
 ### Forward port to the container
 
+__This is not necessary if bridged networking is used on the container.__
+
 On host configure iptables the following way:
 
 ```bash
