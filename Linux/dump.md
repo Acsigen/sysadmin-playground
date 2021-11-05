@@ -1,10 +1,22 @@
-create system image
+# Dump
+
+## Prerequisites
+
+Generate a system backup image then perform a restore operation.
+
+## Create system image
+
+This will create a file called ```system-image.lzo``` with the contents of ```/```
+
 ```bash
-dump -y -u -f /backup/system$(date +%d%m%Y%s).lzo /
+dump -y -u -f /tmp/system-image.lzo /
 ```
 
-restore from system image
+## Restore the system from image
 
 ```bash
-restore -rf /backup/system$(date +%d%m%Y%s).lzo
+restore -rf /tmp/system-image.lzo
 ```
+
+## Disclaimer
+I haven't tested this method yet (2021-11-05).
