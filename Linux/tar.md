@@ -10,3 +10,6 @@ tar cvpf /media/external/backup/snapshot-$(date +%Y-%m-%d).tar.gz --directory=/ 
 ```--use-compress-program=pigz``` is uses all CPU cores for archiving bit it requires ```pigs``` package.  You can remove it from the command but the archive creation duration will be longer.
 
 __Do not forget about the ```.``` at the end! It is important!__
+
+## Disclaimer
+I haven't managed to perform a successful restore with this command. But its a good example of how to create a ```.tar.gz``` archive.
