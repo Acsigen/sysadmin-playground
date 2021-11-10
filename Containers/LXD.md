@@ -170,9 +170,10 @@ The following tutorial will allow you to configure the container the same as the
 # Duplicate the default profile
 lxc profile copy default bridged-network
 
-# Configure the new profile with the following settings
-# nictype: macvlan
-# parent: <host-interface-name>
+# Configure the new profile with the following settings after running the command
+# Remove: network: lxdbr0
+# Add: nictype: macvlan
+# Add: parent: <host-interface-name>
 lxc profile edit bridged-network
 ```
 
