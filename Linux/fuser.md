@@ -4,6 +4,11 @@
 
 Fuser is a tool that displays the PIDs of processes using the specified files or file systems
 
+## Install fuser
+
+* Ubuntu/Debian: ```apt install psmisc```
+* CentOS/RHEL: ```dnf install psmisc```
+
 ## Show which process uses a particular file
 
 ```bash
