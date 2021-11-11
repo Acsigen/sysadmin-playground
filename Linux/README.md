@@ -27,4 +27,4 @@
 * [Server Hardening and iptables configuration](server-hardening.md)
 * [Create swap memory file](swap-memory-file.md)
 * [Configure swappiness and cache pressure](swappiness-change.md)
-* [Confiogure static DNS on Ubuntu](ubuntu-static-dns.md)
+* [Configure static DNS on Ubuntu](ubuntu-static-dns.md)
