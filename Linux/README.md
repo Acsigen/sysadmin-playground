@@ -9,6 +9,7 @@
 * [Grep](grep.md)
 * [In progress - MysQL](mysql.md)
 * [In progress - PostgreSQL](postgresql.md)
+* [Rsync](rsync.md)
 * [Systemctl](systemctl.md)
 * [Tar](tar.md)
 * [Tmux](tmux.md)
