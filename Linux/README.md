@@ -9,12 +9,14 @@
 * [Grep](grep.md)
 * [In progress - MysQL](mysql.md)
 * [In progress - PostgreSQL](postgresql.md)
+* [RegEx](regex.md)
 * [Rsync](rsync.md)
+* [Samba](smb.md)
 * [Systemctl](systemctl.md)
 * [Tar](tar.md)
 * [Tmux](tmux.md)
 * [Vim](vim.md)
-* [RegEx](regex.md)
+
 
 ## Procedures
 
