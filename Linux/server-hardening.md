@@ -19,7 +19,7 @@ This guide is highly opinionated and, in my honest opinion, these are the minimu
 # Accept traffic on loopback interface
 -A INPUT -i lo -j ACCEPT
 
-# Accept established and related incominbg connections
+# Accept established and related incoming connections
 -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
 # Drop invalid packets
