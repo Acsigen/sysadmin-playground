@@ -197,7 +197,7 @@ systemctl enable ossec
 systemctl start ossec
 ```
 
-__WARNING!__ IF AFTER THE SERVER START YOU DO NOT RECEIVE AN EMAIL FROM THE SERVER, YOU MIGHT NEED TO INSTALL POSTFIX AND CONFIGURE IT AS INTERNET SITE!
+__WARNING!__ If after the server start you do not receive an email from the server, you might need to install postfix and configure it as internet site!
 
 ## Sanitise bash history
 
