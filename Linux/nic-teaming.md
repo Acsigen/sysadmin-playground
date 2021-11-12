@@ -16,7 +16,7 @@ For each bonded interface you can define the mode and the link monitoring option
 |3|Broadcast|All transmissions are sent on all slaves|Yes|No|
 |4|Dynamic Link Aggregation|Yes|Yes|
 |5|Transmit Load Balancing (TLB)|The outgoing traffic is distributed depending on the current load on each slave interface. Incoming traffic is received by the current slave. If the receiving slave fails, another slave takes over the MAC address of the failed slave|Yes|Yes|
-|6|Adaprive Load Balancing (ALB)|Unlike Dynamic Link Aggregation, Adaptive Load Balancing does not require any particular switch configuration. Adaptive Load Balancing is only supported in x86 environments. The receiving packets are load balanced through ARP negotiation|Yes|Yes|
+|6|Adaptive Load Balancing (ALB)|Unlike Dynamic Link Aggregation, Adaptive Load Balancing does not require any particular switch configuration. Adaptive Load Balancing is only supported in x86 environments. The receiving packets are load balanced through ARP negotiation|Yes|Yes|
 
 ### Network Bonding Link Monitoring
 
