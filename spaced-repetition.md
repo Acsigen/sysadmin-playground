@@ -12,7 +12,7 @@ By day 7, we remember even less, and by day 30, we retain about 2%-3% of the ori
 
 You can change the shape of the curve! Reprocessing the same chunk of information sends a big signal to your brain to hold onto that data. When the same thing is repeated, your brain says, "Oh - there it is again, I better keep that." When you are exposed to the same information repeatedly, it takes less and less time to "activate" the information in your long term memory and it becomes easier for you to retrieve the information when you need it.
 
-__The formula:__ 
+__The formula:__
 
 * within 24 hours of getting the information - spend 10 minutes reviewing and you will raise the curve almost to 100% again
 * a week later (day 7), it only takes 5 minutes to "reactivate" the same material, and again raise the curve
