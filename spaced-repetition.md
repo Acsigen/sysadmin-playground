@@ -18,9 +18,17 @@ __The formula:__
 * a week later (day 7), it only takes 5 minutes to "reactivate" the same material, and again raise the curve
 * by day 30, your brain will only need 2-4 minutes to give you the feedback, "yes, I know that...".
 
-## Practical method
+## The Leitner Box
 
+The Leitner Box it's like a card game you play against yourself. First, divide your box up into three "Levels" (you can have as many as you want). All new flashcards start at Level 1. I recommend starting with 5 new cards a day. When you review a card, and get it right, it moves up one Level. When the card reaches the final level, your card retires. But if you review a card, and get it wrong, it has to go all the way back down to Level 1.
 
+In the Leitner Box, we review Level 1 cards every day, Level 2 every week, Level 3 every month. Another  pattern is: we double the gap (number of days between reviews) for each Level.
+
+Spaced Repetition will fail if your cards feel bloated, disconnected or meaningless. Instead, memory is like a jigsaw puzzle: full of small, connected pieces.
+
+It's not about collection, it's about connection. Thus, to get the most out of Spaced Repetition, you must make your cards small, connected, and meaningful.
+
+As a rule of thumb, each flashcard should have one and only one idea (optionally you can also add a picture).
 
 ## Sources
 
