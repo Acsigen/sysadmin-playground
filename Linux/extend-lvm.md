@@ -15,3 +15,4 @@ You just increased the storage size of your VM disk so you need to fill the unal
 
 * <https://serverfault.com/questions/861517/centos-7-extend-partition-with-unallocated-space>
 * <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/recognize-expanded-volume-linux.html>
+* <https://www.tecmint.com/extend-and-reduce-lvms-in-linux/>
