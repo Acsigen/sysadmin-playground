@@ -116,5 +116,6 @@ Python has a set of keywords that are reserved words that cannot be used as vari
 
 ## Source
 
-* <https://roadmap.sh/python>
-* <https://www.w3schools.com/python/default.asp>
+* [RoadMap.sh](https://roadmap.sh/python)
+* [W3Scools](https://www.w3schools.com/python/default.asp)
+* [Free Code Camp YouTube Channel](https://www.youtube.com/watch?v=rfscVS0vtbw)
