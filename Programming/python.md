@@ -2,12 +2,6 @@
 
 ## Learn the Basics
 
-### Basic Syntax
-
-# Python
-
-## Learn the Basics
-
 ### Code structure
 
 Most programming languages uses a specific symbol to indicate the end of a line. This is not the case with Python.
