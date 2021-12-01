@@ -1,5 +1,22 @@
 # Python
 
+## ToC
+
+* [Learn the Basics](#learn-the-basics)
+  * [Code structure](#code-structure)
+  * [Comments](#comments)
+  * [Hello World](#hello-world)
+  * [Strings](#strings)
+  * [Variables](#variables)
+  * [Lists](#lists)
+  * [Tuples](#tuples)
+  * [Numbers](#numbers)
+  * [Import Libraries](#import-libraries)
+  * [Grab user input](#grab-user-input)
+  * [Functions](#functions)
+  * [Return statements](#return-statements)
+* [Sources](#sources)
+
 ## Learn the Basics
 
 ### Code structure
