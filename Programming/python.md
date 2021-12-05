@@ -33,8 +33,18 @@ To write a comment in Python, just append ```#``` in front of the line.
 
 ```python
 # This is a single line comment
-# In python there are no multi-line comments, just use multple single line comments
 ```
+
+To write multi-line comments in Pythn, put the comment between ```'''```.
+
+```python
+'''
+This is a multi-line
+comment
+'''
+```
+
+Most of the time you will see multiple single line comments instead of multi-line comments.
 
 ### Hello World
 
