@@ -2,24 +2,24 @@
 
 ## ToC
 
-* [Learn the Basics](#learn-the-basics)
-  * [Code structure](#code-structure)
-  * [Comments](#comments)
-  * [Hello World](#hello-world)
-  * [Strings](#strings)
-  * [Variables](#variables)
-  * [Lists](#lists)
-  * [Tuples](#tuples)
-  * [Numbers](#numbers)
-  * [Import Libraries](#import-libraries)
-  * [Grab user input](#grab-user-input)
-  * [Functions](#functions)
-  * [Return statements](#return-statements)
+* [Code structure](#code-structure)
+* [Comments](#comments)
+* [Hello World](#hello-world)
+* [Strings](#strings)
+* [Variables](#variables)
+* [Lists](#lists)
+* [Tuples](#tuples)
+* [Numbers](#numbers)
+* [Import Libraries](#import-libraries)
+* [Grab user input](#grab-user-input)
+* [Functions](#functions)
+* [Return statements](#return-statements)
+* [Modules](#modules)
+* [Objects and Classes](#objects-and-classes)
+  * [Inheritance](#inheritance)
 * [Sources](#sources)
 
-## Learn the Basics
-
-### Code structure
+## Code structure
 
 Most programming languages uses a specific symbol to indicate the end of a line. This is not the case with Python.
 
@@ -27,7 +27,7 @@ Also, please note that python doesn't use curly braces to define functions or pe
 
 **Be careful when using the key ```TAB```, you must configure your text editor to perform 4 spaces when you press it, otherwise the code won't work.**
 
-### Comments
+## Comments
 
 To write a comment in Python, just append ```#``` in front of the line.
 
@@ -46,13 +46,13 @@ comment
 
 Most of the time you will see multiple single line comments instead of multi-line comments.
 
-### Hello World
+## Hello World
 
 ```python
 print("Hello World!")
 ```
 
-### Strings
+## Strings
 
 Escape sequences: append the ```\``` before the character.  
 Example: ```\n``` stands for new line
@@ -119,7 +119,7 @@ print(function_string.replace("text","string"))
 
 For more examples check the Python Documentation.
 
-### Variables
+## Variables
 
 Display variables using ```print()```
 
@@ -138,7 +138,7 @@ print("My new name is " + character_name + ".")
 
 To fix this issue, you can convert a variable to ```string``` using ```str()``` function while printing it. An example can be seen in [functions](#functions).
 
-### Lists
+## Lists
 
 Define lists:
 
@@ -236,7 +236,7 @@ Clear the list:
 friends_list.clear()
 ```
 
-### Tuples
+## Tuples
 
 A tuple is an immutable list, they cannot be changed.
 
@@ -260,7 +260,7 @@ print(coordinates[0]) # it prints 4
 print(coordinates[0][1]) # it prints 5
 ```
 
-### Numbers
+## Numbers
 
 Declare numbers:
 
@@ -275,7 +275,7 @@ Print a number alongsinte a string:
 print("My number is: " +  str(my_number))
 ```
 
-### Import libraries
+## Import libraries
 
 We can import ```math``` library to perform advanced math operations
 
@@ -288,7 +288,7 @@ from math import *
 square_root = sqrt(my_number)
 ```
 
-### Grab user input
+## Grab user input
 
 ```python
 name = input("Enter your name: ")
@@ -296,7 +296,7 @@ name = input("Enter your name: ")
 
 **All user input is considered to be string, if you want to store it as another type, you must convert it using built-in functions (e.g. ```int()```, ```float()```).**
 
-### Functions
+## Functions
 
 Define a function and call it in a code:
 
@@ -341,7 +341,7 @@ user_age = int(user_age)
 function3(user_name,user_age)
 ```
 
-### Return statements
+## Return statements
 
 If you want to store the result of the operations that were performed by a function you must use the return statement.
 
@@ -371,48 +371,100 @@ result  = cube_number(input_number)
 print(result)
 ```
 
-## Keywords
+## Modules
 
-Python has a set of keywords that are reserved words that cannot be used as variable names, function names, or any other identifiers:
+You can import a program that you wrote to reuse its functions. Let's consider the program from the [Return statements](#return-statements) section,
 
-|Keyword|Description|
-|---|---|
-|and|A logical operator|
-|as|To create an alias|
-|assert|For debugging|
-|break|To break out of a loop|
-|class|To define a class|
-|continue|To continue to the next iteration of a loop|
-|def|To define a function|
-|del|To delete an object|
-|elif|Used in conditional statements, same as else if|
-|else|Used in conditional statements|
-|except|Used with exceptions, what to do when an exception occurs|
-|False|Boolean value, result of comparison operations|
-|finally|Used with exceptions, a block of code that will be executed no matter if there is an exception or not|
-|for|To create a for loop|
-|from|To import specific parts of a module|
-|global|To declare a global variable|
-|if|To make a conditional statement|
-|import|To import a module|
-|in|To check if a value is present in a list, tuple, etc.|
-|is|To test if two variables are equal|
-|lambda|To create an anonymous function |
-|None|Represents a null value|
-|nonlocal|To declare a non-local variable|
-|not|A logical operator|
-|or|A logical operator|
-|pass|A null statement, a statement that will do nothing|
-|raise|To raise an exception|
-|return|To exit a function and return a value|
-|True|Boolean value, result of comparison operations|
-|try|To make a try...except statement|
-|while|To create a while loop|
-|with|Used to simplify exception handling|
-|yield|To end a function, returns a generator|
+```python
+# The return statements code is in custom_module.py file for this case
+import custom_module
 
-## Source
+# Call a function and print the cube of 5
+print(custom_module.cube_number(5))
+```
+
+## Objects and Classes
+
+Classes are used to define your own data type, such as a student.
+
+Class functions can be used inside a class and can either modify the object or retrieve information about the object.
+
+```python
+# File name is classes.py
+# Define the class
+class student:
+    # Define the initialisation function
+    def __init__(self,name,major,gpa,is_budgeted):
+        # Define attributes
+        # The name of the student object will be the name that we passed in and so on
+        self.name = name
+        self.major = major
+        self.gpa = gpa
+        self.is_budgeted = is_budgeted
+
+    # Define class function
+    def has_failed_exam(self):
+        if self.gpa < 5:
+            return True
+        else:
+            return False
+
+    # Define the class to change the student name
+    def change_name(self,new_name):
+        self.name = new_name
+```
+
+To initialise an object, a student, you have the following example.
+
+```python
+# From classes.py file import student class
+from classes import student
+
+# Create object student1
+student1 = student("Jim","Chemistry",8.5, False)
+
+# Print data about the student
+print(student1.name)
+
+# Check if student has failed the exam
+print(student1.has_failed_exam())
+
+# Change the student name
+student1.change_name("Bob")
+print(student1.name)
+```
+
+### Inheritance
+
+A class can inherit the arrtributes of another class.
+
+```python
+# Import the student class
+from classes import student
+
+# Create High School student which inherits the classes of the student
+class hs_student(student):
+    def has_legal_guardian(self,has_lg):
+        self.has_legal_guardian = has_lg
+```
+
+Create an object from the new class.
+
+```python
+# From inherit_class.py file import hs_student class
+from inherit_class import hs_student
+
+# Create High School student
+student2 = hs_student("Mike","CS",6,True)
+
+# Define if it has a legal guardian
+student2.has_legal_guardian(True)
+
+# Check if it has a legal guardian
+print(student2.has_legal_guardian)
+```
+
+## Sources
 
 * [RoadMap.sh](https://roadmap.sh/python)
-* [W3Schools](https://www.w3schools.com/python/default.asp)
 * [Free Code Camp YouTube Channel](https://www.youtube.com/watch?v=rfscVS0vtbw)
