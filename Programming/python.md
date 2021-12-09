@@ -159,7 +159,7 @@ Print from the back of the list:
 print(friends_list[-1])
 ```
 
-Print from the secont element to the end:
+Print from the second element to the end:
 
 ```python
 print(friends_list[1:]) # it can also be [:2]
