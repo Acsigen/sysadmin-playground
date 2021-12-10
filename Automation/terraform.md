@@ -43,13 +43,17 @@ Terraform files have the ```.tf``` extension.
     terraform apply
     ```
 
-    These commands will apply all the ```.tf``` files in that folder.
+    **By default these commands will apply all the ```.tf``` files in that folder and for each resource in those files.**
+
+
 
 ## Modify EC2 resources
 
 If you run the same commands with the same config file, it will only update that specific instance.
 
 In order to modify the instance, just change the parameters in the config file.
+
+**If you comment out the parameters of a resource, or an entire resource, when you run ```terraform apply``` that resource will be deleted/terminated.**
 
 ## Terminate EC2 instances
 
