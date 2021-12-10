@@ -6,6 +6,7 @@
 * [Basic AWS EC2 deployment](#basic-aws-ec2-deployment)
 * [Modify EC2 resources](#modify-ec2-resources)
 * [Terminate EC2 instances](#terminate-ec2-instances)
+* [Reference resources](#reference-resources)
 
 ## Intro
 
@@ -43,9 +44,7 @@ Terraform files have the ```.tf``` extension.
     terraform apply
     ```
 
-    **By default these commands will apply all the ```.tf``` files in that folder and for each resource in those files.**
-
-
+**By default these commands will apply all the ```.tf``` files in that folder and for each resource in those files.**
 
 ## Modify EC2 resources
 
@@ -62,3 +61,30 @@ Run the following command:
 ```bash
 terraform destroy
 ```
+
+## Reference resources
+
+In this example we will create a VPC and assign a subnet.
+
+In order to assign a subnet to a VPC, we need the ID of the VPC, but since it is not created yet, we will reference it.
+
+```terraform
+resource "aws_vpc" "main-vpc" {
+    cidr_block = "10.0.0.0/16"
+    
+    tags = {
+      "Name" = "Production-VPC"
+    }
+}
+
+resource "aws_subnet" "subnet1" {
+    # Reference aws_vpc id from main-vpc
+    vpc_id = aws_vpc.main-vpc.id
+    cidr_block = "10.0.0.0/24"
+    
+    tags = {
+      "Name" = "production-subnet"
+    }
+}
+```
+
