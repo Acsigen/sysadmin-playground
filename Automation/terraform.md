@@ -161,6 +161,7 @@ resource "aws_route_table_association" "main-subnet-rt" {
 
 ### Create and configure security group
 
+```terraform
 resource "aws_security_group" "web" {
     resource "aws_security_group" "allow_tls" {
   name        = "allow_tls"
@@ -189,6 +190,7 @@ resource "aws_security_group" "web" {
   }
 }
 }
+```
 
 ### Create a network interface
 
