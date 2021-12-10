@@ -88,3 +88,114 @@ resource "aws_subnet" "subnet1" {
 }
 ```
 
+## Build basic AWS infrastructure
+
+### Create a VPC
+
+```terraform
+resource "aws_vpc" "main-vpc" {
+    cidr_block = "10.0.0.0/16"
+    
+    tags = {
+      "Name" = "Production-VPC"
+    }
+}
+```
+
+### Create Internet Gateway
+
+```terraform
+resource "aws_internet_gateway" "main-internet-gateway" {
+    vpc_id = aws_vpc.main-vpc.id
+    
+    tags = {
+      "Name" = "Main Internet Gateway"
+    }
+}
+```
+
+### Create Custom Route Table
+
+```terraform
+resource "aws_route_table" "routing-table" {
+    vpc_id = aws_vpc.main-vpc.id
+
+    route = {
+        cidr_block = "0.0.0.0/0"
+        gateway_id = aws_internet_gateway.main-internet-gateway.id
+    }
+
+    route = {
+        ipv6_cidr_block = "::/0"
+        egress_only_gateway_id = aws_internet_gateway.main-internet-gateway.id
+    }
+
+    tags = {
+      "Name" = "Main routing table"
+    }
+}
+```
+
+### Create a subnet
+
+```terraform
+resource "aws_subnet" "main-subnet" {
+    vpc_id = aws_vpc.main-vpc.id
+    cidr_block = "10.0.1.0/24"
+    availability_zone = "us-east-1a"
+
+    tags = {
+      "Name" = "Main subnet"
+    }
+}
+```
+
+### Associate subnet with routing table
+
+```terraform
+resource "aws_route_table_association" "main-subnet-rt" {
+    subnet_id = aws_subnet.main-subnet.id
+    route_route_table_id = aws_route_table.routing-table.id 
+}
+```
+
+### Create and configure security group
+
+resource "aws_security_group" "web" {
+    resource "aws_security_group" "allow_tls" {
+  name        = "allow_tls"
+  description = "Allow TLS inbound traffic"
+  vpc_id      = aws_vpc.main-vpc.id
+
+  ingress {
+    description      = "TLS from VPC"
+    from_port        = 443
+    to_port          = 443
+    protocol         = "tcp"
+    cidr_blocks      = [aws_vpc.main-vpc.cidr_block]
+    ipv6_cidr_blocks = [aws_vpc.main-vpc.ipv6_cidr_block]
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  tags = {
+    Name = "Web"
+  }
+}
+}
+
+### Create a network interface
+
+### Assign an elastic IP
+
+### Create AWS Linux server and install Apache2
+
+## Sources
+
+* [Free Code Camp YouTube Channel](https://www.youtube.com/watch?v=SLB_c_ayRMo)
