@@ -5,6 +5,7 @@
 * [Intro](#intro)
 * [Basic AWS EC2 deployment](#basic-aws-ec2-deployment)
 * [Modify EC2 resources](#modify-ec2-resources)
+* [Terminate EC2 instances](#terminate-ec2-instances)
 
 ## Intro
 
@@ -42,8 +43,18 @@ Terraform files have the ```.tf``` extension.
     terraform apply
     ```
 
+    These commands will apply all the ```.tf``` files in that folder.
+
 ## Modify EC2 resources
 
 If you run the same commands with the same config file, it will only update that specific instance.
 
 In order to modify the instance, just change the parameters in the config file.
+
+## Terminate EC2 instances
+
+Run the following command:
+
+```bash
+terraform destroy
+```
