@@ -301,7 +301,7 @@ This also happens when you want to destroy the resource, in that case just press
 Variables values can also be stored inside a file. That file has the extension ```.tfvars``` and can have the following content:
 
 ```terraform
-subnet_prefix = "10.0.1.0./24"
+subnet_prefix = "10.0.1.0/24"
 ```
 
 ## Sources
