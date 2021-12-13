@@ -227,6 +227,7 @@ resource "aws_eip" "elastic_ip" {
 
 ### Create AWS Ubuntu Linux server and install Apache2
 
+```terraform
 resource "aws_instance" "ubuntu-server" {
   ami = ami-0a49b025fffbbdac6
   instance_type = "t2.micro"
@@ -249,6 +250,7 @@ resource "aws_instance" "ubuntu-server" {
     Name = "Ubuntu Server"
   }
 }
+```
 
 ## Sources
 
