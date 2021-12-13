@@ -53,6 +53,12 @@ If you run the same commands with the same config file, it will only update that
 
 In order to modify the instance, just change the parameters in the config file.
 
+You can also change only specific resources of the config file with ```-target``` option.
+
+```bash
+terraforn apply -target aws_instance.New-EC2-instance
+```
+
 **If you comment out the parameters of a resource, or an entire resource, when you run ```terraform apply``` that resource will be deleted/terminated.**
 
 ## Terminate EC2 instances
