@@ -38,7 +38,7 @@ Terraform files have the ```.tf``` extension.
     # Prepare environment
     terraform init
     
-    # Test configuraiton
+    # Test configuraiton (Dry run)
     terraform plan
     
     # This will take a while
