@@ -8,6 +8,7 @@
 * [Terminate EC2 instances](#terminate-ec2-instances)
 * [Reference resources](#reference-resources)
 * [Build basic AWS infrastructure](#build-basic-aws-infrastructure)
+* [Output and Variables](#output-and-variables)
 
 ## Intro
 
@@ -257,6 +258,46 @@ resource "aws_instance" "ubuntu-server" {
   }
 }
 ```
+
+## Output and Variables
+
+### Output
+
+To display a value at the end of the execution you can use the output command:
+
+```terraform
+output "server_public_ip" {
+  value = aws_instance.ubuntu-server.public_ip
+}
+```
+
+### Variables
+
+Variables have three parameters:
+
+* description - A simple description
+* default - Default value (optional)
+* type - Value type (String, Boolean, List, etc.)
+
+Declare variable:
+
+```terraform
+variable "subnet_prefix" {
+  description = "CIDR Block"
+  default = "10.0.1.0/24"
+  type = string
+}
+```
+
+Reference a variable:
+
+```terraform
+cidr_block = var.subnet_prefix
+```
+
+For any variable that does not have a default value, terraform will prompt the user to enter the value.  
+This also happens when you want to destroy the resource, in that case just press ```Enter```.
+
 
 ## Sources
 
