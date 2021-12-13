@@ -273,11 +273,11 @@ output "server_public_ip" {
 
 ### Variables
 
-Variables have three parameters:
+Variables have three parameters, they are all optional:
 
 * description - A simple description
-* default - Default value (optional)
-* type - Value type (String, Boolean, List, etc.)
+* default - Default value
+* type - Value type (string, boolean, list, etc.)
 
 Declare variable:
 
