@@ -243,7 +243,7 @@ resource "aws_instance" "ubuntu-server" {
               sudo apt update && sudo apt -y upgrade
               sudo apt install apache2 -y
               sudo systemctl start apache2
-              sudo systemctl emable apache2
+              sudo systemctl enable apache2
               EOF
   
   tags = {
