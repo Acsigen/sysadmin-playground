@@ -7,6 +7,7 @@
 * [Modify EC2 resources](#modify-ec2-resources)
 * [Terminate EC2 instances](#terminate-ec2-instances)
 * [Reference resources](#reference-resources)
+* [Build basic AWS infrastructure](#build-basic-aws-infrastructure)
 
 ## Intro
 
@@ -127,7 +128,7 @@ resource "aws_route_table" "routing-table" {
 
     route = {
         ipv6_cidr_block = "::/0"
-        egress_only_gateway_id = aws_internet_gateway.main-internet-gateway.id
+        gateway_id = aws_internet_gateway.main-internet-gateway.id
     }
 
     tags = {
@@ -163,25 +164,33 @@ resource "aws_route_table_association" "main-subnet-rt" {
 
 ```terraform
 resource "aws_security_group" "web" {
-    resource "aws_security_group" "allow_tls" {
-  name        = "allow_tls"
-  description = "Allow TLS inbound traffic"
-  vpc_id      = aws_vpc.main-vpc.id
+  name = "allow_tls"
+  description = "Allow inbound traffic"
+  vpc_id = aws_vpc.main-vpc.id
 
   ingress {
-    description      = "TLS from VPC"
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
-    cidr_blocks      = [aws_vpc.main-vpc.cidr_block]
-    ipv6_cidr_blocks = [aws_vpc.main-vpc.ipv6_cidr_block]
+    description = "TLS from anywhere"
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    cidr_block  = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  ingress {
+    description = "SSH"
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    cidr_block  = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
 
@@ -189,14 +198,57 @@ resource "aws_security_group" "web" {
     Name = "Web"
   }
 }
-}
 ```
 
 ### Create a network interface
 
+```terraform
+resource "aws_network_interface" "main-nic" {
+  subnet_id = aws_subnet.main-subnet.id
+  private_ips = ["10.0.1.50"]
+  security_groups = [aws_security_group.web.id]
+  }
+}
+```
+
 ### Assign an elastic IP
 
-### Create AWS Linux server and install Apache2
+You can assign an Elastic IP only if an internet gateway is already defined.
+
+```terraform
+resource "aws_eip" "elastic_ip" {
+  instance = aws_instance.web.id
+  vpc = true
+  network_interface = aws_network_interface.main-nic.id
+  associate_with_private_ip = "10.0.1.50"
+  depends_on = [aws_internet_gateway.main-internet-gateway]
+}
+```
+
+### Create AWS Ubuntu Linux server and install Apache2
+
+resource "aws_instance" "ubuntu-server" {
+  ami = ami-0a49b025fffbbdac6
+  instance_type = "t2.micro"
+  availability_zone = "us-east-1a" # EC2 instance and subnet must be in the same Availability Zone
+  key_name = "main-key" # SSH Key
+  network_interface {
+    device_index = 0
+    network_interface_id = aws_network_interface.main-nic.id
+  }
+  
+  user_data = <<-EOF
+              #!/bin/bash
+              sudo apt update && sudo apt -y upgrade
+              sudo apt install apache2 -y
+              sudo systemctl start apache2
+              sudo systemctl emable apache2
+              EOF
+  
+  tags = {
+    Name = "Ubuntu Server"
+  }
+}
 
 ## Sources
 
