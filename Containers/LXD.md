@@ -3,7 +3,7 @@
 ## Initialise LXD
 
 Use the default answer except for storage type where you will pick ```dir```.  
-For the best performance pick ```zfs`` and use an entire separate drive as storage for containers.
+For the best performance pick ```zfs``` and use an entire separate drive as storage for containers.
 
 ```bash
 lxd init
