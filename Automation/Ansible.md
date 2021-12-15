@@ -17,7 +17,7 @@ On the Ansible server edit the configuration file ```/etc/ansible/hosts```:
 
 I do not recommend to use the ```root``` user, create a dedicated user for ansible. Make sure it has ```sudo``` access.
 
-Also, do not use plaintext passwords, use a vault or authenticate using SSH keys.
+Also, do not use plaintext passwords, use a vault or SSH keys.
 
 ## Playbook
 
@@ -25,7 +25,7 @@ The Ansible playbook is a configuration storing file.
 
 Its format is YAML with the extension ```.yml```.
 
-An example that install ```vim``` inside an Ubuntu server is presented below:
+An example that installs ```vim``` inside an Ubuntu server is presented below:
 
 ```yaml
 ---
@@ -45,6 +45,8 @@ To check the syntax of the playbook, run the following command:
 ```bash
  ansible-playbook sample-playbook.yml --syntax-check
 ```
+
+To run apply the config file just run the previous command without arguments.
 
 ## Sources
 
