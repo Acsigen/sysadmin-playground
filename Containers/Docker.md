@@ -21,6 +21,7 @@ Run all as ROOT or with sudo rights.
 * Șterge imagine: ```docker rmi <image-name>```
 * Execută comandă în container nou: ```docker run ubuntu cat /etc/hosts```
 * Execută comandă în container care rulează: ```docker exec <container-name> cat /etc/hosts```
+  * ```docker exec -t -i mycontainer /bin/bash```
 * Rulează container în fundal: ```docker run -d <image-name>```
 * Accesează container din fundal: ```docker attach <container-id or container-name>```
   * Se poate specifica doar o parte din ID, cât să fie unic
