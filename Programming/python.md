@@ -23,6 +23,7 @@
 * [Working with files](#working-with-files)
   * [Reading files](#reading-files)
   * [Writing files](#writing-files)
+  * [Deleting files](#deleting-files)
 * [Modules](#modules)
 * [Objects and Classes](#objects-and-classes)
   * [Inheritance](#inheritance)
