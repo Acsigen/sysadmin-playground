@@ -14,6 +14,15 @@
 * [Grab user input](#grab-user-input)
 * [Functions](#functions)
 * [Return statements](#return-statements)
+* [IF statements](#if-statements)
+* [Dictionaries](#dictionaries)
+* [WHILE loop](#while-loop)
+* [FOR loop](#for-loop)
+* [Nested lists](#nested-lists)
+* [TRY and EXCEPT](#try-and-except)
+* [Working with files](#working-with-files)
+  * [Reading files](#reading-files)
+  * [Writing files](#writing-files)
 * [Modules](#modules)
 * [Objects and Classes](#objects-and-classes)
   * [Inheritance](#inheritance)
@@ -369,6 +378,192 @@ print(cube_number(input_number))
 # Method 2 - store the returned value into a variable then print the variable
 result  = cube_number(input_number)
 print(result)
+```
+
+## IF statements
+
+The IF statement executes the code inside the statement if specified conditions are met.
+
+```python
+is_blue = True
+is_round = False
+
+# Simple if else statement
+if is_blue:
+    print("Blue")
+else:
+    print("Not Blue")
+
+# Multiple conditions
+# Or
+if is_blue or is_round:
+    print("Is blue or round")
+else:
+    print("Not blue or round")
+
+# And
+if is_blue and is_round:
+    print("Blue and round")
+else:
+    print("Not and round")
+
+# Else if
+if is_blue and is_round:
+    print("Blue and round")
+
+# The not() function negates the current state of the variable, making it true so the elif executes    
+elif is_blue and not(is_round):
+    print("Blue and not round")
+else:
+    print("Not blue and not round")
+```
+
+## Dictionaries
+
+You can see a dictionary as the representation of JSON in Python.
+
+```python
+# A dictionary works exactly like JSON
+my_dictionary = {
+    "Name": "John",
+    "Age": 25
+}
+
+# Ways to access dictionary data
+print(my_dictionary["Name"])
+print(my_dictionary.get("Age","Key not found"))
+```
+
+## WHILE loop
+
+A while loop executes the code inside the loop while the condition is true.
+
+```python
+i = 1
+
+while i<=5:
+    print("i = " + str(i))
+    
+    # i = i+1
+    i += 1
+```
+
+## FOR loop
+
+A for loop is usually used to iterate through lists and execute code for each iteration.
+
+```python
+# Print the numbers in the list
+list_contents = [1,2,3,4,5]
+for i in list_contents:
+    print(i)
+
+# Print each name in the list
+name_list = ["Bob","Alice","Mike"]
+for x in name_list:
+    print(x)
+
+# Print each name in the list based on index
+for x in range(len(name_list)):
+    print(name_list[x])
+```
+
+## Nested lists
+
+You can see nested lists as a way to store data as kind of a table or matrix.
+
+The example below was formatted for easier understanding of a nested list.
+
+```python
+my_list = [[1,2,3],
+           [4,5,6],
+           [7,8,9]]
+
+# Print all numbers
+for i in my_list:
+    for j in i:
+        print(j)
+```
+
+## TRY and EXCEPT
+
+Try and except are used to catch errors and treat them properly so your program won't crash.
+
+```python
+try:
+    number = int(input("Enter a number: "))
+    print(number)
+except:
+    print("The entered value is not a number!")
+```
+
+**Alway catch specific errors, not a good practie to catch all of them like in the next couple of lines.**
+
+```python
+try:
+    number = int(input("Enter a second number: "))
+    print(number)
+    value = number/0
+except ValueError:
+    print("The entered value is not a number!")
+except ZeroDivisionError:
+    print("You cannot divide by 0!")
+```
+
+You can also store errors in variables.
+
+```python
+try:
+    number = int(input("Enter a third number: "))
+    print(number)
+    value = number/0
+except ValueError as err1:
+    print(err1)
+except ZeroDivisionError as err2:
+    print(err2)
+```
+
+## Working with files
+
+Files can be opened using multiple modes:
+
+* read-only: ```r```
+* write (override or new file): ```w```
+* append: ```a```
+* read-write: ```r+```
+
+### Reading files
+
+```python
+# Open the file in read mode, use relative or absolute path
+employee_file = open("read-from-file.txt","r")
+
+# Check if file is readable and print the contents
+if employee_file.readable() == True:
+    print("File is readable and it has the following content")
+    print(employee_file.read())
+    # To read a specific line
+    # print(employee_file.readlines()[1])
+    # the function readlines() reads the content of the files as a list so you can access a line with an index
+else:
+    print("Action failed, file is not readable.")
+
+# A good practice is to close the file after you are done with it
+employee_file.close()
+```
+
+### Writing files
+
+```python
+# Open the file in append mode. Warning, w will override the file contents. w also can create a new file.
+my_file = open("write-to-file.txt","a")
+
+if my_file.writable() == True:
+    my_file.write("John - Programmer\n")
+else:
+    print("Permission denied, file is not writable!")
+
+my_file.close()
 ```
 
 ## Modules
