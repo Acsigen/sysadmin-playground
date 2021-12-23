@@ -17,6 +17,7 @@
   * [LIMIT](#limit)
   * [JOIN](#join)
 * [MongoDB](#mongodb)
+* [Sources](#sources)
 ## MySQL
 
 Python can be used in database applications. One of the most popular databases is MySQL. The methods presented below can also be used with MariaDB.
@@ -579,3 +580,7 @@ for x in myresult:
 ## MongoDB
 
 Coming soon.
+
+## Sources
+
+* [W3 Schools website](https://www.w3schools.com/python/default.asp)
