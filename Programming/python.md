@@ -566,6 +566,18 @@ else:
 my_file.close()
 ```
 
+### Deleting files
+
+To delete a file you need to import the ```os``` module.
+
+```python
+import os
+if os.path.exists("demofile.txt"):
+  os.remove("demofile.txt")
+else:
+  print("The file does not exist") 
+```
+
 ## Modules
 
 You can import a program that you wrote to reuse its functions. Let's consider the program from the [Return statements](#return-statements) section,
