@@ -1,5 +1,22 @@
 # Working with databases using Python
 
+## ToC
+
+* [MySQL](#mysql)
+  * [Create connection](#create-connection)
+  * [CREATE DATABASE](#create-database)
+  * [CREATE TABLE](#create-table)
+  * [INSERT INTO](#insert-into)
+  * [SELECT](#select)
+  * [WHERE](#where)
+  * [Prevent SQL Injection](#prevent-sql-injection)
+  * [ORDER BY](#order-by)
+  * [DELETE](#delete)
+  * [DRAOP TABLE](#drop-table)
+  * [UPDATE](#update)
+  * [LIMIT](#limit)
+  * [JOIN](#join)
+* [MongoDB](#mongodb)
 ## MySQL
 
 Python can be used in database applications. One of the most popular databases is MySQL. The methods presented below can also be used with MariaDB.
