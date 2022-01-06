@@ -73,3 +73,7 @@ systemctl enable dhcpcd@eth0
 ip -c -br a
 ping google.com -c 4
 ```
+
+## Configure swap
+
+<http://sudoadmins.com/how-to-create-swap-space-in-arch-linux-guide/>
