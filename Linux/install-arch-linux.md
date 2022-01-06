@@ -46,8 +46,7 @@ passwd
 Create a standard user and configure its password:
 
 ```bash
-useradd john
-groupadd john
+useradd -m john
 passwd john
 ```
 
@@ -74,4 +73,3 @@ systemctl enable dhcpcd@eth0
 ip -c -br a
 ping google.com -c 4
 ```
-
