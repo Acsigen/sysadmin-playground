@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-We install Arch Linux on a device without swap memory and with a single storage device (located at ```/dev/sda```).
+We install Arch Linux on a device with a single storage device (located at ```/dev/sda```).
 
 The IP will be allocated through DHCP.
 
@@ -15,6 +15,13 @@ Create a filesystem and mount it to ```/mnt```:
 ```bash
 mkfs.ext4 /dev/sda1
 mount /dev/sda1 /mnt
+```
+
+Create the swap partition and mount it:
+
+```bash
+mkswap /dev/swap_partition
+swapon /dev/swap_partition
 ```
 
 Install OS packages:
