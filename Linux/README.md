@@ -24,6 +24,7 @@
 * [Check storage](check-storage.md)
 * [Clean memory cache](clean-memory-cache.md)
 * [Compile code from source](compile-from-source.md)
+* [Instal Arch Linux](install-arch-linux.md)
 * [In progress - Extend storage space](extend-lvm.md)
 * [Calculate hash](hash-calc.md)
 * [NIC Teaming](nic-teaming.md)
