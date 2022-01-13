@@ -43,6 +43,50 @@ Add swap file information at the end of ```/etc/fstab```
 echo "/swapfile none swap sw 0 0" | sudo tee -a /etc/fstab
 ```
 
+## Improve swap memory in RaspberryPi 4 with Ubuntu
+
+**The following steps should be performed only if you configured swap memory.**
+
+Check if kernel comes with ```zswap```:
+
+```bash
+cat /boot/config-`uname -r` | grep -i zswap
+```
+
+If it returns ```CONFIG_ZSWAP=y``` then you can proceed further.
+
+Edit ```/boot/firmware/cmdline.txt``` and append the following text to that command:
+
+```conf
+zswap.enabled=1 zswap.compressor=lz4 zswap.zpool=z3fold
+```
+
+Enable ```z3fold``` and ```lz4```:
+
+```bash
+echo lz4 >> /etc/initramfs-tools/modules
+echo lz4_compress >> /etc/initramfs-tools/modules
+echo z3fold >> /etc/initramfs-tools/modules
+update-initramfs -u
+```
+
+Reboot then check if parameters were set:
+
+```bash
+grep -R . /sys/module/zswap/parameters ; dmesg | grep -i zswap
+```
+
+Example output:
+
+```bash
+/sys/module/zswap/parameters/same_filled_pages_enabled:Y
+/sys/module/zswap/parameters/enabled:Y
+/sys/module/zswap/parameters/max_pool_percent:20
+/sys/module/zswap/parameters/compressor:lz4
+/sys/module/zswap/parameters/zpool:z3fold
+[    5.327929] zswap: loaded using pool lz4/z3fold
+```
+
 ## Sources
 
 * [Digital Ocean](https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-20-04)
