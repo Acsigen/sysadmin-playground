@@ -67,7 +67,7 @@ Enable ```z3fold``` and ```lz4```:
 echo lz4 >> /etc/initramfs-tools/modules
 echo lz4_compress >> /etc/initramfs-tools/modules
 echo z3fold >> /etc/initramfs-tools/modules
-update-initramfs -u
+update-initramfs -u -k all
 ```
 
 Reboot then check if parameters were set:
