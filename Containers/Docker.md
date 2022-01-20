@@ -2,15 +2,26 @@
 
 ## Prerequisites
 
-I do not use Docker in production at this point so this guide will not be translated from Romanian to English anytime soon.
+A list of most used Docker commands.
 
-## __Comenzi de bază__
+For demonstration purposes, we will test an ```nginx``` image. 
+
+## Getting Started
 
 Run all as ROOT or with sudo rights.
 
-* Instalare docker
-  * Descarcă script instalare: ```curl -fsSL https://get.docker.com -o get-docker.sh```
-  * Rulează script: ```bash get-docker.sh```
+### Install Docker
+
+```bash
+# Download Docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+
+# Run the installation script
+bash get-docker.sh
+```
+
+### Run Docker
+
 * Descarcă imagine de pe <https://hub.docker.com>: ```docker pull <image-name>```
 * Rulează container: ```docker run <image-name>```
 * Oprește container: ```docker stop <container-name>```
