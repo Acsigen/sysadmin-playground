@@ -162,7 +162,9 @@ Alerts configurations (email level 7 is fine, maybe even higher)
 </alerts>
 ```
 
-Configure log files locations. This depends on the logs you have. Most used formats: apache, syslog, mysql_log, postgresql_log. More info: <https://ossec-documentation.readthedocs.io/en/latest/configuration/ossec_conf.html#syntax-localfile>
+For rules classification please check [OSSEC Documentation](https://www.ossec.net/docs/manual/rules-decoders/rule-levels.html)
+
+Configure log files locations. This depends on the logs you have. Most used formats: apache, syslog, mysql_log, postgresql_log. More info at [OSSEC Documentation](https://ossec-documentation.readthedocs.io/en/latest/configuration/ossec_conf.html#syntax-localfile)
 
 ```xml
 <localfile>
