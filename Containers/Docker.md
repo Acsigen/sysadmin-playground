@@ -1,10 +1,16 @@
-# Docker (Work in progress)
+# Docker
 
 ## Prerequisites
 
-A list of most used Docker commands.
+Docker is a set of platform as a service products that use OS-level virtualization to deliver software in packages called containers.
 
-For demonstration purposes, we will test an ```nginx``` image. 
+For demonstration purposes, we will test the following images:
+
+* nginx
+* ubuntu
+* redis
+* flask-app
+* mysql
 
 ## Getting Started
 
@@ -22,38 +28,105 @@ bash get-docker.sh
 
 ### Run Docker
 
-* Descarcă imagine de pe <https://hub.docker.com>: ```docker pull <image-name>```
-* Rulează container: ```docker run <image-name>```
-* Oprește container: ```docker stop <container-name>```
-* Pornește container oprit: ```docker start <container-name>```
-* Lista containere docker: ```docker ps || docker ps -a```
-* Lista imagini docker: ```docker images```
-* Șterge container: ```docker rm <container-id sau container-name>```
-* Șterge imagine: ```docker rmi <image-name>```
-* Execută comandă în container nou: ```docker run ubuntu cat /etc/hosts```
-* Execută comandă în container care rulează: ```docker exec <container-name> cat /etc/hosts```
-  * ```docker exec -t -i mycontainer /bin/bash```
-* Rulează container în fundal: ```docker run -d <image-name>```
-* Accesează container din fundal: ```docker attach <container-id or container-name>```
-  * Se poate specifica doar o parte din ID, cât să fie unic
-* Rulează o anumită versiune de container: ```docker run redis:4.0```
-* Mod interactiv cu terminal: ```docker run -it <image-name>```
-* Port mapping: ```docker run -p <host-port>:<container-port> <image-name>```
-  * Dacă apare o eroare: ```systemctl restart docker```
-* Map storage to host: ```docker run -v <host-directory>:<container-directyory> mysql```
-  * ```docker run -v /opt/datadir:/var/lib/mysql mysql```
-* Vizualizare loguri container: ```docker logs <container-name>```
+Download the container image from [Docker Hub](https://hub.docker.com) and run the container:
 
-## __Environment Variables__
+```bash
+docker pull nginx
+docker run nginx
+```
 
-* Pass ENV Variables: ```docker run -e APP_COLOR=blue <image-name>```
-* Locația setărilor ENV pentru fiecare aplicație se face cu ```docker inspect``` și de obicei sunt în ```Configs/Env```
+You can also run the container in detached mode (background):
 
-## __Docker Images__
+```bash
+docker run -d nginx
+```
 
-Pentru a crea o imagine proprie, trebuie să stabilești pașii pentru instalarea și executarea aplicației începând chiar de la sistemul de operare (ex: ```apt update```) după care se execută ```docker build Dockerfile -t username/app-title```
+Run a specific version of the image:
 
-### __DockerFile sample__
+```bash
+docker run redis:4.0
+```
+
+Run container and execute command right after:
+
+```bash
+docker run ubuntu cat /etc/hosts
+```
+
+Run container in interactive mode with terminal:
+
+```bash
+docker run -it ubuntu
+```
+
+### Interacting with containers
+
+#### Start the container:
+
+```bash
+docker start nginx
+```
+
+#### Stop the container:
+
+```bash
+docker stop nginx
+```
+
+#### Execute commands
+
+Execute command within an already running container:
+
+```bash
+# Open a bash shell inside the container (-t: allocate TTY, -i: interactive mode)
+docker exec -t -i ubuntu /bin/bash
+```
+
+Access running container:
+
+```bash
+docker attach ubuntu
+```
+
+#### List containers and images:
+
+```bash
+# List containers, -a lists all containers, including the stopped ones
+docker ps || docker ps -a
+
+# List images
+docker images
+```
+
+#### Delete containers and images:
+
+```bash
+# Delete container. You can use container_id or container_name, also works with partial id but long enough to be unique.
+docker rm nginx
+
+# Delete image
+docker rmi nginx
+```
+
+## Environment Variables
+
+Pass environment variables:
+
+```bash
+docker run -e APP_COLOR=blue flask-app
+```
+
+The location of ```ENV``` variables for each app can be found with the following command:
+
+```bash
+docker inspect
+```
+
+They are usually in ```Configs/Env```.
+
+## Custom Docker Images
+
+To create your own image, you need to establish the steps for installing and running the application starting from the operating system itself:
 
 ```docker
 FROM Ubuntu
@@ -68,58 +141,129 @@ COPY . /opt/source-code
 ENTRYPOINT FLASK_APP=/opt/source-code/app.py flask run
 ```
 
-## __Terminal vs Entry points__
+Then you run the following command to build the image:
 
-Când un container pornește, acesta execută comanda din dreptul ```CMD``` (ex: ```docker run ubuntu-sleeper sleep 5```).
-Când un container pornește, acesta execută comanda din ```ENTRYPOINT``` la care noi puutem adăuga opțiuni (ex: ```docker run ubuntu-sleeper 10```).
-Acestea pot fi combinate pentru a seta o valoare default pentru entrypoint.
-Pentru a modifica un entrypoint la start: ```docker run --entrypoint sleep2.0 ubuntu-sleeper 10```.
+```bash
+docker build Dockerfile -t username/app-title
+```
 
-## __Networking__
+Pentru a crea o imagine proprie, trebuie să stabilești pașii pentru instalarea și executarea aplicației începând chiar de la sistemul de operare (ex: ```apt update```) după care se execută ```docker build Dockerfile -t username/app-title```
 
-La instalare, docker generează 3 interfețe: bridge (default), none și host.
-Se poate schimba: ```docker run Ubuntu --network=host```
+## Terminal vs. Entry point
 
-* Bridge - Internal IP (requires mapping to be accessed from external networks)
+### Terminal
+
+When a container starts, it executes the command alongside ```CMD``` such as:
+
+```bash
+docker run ubuntu-sleeper sleep 5
+```
+
+### Entry point
+
+When a container starts, it executes the command alongside ```ENTRYPOINT``` to which we can add options such as:
+
+```bash
+docker run ubuntu-sleeper 10
+```
+
+These can be combined to set a default value for the entrypoint.
+
+To modify an entrypointat startup: 
+
+```bash
+docker run --entrypoint sleep2.0 ubuntu-sleeper 10
+```
+
+## Networking
+
+### Port mapping
+
+To map a host port to the docker container use the following command:
+
+```bash
+# -p  <host-port>:<container-port>
+docker run -p 8080:80 nginx
+```
+
+If an error occurs, restart the docker service from ```systemd```: ```systemctl restart docker```.
+
+### Network interfaces
+
+Upon installation, docker generates three network interfaces:
+
+* Bridge (default)- Internal IP (requires mapping to be accessed from external networks)
 * Host - Maps the container to the host interface
 * None - Isolated network
+
+You can change the network type:
+
+```bash
+docker run ubuntu --network=host
+```
 
 Create docker network interface manually:
 
 ```bash
 docker network create \
 --driver bridge \
---subnet 182.18.0.0/16 \
+--subnet 172.16.0.0/16 \
 custom-isolated-network
 ```
 
 List all networks: ```docker network ls```.
 
-Docker has an embedded DNS which can help containers to connect to eachother through their names. (The DNS address is 127.0.0.11)
+Docker has an embedded DNS which can help containers to connect to eachother through their names. The DNS address is ```127.0.0.11```
 
-## __Storage__
+## Storage
 
-Create volume: ```docker volume create data_volume```. It creates a folder caled ```data_volume``` in ```/var/lib/docker/volumes```.  
-Mount the volume in a container: ```docker run -v data_volume:/var/lib/mysql mysql```. (Also called __Volume Mounting__)  
-Docker can also create volumes automatically if ```-v``` option is used. It can also be a custom location on the host ```/data/mysql```. (Also called __Bind Mounting__)
+Map storage to host: 
 
-__WARNING!__ THE ```-v``` OPTION IS NOT USED ANYMORE. INSTEAD, USE ```--mount```.  
-Example: ```docker run --mount type=bind,source=/data/mysql,target=/var/lib/mysql mysql```
+```bash
+# -v <host-directory>:<container-directory>
+docker run -v /home/ubuntu/public_html:/var/www/html nginx
+```
 
-## __Compose__
+Check container logs:
 
-You can create a configuration file in YAML (docker-compose.yml) format using ```docker compose``` command.
-You can name a container with ```--name=name``` option.
+```bash
+docker logs nginx```
+
+Create volume: 
+
+```bash
+docker volume create data_volume
+```
+
+It creates a folder caled ```data_volume``` in ```/var/lib/docker/volumes```.  
+
+Mount the volume in a container (also called **Volume Mounting**):
+
+```bash
+docker run -v data_volume:/var/lib/mysql mysql
+```
+Docker can also create volumes automatically if ```-v``` option is used. It can also be a custom location on the host ```/data/mysql``` (also called **Bind Mounting**).
+
+**WARNING! THE ```-v``` OPTION IS NOT USED ANYMORE. INSTEAD, USE ```--mount```:**
+
+```bash
+docker run --mount type=bind,source=/data/mysql,target=/var/lib/mysql mysql
+```
+
+## Compose
+
+You can create a configuration file in YAML (docker-compose.yml) format using ```docker compose``` command.  
+You can name a container with ```--name=name``` option.  
 You need to link containers to make a system work:
 
 ```bash
-docker run -d --name=vote -p 5000:80 --link redis:redis voting-app
 # --link <name of current redis container>:<name of redis from voting-app config file>
+docker run -d --name=vote -p 5000:80 --link redis:redis voting-app
 ```
 
-__WARNING!__ LINKING LIKE THIS IS DEPRECATED. IT IS USED JUST TO DEMONSTRATE THE CONCEPT OF LINKING THE CONTAINERS.
+**WARNING! LINKING LIKE THIS IS DEPRECATED. IT IS USED JUST TO DEMONSTRATE THE CONCEPT OF LINKING THE CONTAINERS.**
 
-## __Orchestration__
+## Orchestration
 
 To manage multiple instances in a production environment, use the following orchestrating solutions:
 
