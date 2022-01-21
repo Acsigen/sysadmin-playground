@@ -147,8 +147,6 @@ Then you run the following command to build the image:
 docker build Dockerfile -t username/app-title
 ```
 
-Pentru a crea o imagine proprie, trebuie să stabilești pașii pentru instalarea și executarea aplicației începând chiar de la sistemul de operare (ex: ```apt update```) după care se execută ```docker build Dockerfile -t username/app-title```
-
 ## Terminal vs. Entry point
 
 ### Terminal
