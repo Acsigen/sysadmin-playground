@@ -4,54 +4,6 @@
 
 This guide is highly opinionated and, in my honest opinion, these are the minimum requirements that a server must comply to. At least for a server that is exposed to the internet.
 
-## IPTables - recommended rules
-
-```bash
-# Default policies
--P INPUT DROP
--P FORWARD ACCEPT
--P OUTPUT ACCEPT
-
-# Allow incoming ping packets
-# For IPv6 is "-p ipv6-icmp", the rest is the same
--A INPUT -p icmp -j ACCEPT
-
-# Accept traffic on loopback interface
--A INPUT -i lo -j ACCEPT
-
-# Accept established and related incoming connections
--A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-
-# Drop invalid packets
--A INPUT -m conntrack --ctstate INVALID -j DROP
-
-# Block an IP addres
--A INPUT -s 4.3.2.1 -j DROP
-
-# Allow incoming SSH from IP
--A INPUT -p tcp -s 1.2.3.4/32 --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-
-# Allow incoming http/https
--A INPUT -p tcp -m multiport --dports 80,443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
-```
-
-## OSCAP OS hardening
-
-SCAP is a tool created by NIST to evaluate the configuration of different servers.  
-The following script scans the operating system (CentOS 7) and applies the standard profile, then fixes problems where possible. It also generates a nice report in HTML format.  
-To find available profiles, use: ```oscap info scap-security-guide-0.1.55/ssg-centos7-ds.xml```.  
-For older versions, such as Debian 8, find an older version on github which has the files corresponding to the operating system version.
-To scan the system without changing the configuration, remove the ``--remediate`` option from the command below.
-
-```bash
-yum -y install epel-release
-yum -y install openscap-scanner unzip wget
-cd /tmp
-wget https://github.com/ComplianceAsCode/content/releases/download/v0.1.55/scap-security-guide-0.1.55.zip
-unzip scap-security-guide-0.1.55.zip
-oscap xccdf eval --remediate --fetch-remote-resources --profile xccdf_org.ssgproject.content_profile_standard --results-arf results.xml --report report.html --oval-results scap-security-guide-0.1.55/ssg-centos7-ds.xml
-```
-
 ## Hide software versions for a web server
 
 ### __Apache__
@@ -64,6 +16,14 @@ Set:
 
 * ```ServerTokens Prod```
 * ```ServerSignature Off```
+
+### Nginx
+
+```bash
+nano /etc/nginx/nginx.conf
+```
+
+Set: ```server_tokens off;```
 
 ### __PHP__
 
@@ -87,6 +47,10 @@ Reload Apache server:
 
 ```bash
 systemctl reload httpd
+
+# or
+
+systemctl reload nginx
 ```
 
 ## Install & Configure OSSEC-HIDS
@@ -200,6 +164,23 @@ systemctl start ossec
 ```
 
 __WARNING!__ If after the server start you do not receive an email from the server, you might need to install postfix and configure it as internet site!
+
+## OSCAP OS hardening
+
+SCAP is a tool created by NIST to evaluate the configuration of different servers.  
+The following script scans the operating system (CentOS 7) and applies the standard profile, then fixes problems where possible. It also generates a nice report in HTML format.  
+To find available profiles, use: ```oscap info scap-security-guide-0.1.55/ssg-centos7-ds.xml```.  
+For older versions, such as Debian 8, find an older version on github which has the files corresponding to the operating system version.
+To scan the system without changing the configuration, remove the ``--remediate`` option from the command below.
+
+```bash
+yum -y install epel-release
+yum -y install openscap-scanner unzip wget
+cd /tmp
+wget https://github.com/ComplianceAsCode/content/releases/download/v0.1.55/scap-security-guide-0.1.55.zip
+unzip scap-security-guide-0.1.55.zip
+oscap xccdf eval --remediate --fetch-remote-resources --profile xccdf_org.ssgproject.content_profile_standard --results-arf results.xml --report report.html --oval-results scap-security-guide-0.1.55/ssg-centos7-ds.xml
+```
 
 ## Sanitise bash history
 
