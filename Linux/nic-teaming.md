@@ -14,7 +14,7 @@ For each bonded interface you can define the mode and the link monitoring option
 |1|Active Backup|one NIC active while another NIC is asleep. If the active NIC goes down, another NIC becomes active. only supported in x86 environments|Yes|No|
 |2|XOR|In this mode the, the MAC address of the slave NIC is matched up against the incoming request’s MAC and once this connection is established same NIC is used to transmit/receive for the destination MAC|Yes|Yes|
 |3|Broadcast|All transmissions are sent on all slaves|Yes|No|
-|4|Dynamic Link Aggregation|Yes|Yes|
+|4|Dynamic Link Aggregation|Aggregated NICs act as one NIC which results in a higher throughput, but also provides failover in the case that a NIC fails. Dynamic Link Aggregation requires a switch that supports IEEE 802.3ad.|Yes|Yes|
 |5|Transmit Load Balancing (TLB)|The outgoing traffic is distributed depending on the current load on each slave interface. Incoming traffic is received by the current slave. If the receiving slave fails, another slave takes over the MAC address of the failed slave|Yes|Yes|
 |6|Adaptive Load Balancing (ALB)|Unlike Dynamic Link Aggregation, Adaptive Load Balancing does not require any particular switch configuration. Adaptive Load Balancing is only supported in x86 environments. The receiving packets are load balanced through ARP negotiation|Yes|Yes|
 
