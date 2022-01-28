@@ -30,7 +30,7 @@
 * [Calculate hash](hash-calc.md)
 * [NIC Teaming](nic-teaming.md)
 * [Recover ROOT password](recover-root-password.md)
-* [Server Hardening and iptables configuration](server-hardening.md)
 * [Create swap memory file](swap-memory-file.md)
 * [Configure swappiness and cache pressure](swappiness-change.md)
 * [Configure static DNS on Ubuntu](ubuntu-static-dns.md)
+* [Web Server Hardening](server-hardening.md)
