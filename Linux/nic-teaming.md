@@ -87,3 +87,4 @@ We can verify current status of bonding interfaces and which interface is curren
 ## Source
 
 [The Geek Diary](https://www.thegeekdiary.com/centos-rhel-7-how-to-configure-network-bonding-or-nic-teaming/)
+[Ubuntu configuration - For future updates on this guide](https://www.tecmint.com/configure-network-bonding-teaming-in-ubuntu/)
