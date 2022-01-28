@@ -6,6 +6,7 @@
 * [DNF](dnf.md)
 * [Dump](dump.md)
 * [Find](find.md)
+* [Firewalls](firewalls.md)
 * [Grep](grep.md)
 * [In progress - MysQL](mysql.md)
 * [In progress - PostgreSQL](postgresql.md)
