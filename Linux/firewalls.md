@@ -70,6 +70,10 @@ iptables -L -n
 
 If you want to display or add rules from or to a specific table (such as NAT), pass the ```-t nat``` to the commands above.
 
+### Forwarding
+
+An example of port forwarding with iptables can be found in [Containers/LXD.md](../Containers/LXD.md#forward-port-to-the-container)
+
 ## UFW
 
 This is the default firewall that comes with Ubuntu.
