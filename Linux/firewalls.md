@@ -150,9 +150,9 @@ firewall-cmd --permanent --zone=public --add-service=https
 firewall-cmd --reload
 ```
 
-You can also remove rules
+To remove rules just change ```add``` with ```remove```.
 
-**If you do not specify ```--permanent```, the rules will be deleted after reload.**
+**If you do not specify ```--permanent```, the changes won't survive the reload.**
 
 ### Assign interface or IP to zone
 
@@ -186,5 +186,3 @@ Forward port 80 from the host to 192.168.1.5:8080:
 firewall-cmd --permanent --zone=public --add-forward-port=port=80:proto=tcp:toport=8080:toaddr=192.168.1.5
 firewall-cmd --reload
 ```
-
-To remove rules just change ```add``` with ```remove```.
