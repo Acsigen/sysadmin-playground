@@ -168,7 +168,7 @@ firewall-cmd --permanent --zone=trusted --add-source=192.168.2.0/24
 
 **You can assign an interface to one zone only but you can assign multiple IPs to a zone.**
 
-### Allow access based on source
+### Allow access based on source IP
 
 As you can see in the previous example, you can assign an IP range to a zone, then you can allow various services to that zone, this is how you allow traffic from a specific address.
 
