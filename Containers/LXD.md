@@ -135,6 +135,12 @@ Launch an instance of Ubuntu 16.04 and assign the name *test1*:
 lxc launch ubuntu:16.04 test1
 ```
 
+Launch an instance of ALMA Linux 8 and assign the name *akma-test*:
+
+```bash
+lxc launch images:almalinux/8 alma-test
+```
+
 Launch an instance and assign the ```bridged-network``` profile to it:
 
 ```bash
