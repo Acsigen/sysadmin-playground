@@ -35,3 +35,4 @@
 * [Configure static DNS on Ubuntu](ubuntu-static-dns.md)
 * [Web Server Hardening](server-hardening.md)
 * [Manage users and groups](groups.md)
+* [Configure Linux as a NAT router with iptables](nat.md)
