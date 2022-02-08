@@ -106,8 +106,85 @@ ufw reload
 
 FirewallD usually comes by default with RHEL based distributions.
 
+### Zones
+
 It has a slightly different approach, ```firewalld``` uses zones to specify rules. Each zone has a default policy, you can assign ip addresses and interfaces to each zone.
 
 The default zone in ```firewalld``` is ```public```. 
 
-To be continued...
+We will use two zones: ```public``` and ```trusted```.
+
+To get a list of zones you can run the following commands:
+
+```bash
+# List all zones and rules for each zone
+firewall-cmd --list-all-zones
+
+# List the default zone and its rules
+firewall-cmd --list-all
+
+# List only the names of the lists
+firewall-cmd --get-zones
+
+# List the name of the default zone
+firewall-cmd --get-default-zone
+
+# List the name of the active zones
+firewall-cmd --get-active-zones
+```
+
+### Change the default zone
+
+There are two ways to change the default zone.
+
+You can edit the configuration file ```/etc/firewalld/firewalld.conf``` and change the ```DefaultZone``` attribute or by running ```firewall-cmd --set-default-zone=drop```.
+
+### Allow ports and services
+
+In firewalld you can allow connections by specifying port/protocol or service name. To get a list of available services run ```firewall-cmd --get-services```.
+
+
+```bash
+firewall-cmd --permanent --zone=public --add-port=80/tcp
+firewall-cmd --permanent --zone=public --add-service=https
+firewall-cmd --reload
+```
+
+You can also remove rules
+
+**If you do not specify ```--permanent```, the rules will be deleted after reload.**
+
+### Assign interface or IP to zone
+
+To make a zone active you need to assign an interface or a source IP to the zone:
+
+```bash
+# Assign an interface to the public zone
+firewall-cmd --permanent --zone=public --add-interface=eth0@if12
+
+# Assign IP to trusted zone
+firewall-cmd --permanent --zone=trusted --add-source=192.168.2.0/24
+```
+
+**You can assign an interface to one zone only but you can assign multiple IPs to a zone.**
+
+### Allow access based on source
+
+As you can see in the previous example, you can assign an IP range to a zone, then you can allow various services to that zone, this is how you allow traffic from a specific address.
+
+### Forwarding
+
+To allow the IP forwarding to work, you need to switch on IP masquerading which can be done with the following command:
+
+```bash
+firewall-cmd --permanent --zone=public --add-masquerade
+```
+
+Forward port 80 from the host to 192.168.1.5:8080:
+
+```bash
+firewall-cmd --permanent --zone=public --add-forward-port=port=80:proto=tcp:toport=8080:toaddr=192.168.1.5
+firewall-cmd --reload
+```
+
+To remove rules just change ```add``` with ```remove```.
