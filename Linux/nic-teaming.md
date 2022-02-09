@@ -80,11 +80,53 @@ SLAVE=yes
 
 Restart the network services by running ```systemctl restart network``` or you can put the interface up by running ```ifup bond0```.
 
+We can verify current status of bonding interfaces and which interface is currently active, using the command ```cat /proc/net/bonding/bond0```.
+
 ## Ubuntu Configuration
 
-We can verify current status of bonding interfaces and which interface is currently active, using the command ```cat /proc/net/bonding/bond0```.
+Make sure that the bonding module is loaded by running lsmod | grep bonding, if not, then run modprobe bonding.
+
+To create a bond interface composed of the first two physical NICs in your system, issue the below command. However this method of creating bond interface is ephemeral and does not survive system reboot:
+
+```bash
+ip link add bond0 type bond mode 802.3ad
+ip link set eth0 master bond0
+ip link set eth1 master bond0
+```
+
+To create a permanent bond interface in **mode 0** type, use the method to manually edit interfaces configuration file.  
+For Ubuntu there are multiple possibilities for configuration file location as seen in the table below:
+
+|Install type|Renderer|File|
+|---|---|---|
+|Server ISO|systemd-networkd|```/etc/netplan/01-netcfg.yaml```|
+|Cloud Image|systemd-networkd|```/etc/netplan/50-cloud-init.yaml```|
+|Desktop ISO|NetworkManager|```/etc/netplan/01-network-manager-all.yaml```|
+
+Do note that configuration files can exist in three different locations with the precidence from most important to least as follows:
+
+* *run/netplan/*.yaml*
+* *etc/netplan/*.yaml*
+* *lib/netplan/*.yaml*
+
+Bonding can easily be configured with the required interfaces list and by specifying the mode. The mode can be any of the valid types: balance-rr, active-backup, balance-xor, broadcast, 802.3ad, balance-tlb, balance-alb. See the [bonding wiki page](https://help.ubuntu.com/community/UbuntuBonding#Descriptions_of_bonding_modes) for more details.
+
+```yaml
+bonds:
+    bond0:
+        dhcp4: yes
+        interfaces:
+            - enp3s0
+            - enp4s0
+        parameters:
+            mode: active-backup
+            primary: enp3s0
+```
+
+To apply the new configuration run ```netplan try``` to check if the configuration is good then run ```netplan apply```.
 
 ## Source
 
 * [The Geek Diary](https://www.thegeekdiary.com/centos-rhel-7-how-to-configure-network-bonding-or-nic-teaming/)
-* [Ubuntu configuration - For future updates on this guide](https://www.tecmint.com/configure-network-bonding-teaming-in-ubuntu/)
+* [Ubuntu configuration](https://ubuntu.com/blog/ubuntu-bionic-netplan#:~:text=Netplan%20enables%20easily%20configuring%20networking%20on%20a%20system,default%20configuration%20utility%20starting%20with%20Ubuntu%2017.10%20Artful.)
+* [Bonding wiki page](https://help.ubuntu.com/community/UbuntuBonding#Descriptions_of_bonding_modes)
