@@ -33,8 +33,6 @@ The bonding driver supports two methods to monitor a slave’s link state:
 
 ## RHEL Configuration
 
-__The configuration examples are for a RHEL based distribution.__
-
 Make sure that the bonding module is loaded by running ```lsmod | grep bonding```, if not, then run ```modprobe bonding```.
 
 Create the bond interface in ```/etc/sysconfig/network-scripts``` directory with the following configuration
