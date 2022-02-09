@@ -31,7 +31,7 @@ The bonding driver supports two methods to monitor a slave’s link state:
   * This sends ARP queries to peer systems on the network and uses the response as an indication that the link is up.
   * You can specify the monitoring frequency and target addresses.
 
-## Configuration
+## RHEL Configuration
 
 __The configuration examples are for a RHEL based distribution.__
 
@@ -81,6 +81,8 @@ SLAVE=yes
 ```
 
 Restart the network services by running ```systemctl restart network``` or you can put the interface up by running ```ifup bond0```.
+
+## Ubuntu Configuration
 
 We can verify current status of bonding interfaces and which interface is currently active, using the command ```cat /proc/net/bonding/bond0```.
 
