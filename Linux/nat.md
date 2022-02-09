@@ -2,8 +2,8 @@
 
 ## Prerequisites
 
-* Public interface: *eth1*
-* Local interface: *eth0*
+* Public interface: ```eth1```
+* Local interface: ```eth0```
 
 ## Configuration
 To set a linux machine as a router you need to proceed with the following steps.
@@ -34,7 +34,7 @@ iptables -t nat -A POSTROUTING -o eth1 -j MASQUERADE
 ip6tables -t nat -A POSTROUTING -o eth1 -j MASQUERADE
 ```
 
-Accept traffic from *eth0*:
+Accept traffic from ```eth0```:
 
 ```bash
 # IPv4
