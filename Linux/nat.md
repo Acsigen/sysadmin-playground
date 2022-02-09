@@ -4,6 +4,8 @@
 
 * Public interface: ```eth1```
 * Local interface: ```eth0```
+* Public static IPv4: 1.2.3.4/32
+* Private IPv4 class: 192.168.1.0/24
 
 ## Configuration
 To set a linux machine as a router you need to proceed with the following steps.
@@ -32,6 +34,16 @@ iptables -t nat -A POSTROUTING -o eth1 -j MASQUERADE
 
 #IPv6
 ip6tables -t nat -A POSTROUTING -o eth1 -j MASQUERADE
+```
+
+*MASQUERADE* is useful when working with dynamic IPs, when you have a static IP you can use *SNAT*, it is faster than *MASQUERADE*:
+
+```bash
+# IPv4
+iptables -t nat -A POSTROUTING -s 192.168.1.0/24 --j SNAT --to-source 1.2.3.4/32
+
+# IPv6
+ip6tables -t nat -A POSTROUTING -s fc00::/64 -j SNAT --to-source public:ipv6:address/128
 ```
 
 Accept traffic from ```eth0```:
