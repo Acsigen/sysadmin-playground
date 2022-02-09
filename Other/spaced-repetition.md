@@ -1,5 +1,9 @@
 # Spaced Repetition
 
+## Study less study smart
+
+<https://www.youtube.com/watch?v=IlU-zDU6aQ0>
+
 ## The curve of forgetting
 
 ![The curve of forgetting](https://uwaterloo.ca/campus-wellness/sites/ca.campus-wellness/files/styles/body-500px-wide/public/uploads/images/curve_0-500x231.gif?itok=KLIKAnPx)
