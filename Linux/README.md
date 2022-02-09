@@ -8,6 +8,7 @@
 * [Find](find.md)
 * [Firewalls](firewalls.md)
 * [Grep](grep.md)
+* [IP commands](ip.md)
 * [In progress - MysQL](mysql.md)
 * [In progress - PostgreSQL](postgresql.md)
 * [RegEx](regex.md)
