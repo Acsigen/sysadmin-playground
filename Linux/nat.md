@@ -1,32 +1,65 @@
 # Configure Linux as a NAT router with iptables
 
-To set a linux machine as a router you need the following
+## Prerequisites
 
-1- Enable forwarding on the box with
+* Public interface: *eth1*
+* Local interface: *eth0*
 
+## Configuration
+To set a linux machine as a router you need to proceed with the following steps.
+
+Enable forwarding:
+
+```bash
+# IPv4
 echo 1 > /proc/sys/net/ipv4/ip_forward
-Assuming your public interface is eth1 and local interface is eth0
 
-2- Set natting the natting rule with:
+# IPv6
+echo 1 > /proc/sys/net/ipv6/conf/all/forwarding
+```
 
+To make the settings persistent edit the ```sysctl.conf``` with ```vi /etc/sysctl.conf```:
+
+* Set ```net.ipv4.ip_forward=1```
+* Set ```net.ipv6.conf.all.forwarding=1```
+
+## Iptables configuration
+Set natting the natting rule with:
+
+```bash
+# IPv4
 iptables -t nat -A POSTROUTING -o eth1 -j MASQUERADE
-3- Accept traffic from eth0:
 
+#IPv6
+ip6tables -t nat -A POSTROUTING -o eth1 -j MASQUERADE
+```
+
+Accept traffic from *eth0*:
+
+```bash
+# IPv4
 iptables -A INPUT -i eth0 -j ACCEPT
-4- Allow established connections from the public interface.
 
+# IPv6
+ip6tables -A INPUT -i eth0 -j ACCEPT
+```
+
+Allow established connections from the public interface:
+
+```bash
+# IPv4
 iptables -A INPUT -i eth1 -m state --state ESTABLISHED,RELATED -j ACCEPT
-5- Allow outgoing connections:
 
+# IPv6
+ip6tables -A INPUT -i eth1 -m state --state ESTABLISHED,RELATED -j ACCEPT
+```
+
+Allow outgoing connections:
+
+```bash
+# IPv4
 iptables -A OUTPUT -j ACCEPT
 
-```vi /etc/sysctl.conf```
-```conf
-# Uncomment the next line to enable packet forwarding for IPv4
-#net.ipv4.ip_forward=1
-
-# Uncomment the next line to enable packet forwarding for IPv6
-#  Enabling this option disables Stateless Address Autoconfiguration
-#  based on Router Advertisements for this host
-#net.ipv6.conf.all.forwarding=1
+# IPv6
+iptables -A OUTPUT -j ACCEPT
 ```
