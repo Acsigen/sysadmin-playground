@@ -79,10 +79,34 @@ Filesystem       Size  Used Avail Use% Mounted on
 
 ## Fdisk & Pvresize
 
+The output of ```lsblk```:
 
+```output
+NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+fd0               2:0    1    4K  0 disk
+sda               8:0    0   20G  0 disk
+├─sda1            8:1    0  500M  0 part /boot
+└─sda2            8:2    0  4.5G  0 part
+  ├─centos-root 253:0    0    4G  0 lvm  /
+  └─centos-swap 253:1    0  512M  0 lvm  [SWAP]
+sr0              11:0    1 1024M  0 rom
+```
 
-# Sources
+### Partition table
 
-* <https://serverfault.com/questions/861517/centos-7-extend-partition-with-unallocated-space>
-* <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/recognize-expanded-volume-linux.html>
-* <https://www.tecmint.com/extend-and-reduce-lvms-in-linux/>
+* Run ```fdisk /dev/sda```
+* Issue ```p``` to print your current partition table and copy that output to some safe place
+* Now issue ```d``` followed by ```2``` to remove the second partition. Issue ```n``` to create a new second partition. Make sure the start equals the start of the partition table you printed earlier. Make sure the end is at the end of the disk (usually the default).
+* Issue ```t``` followed by ```2``` followed by ```8e``` to toggle the partition type of your new second partition to *8e (Linux LVM)*
+* Issue ```p``` to review your new partition layout and make sure the start of the new second partition is exactly where the old second partition was.
+* If everything looks right, issue ```w``` to write the partition table to disk. You will get an error message from *partprobe* that the partition table couldn't be reread (because the disk is in use).
+* Reboot
+
+### Resize the LVM PV
+
+After your system rebooted invoke ```pvresize /dev/sda2```. Your Physical LVM volume will now span the rest of the drive and you can create or extend logical volumes into that space.
+
+## Sources
+
+* [Serverfault](https://serverfault.com/questions/861517/centos-7-extend-partition-with-unallocated-space)
+* [AWS Documentation](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/recognize-expanded-volume-linux.html)
