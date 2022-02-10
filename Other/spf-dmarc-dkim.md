@@ -45,4 +45,4 @@ Example: ```v=DMARC1;p=reject;sp=none;adkim=s;aspf=r;pct=100;fo=0;rf=afrf;ri=864
 
 ## Learn with an interactive environment
 
-You can learn how DMARC works using [learndmarc.com](ttps://www.learndmarc.com/)
+You can learn how DMARC works using [learndmarc.com](https://www.learndmarc.com/)
