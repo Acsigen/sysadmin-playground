@@ -49,5 +49,4 @@ You can learn how DMARC works using [learndmarc.com](https://www.learndmarc.com/
 
 ## Source
 
-* Guide inspired by [this article of Simon Andrews](https://simonandrews.ca/articles/how-to-set-up-spf-dkim-dmarc)
-* 
+* Guide inspired by [this article written by Simon Andrews](https://simonandrews.ca/articles/how-to-set-up-spf-dkim-dmarc)
