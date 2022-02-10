@@ -42,3 +42,7 @@ Create a ```TXT``` record with the name ```_dmarc.example.com``` and give it the
 * ```rua=mailto:postmaster@example.com```: Receivers. Addresses to which aggregate feedback is to be sent. Comma separated values
 
 Example: ```v=DMARC1;p=reject;sp=none;adkim=s;aspf=r;pct=100;fo=0;rf=afrf;ri=86400;ruf=mailto:postmaster@example.com```
+
+## Learn with an interactive environment
+
+You can learn how DMARC works using [learndmarc.com](ttps://www.learndmarc.com/)
