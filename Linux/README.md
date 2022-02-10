@@ -3,6 +3,7 @@
 ## Tools
 
 * [alias](alias.md)
+* [APT](apt.md)
 * [DNF](dnf.md)
 * [Dump](dump.md)
 * [Find](find.md)
