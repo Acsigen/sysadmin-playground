@@ -196,7 +196,7 @@ ClientAliveInterval 300
 AllowUsers bastionuser
 ```
 
-Remove any existing host keys with the command rm /etc/ssh/ssh_host_* then regenerate host keys with the following commands
+Remove any existing host keys with the command ```rm /etc/ssh/ssh_host_*``` then regenerate host keys with the following commands
 
 ```bash
 ssh-keygen -t rsa -b 4096 -f /etc/ssh/ssh_host_rsa_key -N ""
