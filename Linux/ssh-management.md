@@ -216,7 +216,6 @@ Probably the simplest yet most effective control is to implement a second factor
 * [paepper.com](https://www.paepper.com/blog/posts/how-to-properly-manage-ssh-keys-for-server-access/)
 * [goteleport.com](https://goteleport.com/blog/ssh-bastion-host/)
 
-## Future Updates
+## Future Update
 
 * [Google’s Google Authenticator PAM module](https://goteleport.com/blog/ssh-2fa-tutorial/)
-* [SSH Certificate based authentication](https://goteleport.com/blog/ssh-certificates/)
