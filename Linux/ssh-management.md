@@ -111,7 +111,112 @@ RevokedKeys /etc/ssh/revoked-keys
 
 ## SSH Bastion
 
+An SSH bastion is a critical component of your computing environment, as it reduces the attack surface to just one machine. Therefore, setting up security on this machine is absolutely critical. Before we get to SSH configuration, make sure that the regular Linux security hardening is applied:
+
+* All network ports except those needed for SSH are not accessible from the Internet
+* SSH port is moved from 22 to something else
+* ```root``` user is disabled
+
+### Access a host via bastion
+
+To use a bastion, execute the following command:
+
+```bash
+ssh -J bastion.example.com 10.5.5.10
+```
+
+To avoid using -J flag many times, you can configure your client to apply this flag automatically based on the destination host name or address, and you can use wildcards.  
+Edit ```~/.ssh/config```:
+
+```conf
+Host 10.5.5.*
+    ProxyJump bastion.example.com
+```
+
+With the configurtion above in place, the user only needs to execute ```ssh 10.5.5.10```.
+
+### Bastion configuration
+
+we need to disable interactive SSH sessions so regular users won’t be able to SSH into the bastion.
+
+Update ```/etc/ssh/sshd_config```:
+
+```conf
+# Prohibit regular SSH clients from allocating virtual terminals, forward X11, etc:
+PermitTTY no
+X11Forwarding no
+PermitTunnel no
+GatewayPorts no
+
+# Prohibit launching any remote commands:
+ForceCommand /usr/sbin/nologin
+```
+
+The configuration above will completely disable SSH logins into the bastion server, for everybody.  
+You may also want to allow SSH sessions for certain users.
+
+For that to work, create a separate user account for regular users. In this example we’ll call it ```bastionuser```:
+
+```conf
+Match User bastionuser
+	PermitTTY no
+	X11Forwarding no
+	PermitTunnel no
+	GatewayPorts no
+	ForceCommand /usr/sbin/nologin
+```
+
+The regular users will have to use the following client configuration:
+
+```conf
+Host 10.5.5.*
+    ProxyJump bastionuser@bastion.example.com
+```
+
+The examples above will work only if the public SSH keys of your users are copied to both the bastion host and the destination machines.
+
+## Hardening the SSH server
+
+Install a Host Intrusion Detection System such as [OSSEC](server-hardening.md#install--configure-ossec-hids) or Wazuh.
+
+Apply the following configuration to the ```/etc/ssh/sshd_config``` file:
+
+```conf
+# Disable root ssh acces
+PermitRootLogin no
+
+# Disable password login
+PasswordAuthentication no
+AuthenticationMethods publickey,keyboard-interactive:pam
+
+# Configure idle time logout in seconds
+ClientAliveInterval 300
+
+# Explicitly Allow SSH users
+AllowUsers bastionuser
+```
+
+Remove any existing host keys with the command rm /etc/ssh/ssh_host_* then regenerate host keys with the following commands
+
+```bash
+ssh-keygen -t rsa -b 4096 -f /etc/ssh/ssh_host_rsa_key -N ""
+ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key -N ""
+```
+
+Deactivate Diffie-Hellman short moduli. Diffie-Hellman (DH) key exchange protocol is used to exchange shared secret (encryption key) between client and server. Short moduli (smaller prime numbers) are vulnerable to the [Logjam attack](https://weakdh.org/). To counter this with respect to OpenSSH configuration, Mozilla suggests [deactivating short moduli](https://infosec.mozilla.org/guidelines/openssh) with the command:
+
+```bash
+awk "$5 >= 3071" /etc/ssh/moduli > /etc/ssh/moduli.tmp && mv /etc/ssh/moduli.tmp /etc/ssh/moduli
+```
+
+Probably the simplest yet most effective control is to implement a second factor authentication in your SSH server. [Google’s Google Authenticator PAM module](https://goteleport.com/blog/ssh-2fa-tutorial/) is the popular choice. But it only supports TOTP-based authentication. For more robust authentication, opt for solutions that enable authentication based on [U2F](https://www.yubico.com/authentication-standards/fido-u2f/) or [WebAuthn](https://en.wikipedia.org/wiki/WebAuthn) for SSH.
+
 ## Sources
 
 * [paepper.com](https://www.paepper.com/blog/posts/how-to-properly-manage-ssh-keys-for-server-access/)
+* [goteleport.com](https://goteleport.com/blog/ssh-bastion-host/)
 
+## Future Updates
+
+* [Google’s Google Authenticator PAM module](https://goteleport.com/blog/ssh-2fa-tutorial/)
+* [SSH Certificate based authentication](https://goteleport.com/blog/ssh-certificates/)
