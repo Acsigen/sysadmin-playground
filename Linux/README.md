@@ -27,7 +27,7 @@
 * [Clean memory cache](clean-memory-cache.md)
 * [Compile code from source](compile-from-source.md)
 * [Install Arch Linux](install-arch-linux.md)
-* [In progress - Extend storage space](extend-lvm.md)
+* [Extend storage space](extend-storage.md)
 * [Calculate hash](hash-calc.md)
 * [NIC Teaming](nic-teaming.md)
 * [Recover ROOT password](recover-root-password.md)
