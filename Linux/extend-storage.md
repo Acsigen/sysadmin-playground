@@ -1,4 +1,4 @@
-# Extend VM storage
+# Extend Storage
 
 ## Prerequisites
 
