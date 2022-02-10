@@ -1,6 +1,6 @@
 # Setup SPF, DMARC, and DKIM to avoid email spoofing
 
-Guide inspired by this article: <https://simonandrews.ca/articles/how-to-set-up-spf-dkim-dmarc>
+## Prerequisites
 
 The following example is for an email registered with Microsoft 365.
 
@@ -46,3 +46,8 @@ Example: ```v=DMARC1;p=reject;sp=none;adkim=s;aspf=r;pct=100;fo=0;rf=afrf;ri=864
 ## Learn with an interactive environment
 
 You can learn how DMARC works using [learndmarc.com](https://www.learndmarc.com/)
+
+## Source
+
+* Guide inspired by [this article of Simon Andrews](https://simonandrews.ca/articles/how-to-set-up-spf-dkim-dmarc)
+* 
