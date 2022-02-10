@@ -19,21 +19,25 @@
 * [Tmux](tmux.md)
 * [Vim](vim.md)
 
-
 ## Procedures
 
-* [Setup WireGuard VPN](WireGuard.md)
-* [Check storage](check-storage.md)
-* [Clean memory cache](clean-memory-cache.md)
-* [Compile code from source](compile-from-source.md)
-* [Install Arch Linux](install-arch-linux.md)
-* [Extend storage space](extend-storage.md)
-* [Calculate hash](hash-calc.md)
-* [NIC Teaming](nic-teaming.md)
-* [Recover ROOT password](recover-root-password.md)
-* [Create swap memory file](swap-memory-file.md)
-* [Configure swappiness and cache pressure](swappiness-change.md)
-* [Configure static DNS on Ubuntu](ubuntu-static-dns.md)
-* [Web Server Hardening](server-hardening.md)
-* [Manage users and groups](groups.md)
-* [Configure Linux as a NAT router with iptables](nat.md)
+* Memory
+  * [Clean memory cache](clean-memory-cache.md)
+  * [Configure swappiness and cache pressure](swappiness-change.md)
+  * [Create swap memory file](swap-memory-file.md)
+* Networking
+  * [Configure Linux as a NAT router with iptables](nat.md)
+  * [Configure static DNS on Ubuntu](ubuntu-static-dns.md)
+  * [NIC Teaming](nic-teaming.md)
+  * [Setup WireGuard VPN](WireGuard.md)
+* OS procedures
+  * [Calculate hash](hash-calc.md)
+  * [Compile code from source](compile-from-source.md)
+  * [Install Arch Linux](install-arch-linux.md)
+  * [Manage users and groups](groups.md)
+  * [Recover ROOT password](recover-root-password.md)
+* Security
+  * [Web Server Hardening](server-hardening.md)
+* Storage
+  * [Check storage](check-storage.md)
+  * [Extend storage space](extend-storage.md)
