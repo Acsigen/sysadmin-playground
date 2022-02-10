@@ -1,4 +1,4 @@
-# Secure management of SSH
+# SSH secure management
 
 ## How to properly manage keys
 
