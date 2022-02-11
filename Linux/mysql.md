@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-Various improvements of MySQL
+Basic management and various improvements of MySQL/MariaDB server.
 
 ## UTF8 collation issue
 
@@ -122,6 +122,135 @@ Display the current privileges
 SHOW GRANTS FOR 'newuser'@'localhost';
 ```
 
+## Manage the database
+
+### Character set and collation
+
+Display the list of character sets:
+
+```mysql
+SHOW CHARATER SET;
+```
+
+To display even more variants based on a specific character set:
+
+```mysql
+SHOW COLLATION LIKE 'utf8mb4%';
+```
+
+### Create and delete database
+
+Create database:
+
+```mysql
+CREATE DATABASE production_db
+```
+
+Create database and specify collation:
+
+```mysql
+CREATE DATABASE production_db1 CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+```
+
+Change collation of an existing database:
+
+```mysql
+ALTER DATABASE production_db1 CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+```
+
+You can also set these at the table level.
+
+Select a database:
+
+```mysql
+USE production_db
+```
+
+To delete the database:
+
+```mysql
+DROP DATABASE production_db1;
+```
+
+
+### Manage tables
+
+Create a table with three columns (id - Integer with a length of 3, first_name - Varchar with a length oof 15, and email - Varchar with a length of 20):
+
+```mysql
+CREATE TABLE users(id Int(3),first_name Varchar(15),email Varchar(20));
+```
+
+Display a list of existing tables:
+
+```mysql
+SHOW TABLES
+```
+
+Add another column next to first_name to the users table:
+
+```mysql
+ALTER TABLE users ADD last_name varchar (20) AFTER first_name;
+```
+
+Insert data into users table:
+
+```mysql
+INSERT INTO users VALUES('1','John','Smith','js@example.com');
+```
+
+To insert more than one row, separate the value groups with a comma.
+
+Show the contents of a table:
+
+```mysql
+SELECT * FROM users;
+```
+
+Update a value:
+
+```mysql
+UPDATE users SET id = 3 WHERE first_name = 'John';
+```
+
+Delete a row
+
+```mysql
+DELETE FROM users where id = 3;
+```
+
+Delete a column:
+
+```mysql
+ALTER TABLE users DROP city;
+```
+
+Rename a table:
+
+```mysql
+RENAME TABLE users TO clients;
+```
+
+### Backup & Restore
+
+To backup a database we will use ```mysqldump```.
+
+Backup database ```production_db2```:
+
+```bash
+mysqldump --defaults-extra-file=test_db.cnf production_db2 > production_db2.sql
+```
+
+To restore a database, you need to recreate the database and import the ```.sql``` file:
+
+```mysql
+CREATE DATABASE production_db2 CHARACTER SET utf8mb4 COLLATE utb8mb4_general_ci;
+```
+
+```bash
+mysql --defaults-extra-file=test_db.cnf production_db2 < production_db2.sql
+```
+
 ## Source
 
 * <https://techglimpse.com/mysql-database-connection-error-solved/>
@@ -129,3 +258,4 @@ SHOW GRANTS FOR 'newuser'@'localhost';
 * <https://news.ycombinator.com/item?id=29907551>
 * <https://bugzilla.mozilla.org/show_bug.cgi?id=1253201>
 * <https://unix.stackexchange.com/questions/205180/how-to-pass-password-to-mysql-command-line>
+* <https://www.tecmint.com/gliding-through-database-mysql-in-a-nutshell-part-i/>
