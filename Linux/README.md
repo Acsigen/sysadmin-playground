@@ -10,7 +10,7 @@
 * [Firewalls](firewalls.md)
 * [Grep](grep.md)
 * [IP commands](iproute.md)
-* [In progress - MysQL](mysql.md)
+* [MySQL/MariaDB](mysql.md)
 * [In progress - PostgreSQL](postgresql.md)
 * [RegEx](regex.md)
 * [Rsync](rsync.md)
