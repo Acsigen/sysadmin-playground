@@ -39,6 +39,7 @@ Notice how when you type any of these insertion modes, you'll see that vim has e
 * ```y``` - yank or copy whatever is selected
 * ```yy``` - yank or copy the current line
 * ```p``` - paste the copied text before the cursor
+* ```V``` + ```d``` + ```p```: Select current line, cut, and paste somewehere else
 
 ## Command mode
 
