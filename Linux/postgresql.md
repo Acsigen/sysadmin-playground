@@ -118,7 +118,7 @@ SELECT datname FROM pg_database;
 Create table:
 
 ```sql
-CREATE TABLE users (id char(3) NOT NULL, first_name char(10) NOT NULL, city char(15), country char(20) NOT NULL, PRIMARY KEY (id));
+CREATE TABLE users (id integer NOT NULL, first_name char(10) NOT NULL, city char(15), country char(20) NOT NULL, PRIMARY KEY (id));
 ```
 
 Insert data into the table:
@@ -133,12 +133,63 @@ Show contents of the users table:
 SELECT * FROM users;
 ```
 
+Add/remove column:
+
+In PostgreSQL you can only append a column, you cannot insert a column where you want:
+
+```sql
+ -- Add column
+ ALTER TABLE users ADD COLUMN last_name char (20);
+
+-- Delete column
+ALTER TABLE users DROP COLUMN city; 
+```
+
+Update a value:
+
+```sql
+UPDATE users SET id = 3 WHERE first_name = 'John';
+```
+
+Delete row:
+
+```sql
+DELETE FROM users WHERE id = 3;
+```
+
 Delete database and user:
 
 ```sql
 DROP DATABASE production_db1;
 DROP USER newuser;
 ```
+
+## Backup & restore
+
+To backup the database you need to use ```pg_dump```:
+
+```bash
+# Switch user
+sudo -i -u postgres
+
+# Backup the entire database
+pg_dump production_db1 > production_db1.sql
+
+# Backup only the schema
+pg_dump production_db1 --schema-only > production_db1_schema.sql
+```
+
+Restore the database:
+
+```bash
+pg_dump production_db1 < production_db1.sql
+```
+
+## Script variables
+
+In case you want to use a script to connect to the database and perform some actions, you can use ```PGPASSWORD``` to pass the password.
+
+**This is not recommended because the password is stored in cleartext. You can use ```PGPASSFILE``` to specify the location of the password file to use for lookups.**
 
 ## Sources
 
