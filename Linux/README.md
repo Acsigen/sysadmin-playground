@@ -13,7 +13,7 @@
 * [Less](less.md)
 * [MySQL/MariaDB](mysql.md)
 * [PostgreSQL](postgresql.md)
-* [RegEx](regex.md)
+* [RegEx and Wildcards](regex-and-wildcards.md)
 * [Rsync](rsync.md)
 * [Samba](smb.md)
 * [Systemctl](systemctl.md)
