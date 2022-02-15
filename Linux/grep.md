@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-This guid will show you how to find text in file contents.
+This guide will show you how to find text in file contents.
 
 ## Find text in file contents
 
