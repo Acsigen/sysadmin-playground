@@ -10,6 +10,7 @@
 * [Firewalls](firewalls.md)
 * [Grep](grep.md)
 * [IP commands](iproute.md)
+* [Less](less.md)
 * [MySQL/MariaDB](mysql.md)
 * [PostgreSQL](postgresql.md)
 * [RegEx](regex.md)
