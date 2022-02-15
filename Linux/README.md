@@ -36,6 +36,7 @@
 * OS procedures
   * [Calculate hash](hash-calc.md)
   * [Compile code from source](compile-from-source.md)
+  * [I/O Redirection](io-redirection.md)
   * [Install Arch Linux](install-arch-linux.md)
   * [Manage users and groups](groups.md)
   * [Recover ROOT password](recover-root-password.md)
