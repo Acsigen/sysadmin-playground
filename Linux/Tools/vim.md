@@ -24,6 +24,7 @@ When using ```?``` the functions of ```n``` and ```N``` are inverted.
 * `:bp` - move to the previous file
 * `:buffers` - lists the name of the opened files
 * `:buffer 2` - switch to the file with number 2 on the list
+* `:e filename.txt` - add file to current editing session
 
 ## Insert mode
 
