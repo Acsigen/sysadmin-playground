@@ -8,6 +8,7 @@
 * [Dump](Tools/dump.md)
 * [Find](Tools/find.md)
 * [Firewalls](Tools/firewalls.md)
+* [Fuser](Tools/fuser.md)
 * [Grep](Tools/grep.md)
 * [IP commands](Tools/iproute.md)
 * [Less](Tools/less.md)
