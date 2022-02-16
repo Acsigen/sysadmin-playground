@@ -41,6 +41,7 @@
   * [Install Arch Linux](install-arch-linux.md)
   * [Manage users and groups](groups.md)
   * [Recover ROOT password](recover-root-password.md)
+  * [Terminal session recording](terminal-session-recording.md)
 * Security
   * [SSH secure management](ssh-management.md)
   * [Web Server Hardening](server-hardening.md)
