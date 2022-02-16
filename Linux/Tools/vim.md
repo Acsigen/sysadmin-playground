@@ -22,6 +22,8 @@ When using ```?``` the functions of ```n``` and ```N``` are inverted.
 * ```l``` or the __right arrow__ - move you right one character
 * `:bn` - move to the next file
 * `:bp` - move to the previous file
+* `:buffers` - lists the name of the opened files
+* `:buffer 2` - switch to the file with number 2 on the list
 
 ## Insert mode
 
