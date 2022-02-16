@@ -119,29 +119,3 @@ chgrp group filename
 # For a directory and recursive
 chgrp -R group directory
 ```
-
-## Change identities
-
-Start a new shell with a specific user:
-
-```bash
-su -l user
-```
-
-If only `-` is used, `l` is implied by default.
-
-**If no user is specified, `root` is implied.**
-
-Run a command rather than starting a shell:
-
-```bash
-su -l username -c 'command'
-```
-
-## Change password
-
-Use the `passwd` tool:
-
-```bash
-passwd username
-```
