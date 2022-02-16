@@ -49,5 +49,6 @@
   * [SSH secure management](Procedures/ssh-management.md)
   * [Web Server Hardening](Procedures/server-hardening.md)
 * Storage
-  * [Check storage](Procedures/check-storage.md)
+  * [Check storage space](Procedures/check-storage.md)
+  * [Devices and filesystems](Procedures/devices-and-filesystems.md)
   * [Extend storage space](Procedures/extend-storage.md)
