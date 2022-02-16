@@ -5,6 +5,7 @@ Most of these commands are also available for __vi__.
 I removed the __vi__ file from this repository because this one is more comprehensive.
 
 ## Normal mode
+
 ### Search
 
 To search for a string type ```/``` and then your text: ```/hello``` then press __Enter__.  
@@ -19,6 +20,8 @@ When using ```?``` the functions of ```n``` and ```N``` are inverted.
 * ```k``` or the __up arrow__ - move you up one line
 * ```j``` or the __down arrow__ - move you down one line
 * ```l``` or the __right arrow__ - move you right one character
+* `:bn` - move to the next file
+* `:bp` - move to the previous file
 
 ## Insert mode
 
