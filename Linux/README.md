@@ -14,6 +14,7 @@
 * [Links](links.md)
 * [MySQL/MariaDB](mysql.md)
 * [PostgreSQL](postgresql.md)
+* [Quotes](quotes.md)
 * [RegEx and Wildcards](regex-and-wildcards.md)
 * [Rsync](rsync.md)
 * [Samba](smb.md)
