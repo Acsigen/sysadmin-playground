@@ -20,3 +20,29 @@ usermod -a -G docker zabbix
 ```bash
 gpasswd -d zabbix docker
 ```
+
+## Change identities
+
+Start a new shell with a specific user:
+
+```bash
+su -l zabbix
+```
+
+If only `-` is used, `l` is implied by default.
+
+**If no user is specified, `root` is implied.**
+
+Run a command rather than starting a shell:
+
+```bash
+su -l zabbix -c 'ls -l'
+```
+
+## Change password
+
+Use the `passwd` tool:
+
+```bash
+passwd zabbix
+```
