@@ -43,6 +43,7 @@
   * [Recover ROOT password](recover-root-password.md)
   * [Terminal session recording](terminal-session-recording.md)
 * Security
+  * [Permissions](permissions.md)
   * [SSH secure management](ssh-management.md)
   * [Web Server Hardening](server-hardening.md)
 * Storage
