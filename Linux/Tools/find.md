@@ -17,3 +17,15 @@ Find directory. If you don't know the exact name of the directory you can use ``
 ```bash
 find /home -type d -name .ssh
 ```
+
+## Alternative
+
+An alternative to find is `mlocate`. It indexes filenames in a database.
+
+```bash
+# Update the database
+updatedb
+
+# Find a file (you need to know the exact name)
+locate filename
+```
