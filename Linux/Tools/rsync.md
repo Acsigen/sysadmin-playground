@@ -37,3 +37,5 @@ rsync -vruth --delete /source/directory /destination/directory
 |```-h```|Human readable output|
 |```-z```|With  this  option, rsync compresses the file data as it is sent to the destination machine, which reduces the amount of data being transmitted|
 |```--delete```|This tells rsync to delete extraneous files from the receiving  side  (ones  that  aren’t  on  the sending  side),  but  only  for  the directories that are being synchronized.|
+
+**If you append a `/` to the source, `rsync` will copy only the contents of the source directory and not the directory itself.**
