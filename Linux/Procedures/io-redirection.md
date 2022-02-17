@@ -156,3 +156,15 @@ echo "" > test-file.txt
 # Second method
 > test-file.txt
 ```
+
+Other tools to take into consideration:
+
+|Name|Scope|
+|---|---|
+|`cut`|The cut program is used to extract a section of text from a line and output the extracted section to standard output|
+|`paste`|The paste command does the opposite of cut. Rather than extracting a column of text from a file, it adds one or more columns of text to a file|
+|`diff`|Compare two files|
+|`patch`|Apply a `diff` to an original|
+|`nl`|Number lines|
+|`fmt`|Text formatter|
+|`pr`|The pr program is used to paginate text|
