@@ -18,7 +18,7 @@ Before you do anything, take a look at the __README__ or __INSTALL__ file inside
 
 Depending on what compile method that the developer used, you'll have to use different commands, such as cmake or something else.
 
-nside the package contents will be a configure script, this script checks for dependencies on your system and if you are missing anything, you'll see an error and you'll need to fix those dependencies.
+Inside the package contents will be a configure script, this script checks for dependencies on your system and if you are missing anything, you'll see an error and you'll need to fix those dependencies.
 
 ```bash
 ./configure
