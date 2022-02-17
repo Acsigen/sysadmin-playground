@@ -3,6 +3,7 @@
 ## Prerequisites
 
 * Server listening interface name: ```ens2```
+* Wireguard interface name: `wg0`
 * Private IPv4 class for the VPN: ```10.0.0.0/24```
 * Private IPv6 class for the VPN: ```fc00::/24```
 * Server name: ```wireguard.example.com```
@@ -50,9 +51,9 @@ PublicKey = <client-public-key>
 AllowedIPs = 10.0.0.2/32, fc00::2/128
 ```
 
-If you want to route all client traffic through the VPN server please add the following lines into the ```[Interface]``` section of the config file and replace ```ens2``` with the name of your interface:
+If you want to route all client traffic through the VPN server please add the following lines into the ```[Interface]``` section of the config file and replace ```ens2``` with the name of your physical interface.
 
-I have separated the ```PostUp``` and ```PostDown``` commands with ```\``` for an easier readability in this guide. ```%i``` can be replaced by ```ens2```. __I do not know if it will work if you type them like this so please type all of them on a single line.___
+I have separated the ```PostUp``` and ```PostDown``` commands with ```\``` for an easier readability in this guide, please write the commands on a single line after removing the `\`. ```%i``` can be replaced by ```wg0```.
 
 ```conf
 PostUp = sysctl -w net.ipv4.ip_forward=1;\
@@ -68,6 +69,8 @@ PostDown = iptables -D FORWARD -i %i -j ACCEPT;\
 ```
 
 Don't forget to open the port 51820 on your firewall.
+
+**It won't forward traffic if the the server runs inside an LXC container due to kernel restrictions.**
 
 ### Launch the server
 
