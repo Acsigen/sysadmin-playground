@@ -37,6 +37,7 @@
   * [NIC Teaming](Procedures/nic-teaming.md)
   * [Setup WireGuard VPN](Procedures/WireGuard.md)
 * OS procedures
+  * [Add directory to PATH](Procedures/update-path.md)
   * [Calculate hash](Procedures/hash-calc.md)
   * [Compile code from source](Procedures/compile-from-source.md)
   * [I/O Redirection](Procedures/io-redirection.md)
