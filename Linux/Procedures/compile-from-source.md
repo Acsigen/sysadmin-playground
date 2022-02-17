@@ -30,7 +30,7 @@ Inside of the package contents, there is a file called Makefile that contains ru
 make
 ```
 
-This command actually installs the package, it will copy the correct files to the correct locations on your computer.
+This command actually installs the package, it will copy the correct files to the correct locations on your computer. Usually the location is `/usr/local/bin`.
 
 ```bash
 make install
