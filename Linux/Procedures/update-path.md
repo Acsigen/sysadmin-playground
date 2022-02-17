@@ -29,3 +29,7 @@ Now the PATH looks like this:
 ```
 
 To make it permanent, add the command to `~/.bashrc`
+
+## Tips
+
+The `~/bin` directory is a good place to put scripts intended for personal use.
