@@ -51,3 +51,4 @@ To run apply the config file just run the previous command without arguments.
 ## Sources
 
 * [Simplilearn YouTube Channel](https://www.youtube.com/watch?v=EcnqJbxBcM0)
+* [Awesome Ansible GitHub Reposiory - for further development](https://github.com/KeyboardInterrupt/awesome-ansible)
