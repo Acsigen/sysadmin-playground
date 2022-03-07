@@ -1,5 +1,7 @@
 # Enable `gpedit` in Home version
 
+Create a file called `gpedit-enable.bat` runit then reboot and run `gpedit`.
+
 ```powershell
 @echo off
    nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
