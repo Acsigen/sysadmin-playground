@@ -13,6 +13,27 @@ Next go to **Computer Configuration &rarr; Administrative Templates &rarr; Windo
 
 ## Ransomware protection
 
+From the GUI of Windows Defender go to **Virus & Threat protection &rarr; Ransomware protection &rarr; Mange ransomware protection** and enable `Controlled Folder access`.
+
+## Signature Update
+
+From powershell run the following commands:
+
+```powershell
+Set-MpPreference -SignatureUpdateInterval 1
+Set-MpPreference -CheckForSignaturesBeforeRunningScan 1
+```
+
+## Other Settings
+
+From GUI enable:
+
+* PUA Protection
+* App & Browser control
+* Reputation based protection
+* Isolated browsing
+* Exploit protection
+
 ## Source
 
 * [0ut3r.space](https://0ut3r.space/2022/03/06/windows-defender/)
