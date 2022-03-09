@@ -101,6 +101,113 @@ By adding the surrounding braces, the shell no longer interprets the trailing 1 
 
 ## Here Documents
 
+A here document is an additional form of I/O redirection in which we embed a body of text into our script and feed it into the standard input of a command.
+
+It looks like this:
+
+```bash
+command << token
+text
+token
+```
+
+The string `_EOF_` (meaning *end of file*, a common convention) was selected as the token and marks the end of the embedded text. Tthe token must appear alone and that there must not be trailing spaces on the line.
+
+Our script will look like this:
+
+```bash
+#!/bin/bash
+
+# Program to output a system information page
+
+TITLE="System Information Report For $HOSTNAME"
+CURRENT_TIME="$(date +"%x %r %Z")"
+TIMESTAMP="Generated $CURRENT_TIME, by $USER"
+
+cat << _EOF_
+<html>
+ <head>
+ <title>$TITLE</title>
+ </head>
+ <body>
+ <h1>$TITLE</h1>
+ <p>$TIMESTAMP</p>
+ </body>
+</html>
+_EOF_
+```
+
+When using a here document, by default, single and double quotes within here documents lose their special meaning to the shell.
+
+```bash
+foo="some text"
+cat << _EOF_
+$foo
+"$foo"
+'$foo'
+\$foo
+_EOF_
+some text
+"some text"
+'some text'
+$foo
+```
+
+If we change the redirection operator from `<<` to `<<-`, the shell will ignore leading tab characters (but not spaces) in the here document. This allows a here document to be indented, which can improve readability.
+
+This feature can be somewhat problematic because many text editors (and programmers themselves) will prefer to use spaces instead of tabs to achieve indentation in their scripts.
+
+## Functions
+
+Declare a function:
+
+```bash
+# Formal version
+function name {
+	commands
+	return
+}
+
+# Simpler version
+name () {
+	commands
+	return
+}
+```
+
+To call a function just simply type the name of the function:
+
+```bash
+function step2 {
+echo "Step 2"
+return
+}
+
+echo "Step 1"
+step2
+```
+
+When using `_EOF_` you can call the function using the following syntax: `$(function_name)`. It goes the same for system commands (e.g. `uptime`)
+
+In functions is recommended to use local variables.
+
+```bash
+# Global variable
+foo=0
+
+function funct_1 {
+# Local variable
+local foo
+foo=1
+echo "fnct_1 foo = $foo"
+}
+
+echo "Global foo = $foo" #Will output 0
+fnct_1 #Will output 1
+```
+
+Shell functions make excellent replacements for aliases and are actually the preferred method of creating small commands for personal use. Aliases are limited in the kind of commands and shell features they support, whereas shell functions allow anything that can be scripted.
+
 ## Sources
 
 * The Linux Command Line 2nd Edition
