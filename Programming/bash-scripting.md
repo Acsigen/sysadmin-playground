@@ -1,5 +1,15 @@
 # Bash Scripting
 
+## ToC
+
+* [Prerequisites](#prerequisites)
+* [Scripts location](#scripts-location)
+* [Comments and sheband](#comments-and-shebang)
+* [Variables](#variables)
+* [Here Documents](#here-documents)
+* [Functions](#functions)
+* [Sources](#sources)
+
 ## Prerequisites
 
 Basics of bash scripting.
