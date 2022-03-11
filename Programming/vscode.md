@@ -7,14 +7,33 @@ I also use Cascadia Code font with a size of 14.
 
 ## Extensions
 
-* GitHub Theme
-* Visual Studio IntelliCode
-* Prettier - Code formatter
-* Python (the one with 40M+ installs)
+- Visual Studio IntelliCode
+- Prettier - Code formatter
+- Python (the one with 40M+ installs)
+- YAML
+- markdownlint
+- Markdown PDF
 
 ## Keyboard Shortcuts
 
-* Show all commands: __CTRL + Shift + P__
-* Turn on Zen Mode (hide all clutter): __CTRL + K Z__
-* Find in file: __CTRL + F___
-* Replace in file: __CTRL + H__
+- Show all commands: **CTRL + Shift + P**
+- Turn on Zen Mode (hide all clutter): **CTRL + K Z**
+- Find in file: **CTRL + F**
+- Replace in file: **CTRL + H**
+- Autoformat the entire file: **SHIFT + ALT + F**
+
+## Settings
+
+```json
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.fontFamily": "'Cascadia Code',Consolas, 'Courier New', monospace",
+  "editor.accessibilitySupport": "off",
+  "editor.autoClosingBrackets": "beforeWhitespace",
+  "editor.autoClosingQuotes": "beforeWhitespace",
+  "editor.copyWithSyntaxHighlighting": false,
+  "editor.dragAndDrop": false,
+  "update.enableWindowsBackgroundUpdates": false,
+  "telemetry.telemetryLevel": "error"
+}
+```
