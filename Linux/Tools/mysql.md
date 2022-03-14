@@ -231,6 +231,12 @@ Rename a table:
 RENAME TABLE users TO clients;
 ```
 
+Repair a corrupted table:
+
+```mysql
+REPAIR TABLE users;
+```
+
 ### Backup & Restore
 
 To backup a database we will use ```mysqldump```.
