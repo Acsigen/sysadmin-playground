@@ -9,6 +9,7 @@
 * [Here Documents](#here-documents)
 * [Functions](#functions)
 * [IF](#if)
+* [Read Keyboard Input](#read-keyboard-input)
 * [Sources](#sources)
 
 ## Prerequisites
@@ -518,6 +519,131 @@ mkdir temp && cd temp
 # Check if temp directory exists, if it fails, create the directory
 [[ -d temp ]] || mkdir temp
 ```
+
+## Read Keyboard Input
+
+### Basic keyboard input
+
+The `read` builtin command is used to read a single line of standard input. It can be used to read keyboard input or, when using redirection, a line of data from a file.
+
+Example:
+
+```bash
+# read-integer: evaluate the value of an integer.
+echo -n "Please enter an integer -> "
+# Store the input to variable named int
+read int
+if [[ "$int" =~ ^-?[0-9]+$ ]]; then
+    if [ "$int" -eq 0 ]; then
+        echo "$int is zero."
+    else
+        if [ "$int" -lt 0 ]; then
+            echo "$int is negative."
+        else
+            echo "$int is positive."
+        fi
+        if [ $((int % 2)) -eq 0 ]; then
+            echo "$int is even."
+        else
+            echo "$int is odd."
+        fi
+    fi
+else
+    echo "Input value is not an integer." >&2
+    exit 1
+fi
+```
+
+We use echo with the `-n` option (which suppresses the trailing newline on output) to display a prompt.
+
+Read can work with multiple values at a time. Separate them with spaces.
+
+```bash
+# read-multiple: read multiple values from keyboard
+echo -n "Enter one or more values > "
+read var1 var2 var3 var4 var5
+echo "var1 = '$var1'"
+echo "var2 = '$var2'"
+echo "var3 = '$var3'"
+echo "var4 = '$var4'"
+echo "var5 = '$var5'"
+```
+
+If `read` receives fewer than the expected number, the extra variables are empty, while an excessive amount of input results in the final variable containing all of the extra input.
+
+If no variables are listed after the `read` command, a shell variable, `REPLY`, will be assigned all the input.
+
+`read` supports options:
+
+|Option|Description|
+|---|---|
+|`-a array`|Assign the input to array, starting with index zero.|
+|`-d delimiter`|The first character in the string delimiter is used to indicate the end of input, rather than a newline character.|
+|`-e`|Use Readline to handle input. This permits input editing in the same manner as the command line.|
+|`-i string`|Use string as a default reply if the user simply presses enter. Requires the `-e` option.|
+|`-n num`|Read `num` characters of input, rather than an entire line.|
+|`-p prompt`|Display a prompt for input using the string prompt.|
+|`-r`|Raw mode. Do not interpret backslash characters as escapes.|
+|`-s`|Silent mode. Do not echo characters to the display as they are typed. This is useful when inputting passwords and other confidential information.|
+|`-t seconds`|Timeout. Terminate input after seconds. read returns a non-zero exit status if an input times out.|
+|`-u fd`|Use input from file descriptor `fd`, rather than standard input.|
+
+Example on how you candle password input:
+
+```bash
+# read-secret: input a secret passphrase
+if read -t 10 -sp "Enter secret passphrase > " secret_pass; then
+    echo -e "\nSecret passphrase = '$secret_pass'"
+else
+    echo -e "\nInput timed out" >&2
+    exit 1
+fi
+```
+
+Example on how you handle default values if user only presses `Enter`:
+
+```bash
+# read-default: supply a default value if user presses Enter key.
+read -e -p "What is your user name? " -i $USER
+echo "You answered: '$REPLY'"
+```
+
+#### Internal Field Separator (IFS)
+
+Normally, the shell performs word-splitting on the input provided to `read`.
+
+The default value of IFS contains a *space*, a *tab*, and a *newline* character, each of which will separate items from one another.
+
+We can adjust the value of IFS to control the separation of fields input to read:
+
+```bash
+# read-ifs: read fields from a file
+FILE=/etc/passwd
+read -p "Enter a username > " user_name
+file_info="$(grep "^$user_name:" $FILE)"
+if [ -n "$file_info" ]; then
+
+# The line consists of three parts: a variable assignment, a read command with a list of variable names as arguments, and a strange new redirection operator.
+
+#The shell allows one or more variable assignments to take place immediately before a command. These assignments alter the environment for the command that follows. The effect of the assignment is temporary, changing the environment only for the duration of the command
+
+# The <<< operator indicates a here string. A here string is like a here document, only shorter, consisting of a single string.
+    IFS=":" read user pw uid gid name home shell <<< "$file_info"
+    echo "User = '$user'"
+    echo "UID = '$uid'"
+    echo "GID = '$gid'"
+    echo "Full Name = '$name'"
+    echo "Home Dir. = '$home'"
+    echo "Shell = '$shell'"
+else
+    echo "No such user '$user_name'" >&2
+    exit 1
+fi
+```
+
+**You cannot pipe `read`. While the read command normally takes input from standard input, you cannot do this: `echo "foo:" | read`**
+
+#### Validating input
 
 ## Sources
 
