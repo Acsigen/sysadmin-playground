@@ -11,6 +11,7 @@
 * [IF](#if)
 * [Read Keyboard Input](#read-keyboard-input)
 * [WHILE Loop](#while-loop)
+* [Troubleshooting](#troubleshooting)
 * [Sources](#sources)
 
 ## Prerequisites
@@ -792,7 +793,14 @@ sort -k 1,1 -k 2n distros.txt | while read distro version release; do
 done
 ```
 
+## Troubleshooting
+
+As a general rule, always precede wildcards (such as `*` and `?`) with `./` to prevent misinterpretation by commands. This includes things like `*.pdf` and `???.mp3`, for example.
+
+Be careful with filenames. Just don't use spaces and special characters.
+
+To trace an error, add `echo "This was executed"` to segments of the script to better locate the error.
+
 ## Sources
 
 * The Linux Command Line 2nd Edition
-
