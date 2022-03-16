@@ -9,6 +9,7 @@
 * [Here Documents](#here-documents)
 * [Functions](#functions)
 * [IF](#if)
+* [CASE](#case)
 * [Read Keyboard Input](#read-keyboard-input)
 * [WHILE Loop](#while-loop)
 * [Troubleshooting](#troubleshooting)
@@ -521,6 +522,52 @@ mkdir temp && cd temp
 # Check if temp directory exists, if it fails, create the directory
 [[ -d temp ]] || mkdir temp
 ```
+
+## CASE
+
+In `bash`, the multiple-choice compound command is called `case`.
+
+```bash
+# case-menu: a menu driven system information program
+clear
+echo "
+Please Select:
+1. Display System Information
+2. Display Disk Space
+3. Display Home Space Utilization
+0. Quit
+"
+read -p "Enter selection [0-3] > "
+case "$REPLY" in
+    0) echo "Program terminated."
+       exit
+       ;;
+    1) echo "Hostname: $HOSTNAME"
+       uptime
+       ;;
+    2) df -h
+       ;;
+    3) if [[ "$(id -u)" -eq 0 ]]; then
+           echo "Home Space Utilization (All Users)"
+           du -sh /home/*
+       else
+           echo "Home Space Utilization ($USER)"
+           du -sh "$HOME"
+       fi
+       ;;
+    *) echo "Invalid entry" >&2
+       exit 1
+       ;;
+esac
+```
+
+The patterns used by `case` are the same as those used by pathname expansion. Patterns are terminated with a `)` character (e.g. `???)` matches if the *word* is exactly three characters long)
+
+`*)` Matches any value of word. It is a good practice to use it as the default option in case nothing else matches the patterns.
+
+It is also possible to use multiple patterns at once by using `|` as a separator. Creating an *or* conditional pattern (e.g. `q|Q)`).
+
+`case` will stop comparing values after the first match. To overcome this, you can place `&` after `;;`. This way, `case` will continue running the next comparison instead of terminating.
 
 ## Read Keyboard Input
 
