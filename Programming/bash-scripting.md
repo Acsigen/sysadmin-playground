@@ -12,6 +12,7 @@
 * [CASE](#case)
 * [Read Keyboard Input](#read-keyboard-input)
 * [WHILE Loop](#while-loop)
+* [Positional Parameters (Command Arguments)](#positional-parameters-command-arguments)
 * [Troubleshooting](#troubleshooting)
 * [Sources](#sources)
 
@@ -837,6 +838,123 @@ sort -k 1,1 -k 2n distros.txt | while read distro version release; do
     "$distro" \
     "$version" \
     "$release"
+done
+```
+
+## Positional Parameters (Command Arguments)
+
+The shell provides a set of variables called positional parameters that contain the individual words on the command line. The variables are named 0 through 9. They can be demonstrated this way:
+
+```bash
+# posit-param: script to view command line parameters
+echo "
+Number of arguments: $#
+\$0 = $0
+\$1 = $1
+\$2 = $2
+\$3 = $3
+\$4 = $4
+\$5 = $5
+\$6 = $6
+\$7 = $7
+\$8 = $8
+\$9 = $9
+"
+```
+
+When running `./posit-param a b c d` the output is:
+
+```output
+Number of arguments: 4
+$0 = /home/me/bin/posit-param
+$1 = a
+$2 = b
+$3 = c
+$4 = d
+$5 =
+$6 =
+$7 =
+$8 =
+$9 =
+```
+
+Even when no arguments are provided, `$0` will always contain the first item appearing on the command line, which is the pathname of the program being executed.
+
+The shell also provides a variable, `$#`, that contains the number of arguments on the command line.
+
+The `shift` command causes all the parameters to *move down one* each time it is executed. In fact, by using shift, it is possible to get by with only one parameter (in addition to `$0`, which never changes).
+
+```bash
+# posit-param2: script to display all arguments
+count=1
+while [[ $# -gt 0 ]]; do
+    echo "Argument $count = $1"
+    count=$((count + 1))
+    shift
+done
+```
+
+It is sometimes useful to manage all the positional parameters as a group. 
+
+The shell provides two special parameters for this purpose. They both expand into the complete list of positional parameters but differ in rather subtle ways:
+
+|Parameter|Description|
+|---|---|
+|`$*`|Expands into the list of positional parameters, starting with 1. When surrounded by double quotes, it expands into a double-quoted string containing all of the positional parameters, each separated by the first character of the IFS shell variable (by default a space character).|
+|`$@`|Expands into the list of positional parameters, starting with 1. When surrounded by double quotes, it expands each positional parameter into a separate word as if it was surrounded by double quotes.|
+
+```bash
+ $* :
+$1 = Hello
+$2 = World
+
+ "$*" :
+$1 = Hello World
+$2 =
+ $@ :
+$1 = Hello
+$2 = World
+ "$@" :
+$1 = Hello
+$2 = Hello World
+$3 =
+```
+
+* `$*` and `$@` produce: *Hello World*
+* `"$*"` produces: *"Hello World"*
+* `"$@"` produces: *"Hello" "Hello World"*
+
+A more complete example:
+
+```bash
+# display a message when the help option is invoked or an unknown option is attempted
+usage () {
+ echo "$PROGNAME: usage: $PROGNAME [-f file | -i]"
+ return
+}
+# process command line options
+interactive=
+filename=
+
+# This loop continues while the positional parameter $1 is not empty
+while [[ -n "$1" ]]; do
+    # Examine the current positional parameter to see whether it matches any of the supported choices
+    case "$1" in
+        # When detected, it causes an additional shift to occur, which advances the positional parameter $1 to the filename argument supplied to the -f option
+        -f | --file)        shift
+                            filename="$1"
+                            ;;
+        -i | --interactive) interactive=1
+                            ;;
+        -h | --help)        usage
+                            exit
+                            ;;
+        *)                  usage >&2
+                            exit 1
+                            ;;
+    esac
+    # advance the positional parameters to ensure that the loop will eventually terminate
+    shift
 done
 ```
 
