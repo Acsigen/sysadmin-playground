@@ -10,6 +10,7 @@
 * [Functions](#functions)
 * [IF](#if)
 * [Read Keyboard Input](#read-keyboard-input)
+* [WHILE Loop](#while-loop)
 * [Sources](#sources)
 
 ## Prerequisites
@@ -685,6 +686,110 @@ else
     echo "Invalid entry." >&2
     exit 1
 fi
+```
+
+## WHILE Loop
+
+The syntax looks like this: `while commands; do commands; done`.
+
+Basic while loop:
+
+```bash
+# while-count: display a series of numbers
+count=1
+while [[ "$count" -le 5 ]]; do
+    echo "$count"
+    count=$((count + 1))
+done
+    echo "Finished."
+```
+
+The `break` command immediately terminates a loop, and program control resumes with the next statement following the loop. The `continue` command causes the remainder of the loop to be skipped, and program control resumes with the next iteration of the loop.
+
+```bash
+# while-menu2: a menu driven system information program
+DELAY=3 # Number of seconds to display results
+while true; do
+    clear
+    cat <<- _EOF_
+    Please Select:
+    1. Display System Information
+    2. Display Disk Space
+    3. Display Home Space Utilization
+    0. Quit
+_EOF_
+    read -p "Enter selection [0-3] > "
+    if [[ "$REPLY" =~ ^[0-3]$ ]]; then
+        if [[ "$REPLY" == 1 ]]; then
+            echo "Hostname: $HOSTNAME"
+            uptime
+            sleep "$DELAY"
+            continue
+        fi
+        if [[ "$REPLY" == 2 ]]; then
+            df -h
+            sleep "$DELAY"
+            continue
+        fi
+        if [[ "$REPLY" == 3 ]]; then
+            if [[ "$(id -u)" -eq 0 ]]; then
+                echo "Home Space Utilization (All Users)"
+                du -sh /home/*
+            else
+                echo "Home Space Utilization ($USER)"
+                du -sh "$HOME"
+            fi
+            sleep "$DELAY"
+            continue
+        fi
+    if [[ "$REPLY" == 0 ]]; then
+        break
+    fi
+    else
+        echo "Invalid entry."
+        sleep "$DELAY"
+    fi
+done
+    echo "Program terminated."
+```
+
+The `until` compound command is much like `while`, except instead of exiting a loop when a non-zero exit status is encountered, it does the opposite. An until loop continues until it receives a zero exit status.
+
+```bash
+# until-count: display a series of numbers
+
+count=1
+until [[ "$count" -gt 5 ]]; do
+    echo "$count"
+    count=$((count + 1))
+done
+    echo "Finished."
+```
+
+You can also read lines from files with `while` and `until`:
+
+```bash
+# while-read: read lines from a file
+while read distro version release; do
+    printf "Distro: %s\tVersion: %s\tReleased: %s\n" \
+    "$distro" \
+    "$version" \
+    "$release"
+done < distros.txt
+```
+
+To redirect a file to the loop, we place the redirection operator after the `done` statement.
+
+It is also possible to pipe standard input into a loop:
+
+```bash
+# while-read2: read lines from a file
+sort -k 1,1 -k 2n distros.txt | while read distro version release; do
+    printf "Distro: %s\tVersion: %s\tReleased: %s\n" \
+    "$distro" \
+    "$version" \
+    "$release"
+done
 ```
 
 ## Sources
