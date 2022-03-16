@@ -643,7 +643,49 @@ fi
 
 **You cannot pipe `read`. While the read command normally takes input from standard input, you cannot do this: `echo "foo:" | read`**
 
-#### Validating input
+#### Menus
+
+We can create menus so the user can pick an option:
+
+```bash
+clear
+echo "
+Please Select:
+1. Display System Information
+2. Display Disk Space
+3. Display Home Space Utilization
+0. Quit
+"
+read -p "Enter selection [0-3] > "
+if [[ "$REPLY" =~ ^[0-3]$ ]]; then
+    if [[ "$REPLY" == 0 ]]; then
+        echo "Program terminated."
+        exit
+    fi
+    if [[ "$REPLY" == 1 ]]; then
+        echo "Hostname: $HOSTNAME"
+        uptime
+        exit
+    fi
+    if [[ "$REPLY" == 2 ]]; then
+        df -h
+        exit
+    fi
+    if [[ "$REPLY" == 3 ]]; then
+        if [[ "$(id -u)" -eq 0 ]]; then
+            echo "Home Space Utilization (All Users)"
+            du -sh /home/*
+        else
+            echo "Home Space Utilization ($USER)"
+            du -sh "$HOME"
+        fi
+        exit
+    fi
+else
+    echo "Invalid entry." >&2
+    exit 1
+fi
+```
 
 ## Sources
 
