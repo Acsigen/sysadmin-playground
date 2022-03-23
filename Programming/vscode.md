@@ -38,3 +38,11 @@ I also use Cascadia Code font with a size of 14.
   "editor.acceptSuggestionOnEnter": "off"
 }
 ```
+
+## Fonts
+
+I have three fonts that I really enjoy using:
+
+- Roboto Mono by Google
+- Ubuntu Mono by Canonical
+- Cascadia Mono by Microsoft
