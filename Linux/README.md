@@ -20,6 +20,7 @@
 * [RegEx and Wildcards](Tools/regex-and-wildcards.md)
 * [Rsync](Tools/rsync.md)
 * [Samba](Tools/smb.md)
+* [Sed](Tools/sed.md)
 * [Systemctl](Tools/systemctl.md)
 * [Tar](Tools/tar.md)
 * [TCPDump](Tools/tcpdump.md)
