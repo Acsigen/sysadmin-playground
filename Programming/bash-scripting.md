@@ -16,6 +16,7 @@
 * [Operators](#operators)
 * [Arrays](#arrays)
 * [Positional Parameters (Command Arguments)](#positional-parameters-command-arguments)
+* [Traps](#traps)
 * [Troubleshooting](#troubleshooting)
 * [Sources](#sources)
 
@@ -1126,6 +1127,69 @@ while [[ -n "$1" ]]; do
     shift
 done
 ```
+
+## Traps
+
+When we design a large, complicated script, it is important to consider what happens if the user logs off or shuts down the computer while the script is running.
+
+When such an event occurs, a signal will be sent to all affected processes. In turn, the programs representing those processes can perform actions to ensure a proper and orderly termination of the program.
+
+In the following example, every time program receives `SIGINT` or `SIGTERM` signal, it displays a message:
+
+```bash
+trap "echo 'I am ignoring you.'" SIGINT SIGTERM
+for i in {1..5}; do
+    echo "Iteration $i of 5"
+    sleep 5
+done
+```
+
+A list of signals can be found bellow:
+
+|Signal|Description|
+|---|---|
+|`SIGINT`|The signal sent when we press **CTRL + C**.|
+|`SIGTERM` and `SIGQUIT`|`SIGTERM` is the default signal when we use the `kill` command. `SIGQUIT` also generates a core dump before exiting.|
+|`SIGKILL`|We use this signal to forcefully terminate the process. We should be careful as the process won’t be able to execute any clean-up routine.|
+
+**Use `SIGINT` only when you want to trap the interruption caused by the user. In other cases, use the other signals accordingly.**
+
+It is a good practice to use `trap` with functions:
+
+```bash
+exit_on_signal_SIGINT () {
+    echo "Script interrupted." 2>&1
+    exit 0
+}
+
+exit_on_signal_SIGTERM () {
+    echo "Script terminated." 2>&1
+    exit 0
+}
+
+trap exit_on_signal_SIGINT SIGINT
+trap exit_on_signal_SIGTERM SIGTERM
+
+for i in {1..5}; do
+    echo "Iteration $i of 5"
+    sleep 5
+done
+```
+
+**One reason signal handlers are included in scripts is to remove temporary files that the script may create to hold intermediate results during execution.**
+
+It is important to give temporary files nonpredictable file-names. This avoids an exploit known as a temp race attack. One way to create a nonpredictable (but still descriptive) name is to do something like this:
+
+```bash
+# This will create a filename consisting of the program’s name, followed by its PID followed by a random integer.
+tempfile=/tmp/$(basename $0).$$.$RANDOM
+
+# An even better way
+# This will create a filename consisting of the file name, followed by the PID and X random numbers and letters. /tmp/foobar.6593.UOZuvM6654
+tempfile=$(mktemp /tmp/foobar.$$.XXXXXXXXXX)`
+```
+
+For scripts that are run by regular users, avoid using `/tmp` directory. Instead, create a `tmp` directory inside their `home` directory.
 
 ## Troubleshooting
 
