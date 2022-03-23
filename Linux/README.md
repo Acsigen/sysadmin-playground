@@ -41,6 +41,7 @@
   * [Add directory to PATH](Procedures/update-path.md)
   * [Calculate hash](Procedures/hash-calc.md)
   * [Compile code from source](Procedures/compile-from-source.md)
+  * [Echo cancellation](Procedures/echo-cancellation.md)
   * [I/O Redirection](Procedures/io-redirection.md)
   * [Install Arch Linux](Procedures/install-arch-linux.md)
   * [Manage users and groups](Procedures/groups.md)
