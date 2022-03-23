@@ -13,6 +13,7 @@
 * [Read Keyboard Input](#read-keyboard-input)
 * [WHILE Loop](#while-loop)
 * [FOR Loop](#for-loop)
+* [Operators](#operators)
 * [Positional Parameters (Command Arguments)](#positional-parameters-command-arguments)
 * [Troubleshooting](#troubleshooting)
 * [Sources](#sources)
@@ -863,6 +864,41 @@ for ((i=0;i<=5;i++)); do
     echo $i
 done
 ```
+
+## Operators
+
+### Assignment operators
+
+In addition to `=` notation, the shell provides notation that perform some assignments:
+
+|Notation|Description|
+|---|---|
+|`parameter = value`|Simple assignment. Assigns value to parameter.|
+|`parameter += value`|Addition. Equivalent to parameter = parameter + value.|
+|`parameter -= value`|Subtraction. Equivalent to parameter = parameter – value.|
+|`parameter *= value`|Multiplication. Equivalent to parameter = parameter * value.|
+|`parameter /= value`|Integer division. Equivalent to parameter = parameter / value.|
+|`parameter %= value`|Modulo. Equivalent to parameter = parameter % value.|
+|`parameter++`|Variable post-increment. Equivalent to parameter = parameter + 1 |(however, see the following discussion).
+|`parameter−−`|Variable post-decrement. Equivalent to parameter = parameter − 1.|
+|`++parameter`|Variable pre-increment. Equivalent to parameter = parameter + 1.|
+|`--parameter`|Variable pre-decrement. Equivalent to parameter = parameter − 1.|
+
+**The shell only performs integer arithmetic. It cannot do floating point arithmetic. To achieve that, please use `bc`**
+
+### Logic operators
+
+|Operator|Description|
+|---|---|
+|`<=`|Less than or equal to.|
+|`>=`|Greater than or equal to.|
+|`<`|Less than.|
+|`>`|Greater than.|
+|`==`|Equal to.|
+|`!=`|Not equal to.|
+|`&&`|Logical AND.|
+|`\|\|`|Logical OR.|
+|`expr1?expr2:expr3`|Comparison (ternary) operator. If expression expr1 evaluates to be nonzero (arithmetic true), then expr2; else expr3.|
 
 ## Positional Parameters (Command Arguments)
 
