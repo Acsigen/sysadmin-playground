@@ -884,7 +884,7 @@ In addition to `=` notation, the shell provides notation that perform some assig
 |`++parameter`|Variable pre-increment. Equivalent to parameter = parameter + 1.|
 |`--parameter`|Variable pre-decrement. Equivalent to parameter = parameter − 1.|
 
-**The shell only performs integer arithmetic. It cannot do floating point arithmetic. To achieve that, please use `bc`**
+**The shell only performs integer arithmetic. It cannot do floating point arithmetic. To achieve that, please use `bc`.**
 
 ### Logic operators
 
