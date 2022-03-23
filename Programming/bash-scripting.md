@@ -1255,3 +1255,4 @@ To trace an error, add `echo "This was executed"` to segments of the script to b
 ## Sources
 
 * The Linux Command Line 2nd Edition
+* [baeldung.com](https://www.baeldung.com/linux/sigint-and-other-termination-signals)
