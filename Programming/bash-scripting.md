@@ -12,6 +12,7 @@
 * [CASE](#case)
 * [Read Keyboard Input](#read-keyboard-input)
 * [WHILE Loop](#while-loop)
+* [FOR Loop](#for-loop)
 * [Positional Parameters (Command Arguments)](#positional-parameters-command-arguments)
 * [Troubleshooting](#troubleshooting)
 * [Sources](#sources)
@@ -838,6 +839,28 @@ sort -k 1,1 -k 2n distros.txt | while read distro version release; do
     "$distro" \
     "$version" \
     "$release"
+done
+```
+
+## FOR Loop
+
+The syntax for this type of loop looks like this:
+
+```bash
+for i in A B C D; do
+    echo $i
+done
+
+for i in {A..D}; do
+    echo $i
+done
+```
+
+The C-like language form:
+
+```bash
+for ((i=0;i<=5;i++)); do
+    echo $i
 done
 ```
 
