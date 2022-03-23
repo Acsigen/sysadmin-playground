@@ -17,6 +17,8 @@
 * [Arrays](#arrays)
 * [Positional Parameters (Command Arguments)](#positional-parameters-command-arguments)
 * [Traps](#traps)
+* [Asynchronous Execution](#asynchronous-execution)
+* [Named Pipes](#named-pipes)
 * [Troubleshooting](#troubleshooting)
 * [Sources](#sources)
 
@@ -1190,6 +1192,57 @@ tempfile=$(mktemp /tmp/foobar.$$.XXXXXXXXXX)`
 ```
 
 For scripts that are run by regular users, avoid using `/tmp` directory. Instead, create a `tmp` directory inside their `home` directory.
+
+## Asynchronous Execution
+
+When a script runs another scripts, it becomes difficult to keep the parent and child coordinated. To overcome this we can use `wait`.
+
+```bash
+# Parent script
+echo "Parent: starting..."
+
+echo "Parent: launching child script..."
+async-child &
+pid=$!
+echo "Parent: child (PID= $pid) launched."
+
+echo "Parent: continuing..."
+sleep 2
+
+echo "Parent: pausing to wait for child to finish..."
+wait "$pid"
+
+echo "Parent: child is finished. Continuing..."
+echo "Parent: parent is done. Exiting."
+```
+
+The process ID of the child script is recorded by assigning the `pid` variable with the value of the `$!` shell parameter, which will always contain the process ID of the last job put into the background.
+
+```bash
+# Child script
+echo "Child: child is running..."
+sleep 5
+echo "Child: child is done. Exiting."
+```
+
+## Named pipes
+
+Named pipes are behaving like buffer files (FIFO buffer) between two processes.
+
+```bash
+# Create the pipe
+mkfifo pipe1
+
+# Store the output of ls -lh to pipe1
+ls -lh > pipe1
+
+# Read the buffer of pipe1
+cat < pipe1
+
+# This acts as ls -lh | cat
+```
+
+After we press *enter*, the command `ls -lh > pipe1` will appear to hang. This is because there is nothing receiving data from the other end of the pipe yet. When this occurs, it is said that the pipe is *blocked*. This condition will clear once we attach a process to the other end and it begins to read input from the pipe with `cat < pipe1`.
 
 ## Troubleshooting
 
