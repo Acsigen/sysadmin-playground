@@ -45,4 +45,4 @@ I have three fonts that I really enjoy using:
 
 - Roboto Mono 14 by Google
 - Ubuntu Mono 16 by Canonical
-- Cascadia Mono 16 by Microsoft
+- Cascadia Mono 14 by Microsoft
