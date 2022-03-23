@@ -14,6 +14,7 @@
 * [WHILE Loop](#while-loop)
 * [FOR Loop](#for-loop)
 * [Operators](#operators)
+* [Arrays](#arrays)
 * [Positional Parameters (Command Arguments)](#positional-parameters-command-arguments)
 * [Troubleshooting](#troubleshooting)
 * [Sources](#sources)
@@ -899,6 +900,115 @@ In addition to `=` notation, the shell provides notation that perform some assig
 |`&&`|Logical AND.|
 |`\|\|`|Logical OR.|
 |`expr1?expr2:expr3`|Comparison (ternary) operator. If expression expr1 evaluates to be nonzero (arithmetic true), then expr2; else expr3.|
+
+## Arrays
+
+**Bash only supports single dimensional arrays.**
+
+### Declare an array
+
+To declare an array use the following syntax:
+
+```bash
+# Create the array
+a[1]=foo
+
+# Access a specific element
+echo ${a[1]}
+> foo
+
+# You can also use the declare command. -a option creates the array a
+declare -a a
+
+# Declare an array with multiple values
+days=(Mon Tue Wed Thu Fri Sat Sun)
+
+# Declare an array with multiple values and assign them to a specific position
+days([0]=Mon [1]=Tue [2]=Wed [3]=Thu [4]=Fri [5]=Sat [6]=Sun)
+```
+
+### Display contents
+
+Iterate through the array:
+
+```bash
+days=(Mon Tue Wed Thu Fri Sat Sun)
+
+# You can use @ or *. @ will insert a new line, while * will print everythin on a single row.
+for i in "${days[*]}"; do
+    echo $i
+done
+```
+
+You can use `@` or `*` to iterate through all the contents of an array.
+
+The `*` notation results in a single word containing the array’s contents, while the `@` notation results in seven single-word strings, which matches the array’s *real* contents. This difference appears only if the doublequotes are being used (recommended).
+
+Find the length:
+
+```bash
+# The length of an array
+a[100]=foo
+echo ${#a[@]} # number of array elements, 1 in this case
+echo ${#a[100]} # length of element 100, 3 in this case
+```
+
+Find the allocated suscripts:
+
+```bash
+foo=([2]=a [4]=b [6]=c)
+
+for i in "${foo[@]}"; do
+    echo $i
+done
+# Output: a b c
+
+for i in "${!foo[@]}"; do
+    echo $i
+done
+# Output: 2 4 6
+```
+
+### Array manipulation
+
+Append an element:
+
+```bash
+# By using the += assignment operator, we can auto-matically append values to the end of an array
+foo=(a b c)
+foo+=(d e f)
+echo ${foo[@]} # a b c d e f
+```
+
+Sort an array:
+
+```bash
+a=(f e d c b a)
+echo "Original array: ${a[@]}"
+a_sorted=($(for i in "${a[@]}"; do echo $i; done | sort))
+echo "Sorted array:
+${a_sorted[@]}"
+```
+
+Replace an element just by overriding it.
+
+Delete an element by using `unset foo[2]`.
+
+Delete an entire array by using `unset array_name`.
+
+**Any reference to an array variable without a subscript refers to element zero of the array.**
+
+### Associative arrays
+
+Associative arrays use string indexes instead of numbers:
+
+```bash
+declare -A colors
+colors["red"]="#ff0000"
+colors["green"]="#00ff00"
+colors["blue"]="#0000ff"
+echo ${colors["blue"]} # #0000ff
+```
 
 ## Positional Parameters (Command Arguments)
 
