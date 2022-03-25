@@ -22,7 +22,7 @@ Kubernetes supports the following container runtimes:
 - CRI-OI
 - containerd
 
-Kubernetes are also found as K8S, or k8s (there are 8 characters between k and s in kubernetes)
+Kubernetes are also known as K8S, or k8s (there are 8 characters between k and s in kubernetes)
 
 ## Introduction
 
