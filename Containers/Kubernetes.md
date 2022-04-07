@@ -4,8 +4,8 @@
 
 - [Prerequisites](#prerequisites)
 - [Introduction](#introduction)
-- [Create Kubernetes cluster locally](#)
-- [Create and scale deployments](#)
+- [Create Kubernetes cluster locally](#create-kubernetes-cluster-locally)
+- [Create and scale deployments](#create-and-scale-deployments)
 - [Build custom docker image and deploy](#)
 - [Create services and deployment using YAML](#)
 - [Connect different deployments together](#)
@@ -78,6 +78,36 @@ The command line tool to connect to a cluster is `kubectl`.
 
 ### Dependencies and Installation
 
+To run k8s locally you need to install the following:
+
+- `minikube` to run a single node cluster
+- `kubectl` to manage the cluster
+
+## Create Kubernetes cluster locally
+
+To start the cluster you need to use the following command: `minikube start --driver=<driver_name>`
+
+For `--driver` please check minikube documentation for compatible drivers (e.g. VirtualBox, Docker, Hyper-V, VMWare, none).
+
+**Make sure that you have the driver packages installed on your system.**
+
+You can access minikube node using SSH by running `minikube ip` to get the IP of the minikube and then run `ssh docker@<minikube_ip>`. The default password is `tcuser`.
+
+### Basic commands
+
+|Command|Action|
+|---|---|
+|`kubectl cluster-info`|List the cluster informations|
+|`kubectl get nodes`|List the nodes. If you use *minikube* it will list only one|
+|`kubectl get pods`|List the pods. Append `-o wide` to get more info|
+|`kubectl get namespaces`|Will list the namespaces|
+|`kubectl get pods --namespace=kube-system`|List pods that are running in *kube-system* namespace|
+|`kubectl run nginx --image=nginx`|Run an Nginx pod named *nginx*|
+|`kubectl describe pod nginx`|Get more info about *nginx* pod created earlier|
+|`kubectl delete pod nginx`|Delete *nginx* pod|
+
+## Create and scale deployments
+
 ## Sources
 
-- [FreeCodeCamp YouTube Channel](https://youtu.be/d6WC5n9G_sM?t=1047)
+- [FreeCodeCamp YouTube Channel](https://youtu.be/d6WC5n9G_sM?t=3318)
