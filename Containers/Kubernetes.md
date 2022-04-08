@@ -7,8 +7,8 @@
 - [Create Kubernetes cluster locally](#create-kubernetes-cluster-locally)
 - [Create and scale deployments](#create-and-scale-deployments)
 - [Create services and deployment using YAML](#create-services-and-deployment-using-yaml)
-- [Connect different deployments together](#)
-- [Change container runtime from Docker to CRI-O](#)
+- [Connect different deployments together](#connect-differnet-deployments-together)
+- [Change container runtime from Docker to CRI-O](#change-container-runtime-from-docker-to-cri-o)
 - [Sources](#sources)
 
 ## Prerequisites
@@ -98,6 +98,7 @@ You can access minikube node using SSH by running `minikube ip` to get the IP of
 
 |Command|Action|
 |---|---|
+|`k exec nginx-deployment-fdfs-dsfsfed -- nslookup google.com`|Execute `nslookup google.com` command inside container|
 |`k cluster-info`|List the cluster informations|
 |`k get nodes`|List the nodes. If you use *minikube* it will list only one|
 |`k get pods`|List the pods. Append `-o wide` to get more info|
@@ -316,8 +317,56 @@ Apply the YAML file:
 k apply -f deployment.yaml
 ```
 
+You can also use a single file such as `nginx-dployment.yaml` and separate the *service* and *deployment* configuration using `---`
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp
+spec:
+  selector:
+    app: myapp
+  ports:
+  - port: <Port>
+    targetPort: <Target Port>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: myapp
+        image: <Image>
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: <Port>
+```
+
 To delete deployments you can run `k delete -f deployment.yaml -f service.yaml`.
+
+## Connect different deployments together
+
+It is very common to connect multiple deployments together. Such as a web interface application to a database.
+
+The web interface usually has a *LoadBalancer* type and the database has a *ClusterIP* type.
+
+## Change container runtime from Docker to CRI-O
+
+To change the container runtime you need to delete the current *minikube* setup and create a new one, then append `--container-runtime=cri-o` or `--container-runtime=containerd` to the `minikube start --driver=<driver_type>` command.
 
 ## Sources
 
-- [FreeCodeCamp YouTube Channel](https://youtu.be/d6WC5n9G_sM?t=8879)
+- [FreeCodeCamp YouTube Channel](https://youtu.be/d6WC5n9G_sM)
