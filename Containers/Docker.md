@@ -108,6 +108,14 @@ docker rm nginx
 docker rmi nginx
 ```
 
+#### Restart container in case of a crash
+
+Sometimes applications crash, to avoid downtime, you could pass the following arguments to the command `docker run --restart always <rest_of_arguments>`.
+
+There are multiple restart policies that you can use.
+
+If you user `always` the container will restart until you manually stop it.
+
 ## Environment Variables
 
 Pass environment variables:
