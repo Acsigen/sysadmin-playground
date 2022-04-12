@@ -4,6 +4,7 @@
 
 - [Source Control Management - Git](#source-control-management---git)
 - [Build Automation](#build-automation---gradle)
+- [Continuous Integration](#continuous-integration---jenkins)
 
 ## Source Control Management - Git
 
@@ -76,4 +77,15 @@ this `./gradlew my_task`.
 
 Gradle also supports plugins.
 
+## Continuous Integration - Jenkins
+
+To provide continuous integration we use a CI server that automatically compiles the code and runs automated tests.
+
+A popular open source automation server is Jenkins.
+
+The configuration which controls what a piece of Jenkins automates is called a *project* or a *job* (Job is an older terminology but they mean the same thing).
+
+The easieas way to implement a CI build is to use a *freestyle project*.
+
+Jenkins comes with a web interface, please read the documentation for further details.
 
