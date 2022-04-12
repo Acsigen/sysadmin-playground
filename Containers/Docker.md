@@ -147,6 +147,12 @@ Then you run the following command to build the image:
 docker build Dockerfile -t username/app-title
 ```
 
+You can also use `EXPOSE <port>` to tell Docker that the software in the container listens to a specific port.
+
+`WORKDIR <path/to/dir>` sets the current working directory inside the container image.
+
+You can find more details [here](https://docs.docker.com/engine/reference/builder/).
+
 ## Terminal vs. Entry point
 
 ### Terminal
