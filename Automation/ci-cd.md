@@ -3,7 +3,7 @@
 ## ToC
 
 - [Source Control Management - Git](#source-control-management---git)
-- [Build Automation](#build-automation)
+- [Build Automation](#build-automation---gradle)
 
 ## Source Control Management - Git
 
@@ -46,5 +46,34 @@ Tags are used, commonly, to indicate the version of the commit. You can use it l
 
 Pull requests are available only on GitHub. They allow review of merges from other users.
 
-## Build Automation
+## Build Automation - Gradle
+
+Gradle is a build tool. The installation steps 
+can be found on their [website](https://gradle.
+org).
+
+Gradle also has a tool called Gradle Wrapper. 
+"*The Gradle Wrapper is a script that invokes a 
+declared version of Gradle, downloading it 
+beforehand if necessary.*"
+
+If you already have Gradle installed on your 
+computer, just `cd` into your project folder 
+and run `gradle wrapper`.
+
+This will place some script files inside your 
+project folder.
+
+**Please add `.gradle` to your `.gitignore` 
+file so it won't be pushed to the repository.**
+
+To run Graddle commands on your project use `./
+gradlew build`
+
+Gradle executes tasks. You can specify the 
+tasks in *build.gradle* file and call them like 
+this `./gradlew my_task`.
+
+Gradle also supports plugins.
+
 
