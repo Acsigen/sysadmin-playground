@@ -89,3 +89,16 @@ The easieas way to implement a CI build is to use a *freestyle project*.
 
 Jenkins comes with a web interface, please read the documentation for further details.
 
+In order to make Docker work with Jenkins, on the Jenkins machine install `docker` and run the following commands:
+
+```bash
+# Create group docker
+groupadd docker
+
+# Add the user jenkins to the docker group
+usermod -aG docker jenkins
+
+# Restart the services
+systemctl jenkins
+systemctl docker
+```
