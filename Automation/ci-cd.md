@@ -5,6 +5,7 @@
 - [Source Control Management - Git](#source-control-management---git)
 - [Build Automation](#build-automation---gradle)
 - [Continuous Integration](#continuous-integration---jenkins)
+- [Monitoring](#monitoring)
 
 ## Source Control Management - Git
 
@@ -102,3 +103,13 @@ usermod -aG docker jenkins
 systemctl jenkins
 systemctl docker
 ```
+
+## Monitoring
+
+The monitoring process is made using Prometheus and Grafana.
+
+Prometheus collects data and Grafana builds a dashboard to visualise that data.
+
+To install Prometheus and Grafana in k8s, we will use *Helm*. With Helm we will be able to deploy preconfigured instances of Prometheus and Grafana inside a k8s cluster.
+
+In Grafana you can either download community dashboards or create one yourself.
