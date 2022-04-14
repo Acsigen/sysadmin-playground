@@ -51,8 +51,7 @@ Pull requests are available only on GitHub. They allow review of merges from oth
 ## Build Automation - Gradle
 
 Gradle is a build tool. The installation steps 
-can be found on their [website](https://gradle.
-org).
+can be found on their [website](https://gradle.org).
 
 Gradle also has a tool called Gradle Wrapper. 
 "*The Gradle Wrapper is a script that invokes a 
