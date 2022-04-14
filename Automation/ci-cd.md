@@ -100,8 +100,8 @@ groupadd docker
 usermod -aG docker jenkins
 
 # Restart the services
-systemctl jenkins
-systemctl docker
+systemctl restart jenkins
+systemctl restart docker
 ```
 
 ## Monitoring
