@@ -2,7 +2,7 @@
 
 ## ToC
 
-* [Intro](#intro)
+* [Authentication](#authentication)
 * [Basic AWS EC2 deployment](#basic-aws-ec2-deployment)
 * [Modify EC2 resources](#modify-ec2-resources)
 * [Terminate EC2 instances](#terminate-ec2-instances)
@@ -10,11 +10,7 @@
 * [Build basic AWS infrastructure](#build-basic-aws-infrastructure)
 * [Output and Variables](#output-and-variables)
 
-## Intro
-
-Terraform files have the ```.tf``` extension.
-
-## Basic AWS EC2 deployment
+### Authentication
 
 **The authentication method used below is not recommended.**
 
@@ -27,9 +23,8 @@ Terraform files have the ```.tf``` extension.
         access_key = <access-key>
         secret_key = <secret-key>
     }
-    resource "aws_instance" "New-EC2-instance" {
-        ami = "<aws-ami-id>"
-        instance_type = "t2.micro"
+    resource "aws_vpc" "my_vpc" {
+        cidr_block = "10.0.0.0/16"
     }
     ```
 
@@ -47,6 +42,12 @@ Terraform files have the ```.tf``` extension.
     ```
 
 **By default these commands will apply all the ```.tf``` files in that folder and for each resource in those files.**
+
+There are three other ways to pass the credentials to terraform:
+
+1. First method is using *AWS CLI*. Remove the `access_key` and `secret_key` from the terraform file and run `aws configure` where you will be prompted to insert your keys. Then, when you apply the terraform configurations, it will use the credentials from the CLI automatically.
+2. Use environment variables: `export AWS_ACCESS_KEY_ID=<key>` and `export AWS_SECRET_KEY_ID-<key>` (on Windows is `setx`).
+3. Use a vault provider
 
 ## Modify EC2 resources
 
