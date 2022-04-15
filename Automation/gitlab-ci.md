@@ -7,10 +7,6 @@
 - this course is for people new to DevOps who want to use GitLab to build, test and deploy their software
 - you will get hands-on experience building pipelines with GitLab CI and deploying software to AWS
 
-#### 📚 Resources
-* [Subscribe to my YouTube channel](http://www.youtube.com/channel/UCUUl_HXJjU--iYjUkIgEcTw?sub_confirmation=1)
-* [Join the DevOps newsletter](https://sendfox.com/lp/1x9k59)
-
 ### Lesson 2 - Your first GitLab project
 
 - we will be using GitLab.com in this course
