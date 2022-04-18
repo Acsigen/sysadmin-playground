@@ -3,14 +3,14 @@
 ## ToC
 
 * [Authentication](#authentication)
-* [Basic AWS EC2 deployment](#basic-aws-ec2-deployment)
-* [Modify EC2 resources](#modify-ec2-resources)
+* [Variables](#variables)
+* [EC2 resources](#ec2-resources)
 * [Terminate EC2 instances](#terminate-ec2-instances)
 * [Reference resources](#reference-resources)
 * [Build basic AWS infrastructure](#build-basic-aws-infrastructure)
 * [Output and Variables](#output-and-variables)
 
-### Authentication
+## Authentication
 
 **The authentication method used below is not recommended.**
 
@@ -49,7 +49,47 @@ There are three other ways to pass the credentials to terraform:
 2. Use environment variables: `export AWS_ACCESS_KEY_ID=<key>` and `export AWS_SECRET_KEY_ID-<key>` (on Windows is `setx`).
 3. Use a vault provider
 
-## Modify EC2 resources
+## Variables
+
+Terraform supports variables. A good practice is to create a folder named *variables* and inside it put a *main.tf* file.
+
+The main variable types are presented here:
+
+```terraform
+# Define a string variable
+variable "vpc_name" {
+  type = string
+  default = "myvpc"
+}
+
+# Define an integer variable
+variable "ssh_port" {
+  type = number
+  default = 22
+}
+
+# Define a boolean variable
+variable "enabled" {
+  default = true
+}
+
+# Define a list variable
+variable "my_list" {
+  type = list(string) # The data type inside the list goes between ()
+  default = ["value1","value2"] # The index starts at 0
+}
+
+# Define map variable (key:value pair)
+
+variable "my_map" {
+  type = map
+  default = {
+      key1 = "value1"
+      key2 = "value2"
+  }
+}
+```
+## EC2 resources
 
 If you run the same commands with the same config file, it will only update that specific instance.
 
