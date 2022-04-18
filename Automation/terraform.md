@@ -184,7 +184,7 @@ Variables values can be passed as a command line argument:
 terraform apply -var "subnet_prefix=10.0.1.0/24"
 ```
 
-Variables values can also be stored inside a file. That file has the extension ```.tfvars``` and can have the following content:
+Variables values can also be stored inside a `.tfvar` file like this:
 
 ```terraform
 subnet_prefix = "10.0.1.0/24"
