@@ -82,12 +82,28 @@ variable "my_list" {
 }
 
 # Define map variable (key:value pair)
-
 variable "my_map" {
   type = map
   default = {
       key1 = "value1"
       key2 = "value2"
+  }
+}
+
+# Define tuple variable
+# A tuple is like a list that can hold multiple types of data
+variable "my_tuple" {
+  type = tuple([string, number, string])
+  default = ["value1", 1, "value2"]
+}
+
+# Define object variable
+# An object is like a map that can hold multiple types of data
+variable "my_object" {
+  type = object({name = string, port = list(number)})
+  default = {
+    name = "value1"
+    port = [22, 80, 443]
   }
 }
 ```
