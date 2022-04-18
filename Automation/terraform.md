@@ -97,11 +97,30 @@ variable "my_map" {
 In this example we will set the VPC name by calling a variable we defined:
 
 ```terraform
-resource "aws_vpc" "name" {
+# Variable callback
+resource "aws_vpc" "my_vpc" {
   cidr_block = "10.0.0.0/24"
   
   tags = {
     Name = var.vpc_name # or you can use "${var.vpc_name}" for versions <= 0.11
+  }
+}
+
+# List variable callback
+resource "aws_vpc" "my_vpc2" {
+  cidr_block = "10.0.0.0/24"
+  
+  tags = {
+    Name = var.my_list[0] # or you can use "${var.my_list[0]}" for versions <= 0.11
+  }
+}
+
+# Map variable callback
+resource "aws_vpc" "my_vpc3" {
+  cidr_block = "10.0.0.0/24"
+  
+  tags = {
+    Name = var.my_map["key1"] # or you can use "${var.my_map["key2"]}" for versions <= 0.11
   }
 }
 ```
