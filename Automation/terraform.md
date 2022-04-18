@@ -51,6 +51,8 @@ There are three other ways to pass the credentials to terraform:
 
 ## Variables
 
+### Define variables
+
 Terraform supports variables. A good practice is to create a folder named *variables* and inside it put a *main.tf* file.
 
 The main variable types are presented here:
@@ -89,6 +91,21 @@ variable "my_map" {
   }
 }
 ```
+
+### Call variables
+
+In this example we will set the VPC name by calling a variable we defined:
+
+```terraform
+resource "aws_vpc" "name" {
+  cidr_block = "10.0.0.0/24"
+  
+  tags = {
+    Name = var.vpc_name # or you can use "${var.vpc_name}" for versions <= 0.11
+  }
+}
+```
+
 ## EC2 resources
 
 If you run the same commands with the same config file, it will only update that specific instance.
