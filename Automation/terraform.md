@@ -142,6 +142,18 @@ resource "aws_vpc" "my_vpc" {
 }
 ```
 
+Sometimes it is useful to print some data on the screen. For this, we use the *output* variable to display the VPC id that we just created:
+
+```terraform
+output "vpc_id" {
+  value = aws_vpc.my_vpc.id
+}
+```
+
+These values are called *Attribures References* and they can be found in [Terraform documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc#attributes-reference).
+
+**The output variable will be prompted only for `terraform apply` because is a computed value.**
+
 ## EC2 resources
 
 If you run the same commands with the same config file, it will only update that specific instance.
