@@ -36,6 +36,7 @@ I also use Cascadia Code font with a size of 14.
   "update.enableWindowsBackgroundUpdates": false,
   "telemetry.telemetryLevel": "error",
   "editor.acceptSuggestionOnEnter": "off"
+  "editor.detectIndentation": false
 }
 ```
 
