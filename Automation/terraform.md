@@ -8,7 +8,6 @@
 * [Terminate EC2 instances](#terminate-ec2-instances)
 * [Reference resources](#reference-resources)
 * [Build basic AWS infrastructure](#build-basic-aws-infrastructure)
-* [Output and Variables](#output-and-variables)
 
 ## Authentication
 
@@ -399,18 +398,6 @@ resource "aws_instance" "ubuntu-server" {
   tags = {
     Name = "Ubuntu Server"
   }
-}
-```
-
-## Output and Variables
-
-### Output
-
-To display a value at the end of the execution you can use the output command:
-
-```terraform
-output "server_public_ip" {
-  value = aws_instance.ubuntu-server.public_ip
 }
 ```
 
