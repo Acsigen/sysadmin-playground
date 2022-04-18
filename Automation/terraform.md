@@ -190,23 +190,9 @@ Variables values can also be stored inside a `.tfvar` file like this:
 subnet_prefix = "10.0.1.0/24"
 ```
 
-## EC2 resources
+## Destroy
 
-If you run the same commands with the same config file, it will only update that specific instance.
-
-In order to modify the instance, just change the parameters in the config file.
-
-You can also change only specific resources of the config file with ```-target``` option.
-
-```bash
-terraforn apply -target aws_instance.New-EC2-instance
-```
-
-**If you comment out the parameters of a resource, or an entire resource, when you run ```terraform apply``` that resource will be deleted/terminated.**
-
-## Terminate EC2 instances
-
-Run the following command:
+Run the following command to terminate the resources created with terraform's current configuration:
 
 ```bash
 terraform destroy
