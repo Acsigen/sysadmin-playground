@@ -107,7 +107,7 @@ resource "aws_vpc" "my_vpc" {
 }
 
 # List variable callback
-resource "aws_vpc" "my_vpc2" {
+resource "aws_vpc" "my_vpc" {
   cidr_block = "10.0.0.0/24"
   
   tags = {
@@ -116,11 +116,28 @@ resource "aws_vpc" "my_vpc2" {
 }
 
 # Map variable callback
-resource "aws_vpc" "my_vpc3" {
+resource "aws_vpc" "my_vpc" {
   cidr_block = "10.0.0.0/24"
   
   tags = {
     Name = var.my_map["key1"] # or you can use "${var.my_map["key2"]}" for versions <= 0.11
+  }
+}
+```
+
+There is another type of variable called *input variable*, this will prompt the user to input the value of the variable when you run `terraform plan`:
+
+```terraform
+variable "input_name" {
+  type = string
+  description = "Enter VPC name"
+}
+
+resource "aws_vpc" "my_vpc" {
+  cidr_block = "10.0.0.0/24"
+  
+  tags = {
+    Name = var.input_name # or you can use "${var.my_map["key2"]}" for versions <= 0.11
   }
 }
 ```
