@@ -55,6 +55,12 @@ There are three other ways to pass the credentials to terraform:
 
 Terraform supports variables. A good practice is to create a folder named *variables* and inside it put a *main.tf* file.
 
+Variables have three parameters, they are all optional:
+
+* description - A simple description
+* default - Default value
+* type - Value type (string, boolean, list, etc.)
+
 The main variable types are presented here:
 
 ```terraform
@@ -169,6 +175,21 @@ output "vpc_id" {
 These values are called *Attribures References* and they can be found in [Terraform documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc#attributes-reference).
 
 **The output variable will be prompted only for `terraform apply` because is a computed value.**
+
+For any variable that does not have a default value, terraform will prompt the user to enter the value.  
+This also happens when you want to destroy the resource, in that case just press ```Enter```.
+
+Variables values can be passed as a command line argument:
+
+```bash
+terraform apply -var "subnet_prefix=10.0.1.0/24"
+```
+
+Variables values can also be stored inside a file. That file has the extension ```.tfvars``` and can have the following content:
+
+```terraform
+subnet_prefix = "10.0.1.0/24"
+```
 
 ## EC2 resources
 
@@ -391,45 +412,6 @@ To display a value at the end of the execution you can use the output command:
 output "server_public_ip" {
   value = aws_instance.ubuntu-server.public_ip
 }
-```
-
-### Variables
-
-Variables have three parameters, they are all optional:
-
-* description - A simple description
-* default - Default value
-* type - Value type (string, boolean, list, etc.)
-
-Declare variable:
-
-```terraform
-variable "subnet_prefix" {
-  description = "CIDR Block"
-  default = "10.0.1.0/24"
-  type = string
-}
-```
-
-Reference a variable:
-
-```terraform
-cidr_block = var.subnet_prefix
-```
-
-For any variable that does not have a default value, terraform will prompt the user to enter the value.  
-This also happens when you want to destroy the resource, in that case just press ```Enter```.
-
-Variables values can be passed as a command line argument:
-
-```bash
-terraform apply -var "subnet_prefix=10.0.1.0/24"
-```
-
-Variables values can also be stored inside a file. That file has the extension ```.tfvars``` and can have the following content:
-
-```terraform
-subnet_prefix = "10.0.1.0/24"
 ```
 
 ## Sources
