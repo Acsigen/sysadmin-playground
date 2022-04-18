@@ -137,7 +137,7 @@ resource "aws_vpc" "my_vpc" {
   cidr_block = "10.0.0.0/24"
   
   tags = {
-    Name = var.input_name # or you can use "${var.my_map["key2"]}" for versions <= 0.11
+    Name = var.input_name # or you can use "${var.input_name}" for versions <= 0.11
   }
 }
 ```
