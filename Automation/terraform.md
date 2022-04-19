@@ -6,6 +6,7 @@
 * [Variables](#variables)
 * [Looping with dynamic blocks](#looping-with-dynamic-blocks)
 * [Destroy](#destroy)
+* [Modules](#modules)
 * [Reference resources](#reference-resources)
 * [Build basic AWS infrastructure](#build-basic-aws-infrastructure)
 
@@ -229,6 +230,45 @@ Run the following command to terminate the resources created with terraform's cu
 
 ```bash
 terraform destroy
+```
+
+## Modules
+
+A module is a folder inside our project that contains code.
+
+In this example we have a module namedm *ec2* in which we placed a file named `ec2.tf`. It contains the variables and the EC2 instance declaration.
+
+The contents of `main.tf`:
+
+```terraform
+# Declare the module
+module "ec2_module" {
+  
+  # Set the source to <current-folder/ec2>
+  source = "./ec2"
+  
+  # Set the value for ec2_name variable wich will be passed to the ec2 resource
+  ec2_name = "Ubuntu 20.04 Apache"
+}
+```
+
+The contents of `ec2/ec2.tf`:
+
+```terraform
+variable "ec2_name" {
+  # Do not set a default value
+  type = stirng
+}
+
+resource "aws_instance" "my_ec2" {
+  ami = "ami-032598fcc7e9d1c7a"
+  instance_type = "t2.micro"
+
+  tags = {
+    # Set the name of the instance 
+    Name = var.ec2_name
+  }
+}
 ```
 
 ## Reference resources
