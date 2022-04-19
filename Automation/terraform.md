@@ -271,6 +271,8 @@ resource "aws_instance" "my_ec2" {
 }
 ```
 
+Terraform Registry also provides pre-built modules which you can use.
+
 ## Reference resources
 
 In this example we will create a VPC and assign a subnet.
