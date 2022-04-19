@@ -4,6 +4,7 @@
 
 * [Authentication](#authentication)
 * [Variables](#variables)
+* [Looping with dynamic blocks](#looping-with-dynamic-blocks)
 * [Destroy](#destroy)
 * [Reference resources](#reference-resources)
 * [Build basic AWS infrastructure](#build-basic-aws-infrastructure)
@@ -187,6 +188,38 @@ Variables values can also be stored inside a `.tfvar` file like this:
 
 ```terraform
 subnet_prefix = "10.0.1.0/24"
+```
+
+## Looping with dynamic blocks
+
+Use a FOR loop to iterate through a list and assign those values to a resource. In this case, define a list of ports and assign them dynamically to a security group by using a dynamic block.
+
+```terraform
+# Declare a variable containing the ports
+variable "ingress_ports" {
+  type = list(number)
+  default = [80, 443]
+}
+
+# Create a dynamic block to add a security group that allows the ports specified in the variable
+resource "aws_security_group" "allow_web" {
+  name = "Allow Web traffic"
+  dynamic "ingress" {
+    # Declare an iterator operator
+    iterator = port
+
+    # The for loop
+    for_each = var.ingress_ports
+    
+    # The contents of the block
+    content {
+      # Refference the current value
+      from_port = port.value
+      protocol = "TCP"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
+}
 ```
 
 ## Destroy
