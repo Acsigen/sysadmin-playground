@@ -351,6 +351,13 @@ resource "aws_network_interface" "main-nic" {
 You can assign an Elastic IP only if an internet gateway is already defined.
 
 ```terraform
+# Create basic EC2 instance
+resource "aws_instance" "my_ec2" {
+  ami = "ami-032598fcc7e9d1c7a"
+  instance_type = "t2.micro"
+}
+
+# Assign the IP
 resource "aws_eip" "elastic_ip" {
   instance = aws_instance.web.id
   vpc = true
