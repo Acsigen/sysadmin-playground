@@ -4,8 +4,7 @@
 
 * [Authentication](#authentication)
 * [Variables](#variables)
-* [EC2 resources](#ec2-resources)
-* [Terminate EC2 instances](#terminate-ec2-instances)
+* [Destroy](#destroy)
 * [Reference resources](#reference-resources)
 * [Build basic AWS infrastructure](#build-basic-aws-infrastructure)
 
