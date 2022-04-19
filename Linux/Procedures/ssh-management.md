@@ -135,6 +135,18 @@ Host 10.5.5.*
 
 With the configurtion above in place, the user only needs to execute ```ssh 10.5.5.10```.
 
+You can also use the bastion as a proxy by running `ssh my-bastion` with the following configuration set. This creates a SOCKS5 proxy on `localhost:8080`. You need to configure your browser to uset like you configure it for Tor:
+
+```conf
+Host my-bastion
+	Hostname <bastion_ip>
+	User ubuntu
+	Identityfile <path_to_private_key.key>
+	DynamicForward 8080
+	Compression yes # Optional
+	LogLevel QUIET # Optional
+```
+
 ### Bastion configuration
 
 we need to disable interactive SSH sessions so regular users won’t be able to SSH into the bastion.
