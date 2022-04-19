@@ -7,6 +7,7 @@
 * [Looping with dynamic blocks](#looping-with-dynamic-blocks)
 * [Destroy](#destroy)
 * [Modules](#modules)
+* [IAM](#iam)
 * [Reference resources](#reference-resources)
 * [Build basic AWS infrastructure](#build-basic-aws-infrastructure)
 
@@ -272,6 +273,31 @@ resource "aws_instance" "my_ec2" {
 ```
 
 Terraform Registry also provides pre-built modules which you can use.
+
+## IAM
+
+This is an example on how to assign a policy with Terraform. Please do note that to generate the JSON, it's wise to use the AWS Console and copy the resulted JSON into Terraform:
+
+```terraform
+resource "aws_iam_user" "my_user" {
+  name = "John"
+}
+
+resource "aws_iam_policy" "my_policy" {
+  name = "PolicyName"
+
+  policy = <<EOF
+  # Go to console and generate the policy but don't save it, copy the JSON format here.
+  # The JSON { must be placed at the most left side inside this EOF, do not indent it otherwise it won't work.
+  EOF
+}
+
+resource "aws_iam_policy_attachment" "policyBind" {
+  name = "attachment"
+  users = [aws_iam_user.my_user.name]
+  policy_arn = aws_iam_policy.my_policy.arn
+}
+```
 
 ## Reference resources
 
