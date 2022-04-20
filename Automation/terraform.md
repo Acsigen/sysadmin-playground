@@ -8,6 +8,7 @@
 * [Destroy](#destroy)
 * [Modules](#modules)
 * [IAM](#iam)
+* [Dependencies](#dependencies)
 * [Reference resources](#reference-resources)
 * [Build basic AWS infrastructure](#build-basic-aws-infrastructure)
 
@@ -296,6 +297,25 @@ resource "aws_iam_policy_attachment" "policyBind" {
   name = "attachment"
   users = [aws_iam_user.my_user.name]
   policy_arn = aws_iam_policy.my_policy.arn
+}
+```
+
+## Dependencies
+
+We can create dependencies to start a resource before another, such as the dB before the Web.
+
+```terraform
+resource "aws_instance" "db" {
+  ami = <ami_id>
+  instance_type = "t2.micro"
+}
+
+resource "aws_instance" "web" {
+  ami = <ami_id>
+  instance_type = "t2.micro"
+
+# This resource depends on dB to start
+  depends_on = [aws_instance.db]
 }
 ```
 
