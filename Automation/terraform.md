@@ -10,6 +10,7 @@
 * [IAM](#iam)
 * [Dependencies](#dependencies)
 * [Import existing resources](#import-existing-resources)
+* [Query for data](#query-for-data)
 * [Reference resources](#reference-resources)
 * [Build basic AWS infrastructure](#build-basic-aws-infrastructure)
 
@@ -323,6 +324,28 @@ resource "aws_instance" "web" {
 ## Import existing resources
 
 If you already have some resources already running and you want to manage them with Terraform, you can create the resources in terraform then run the following command (e.g. for a VPC) `terraform import aws_vpc.my_vpc2 <vpc_id>`.
+
+## Query for data
+
+Terraform can perform queries to AWS API to retreive information about instances. For this, we use data sources.
+
+The following code will query the AWS API to retreieve the AMI ID for the database servers which have the tag `Name = "DB Server"`
+
+```terraform
+data "aws_instance" "db_search" {
+  filter {
+    # This is the key
+    name = "tag:Name"
+    
+    # This is the value
+    values = ["DB Server"]
+  }
+}
+
+output "db_servers" {
+  value = data.aws_instance.db_search.ami
+}
+```
 
 ## Reference resources
 
