@@ -329,7 +329,7 @@ If you already have some resources already running and you want to manage them w
 
 Terraform can perform queries to AWS API to retreive information about instances. For this, we use data sources.
 
-The following code will query the AWS API to retreieve the AMI ID for the database servers which have the tag `Name = "DB Server"`
+The following code will query the AWS API to retreieve the AMI ID for the database servers which have the tag `"Name" = "DB Server"`
 
 ```terraform
 data "aws_instance" "db_search" {
