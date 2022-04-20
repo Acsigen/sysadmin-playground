@@ -9,6 +9,7 @@
 * [Modules](#modules)
 * [IAM](#iam)
 * [Dependencies](#dependencies)
+* [Import existing resources](#import-existing-resources)
 * [Reference resources](#reference-resources)
 * [Build basic AWS infrastructure](#build-basic-aws-infrastructure)
 
@@ -318,6 +319,10 @@ resource "aws_instance" "web" {
   depends_on = [aws_instance.db]
 }
 ```
+
+## Import existing resources
+
+If you already have some resources already running and you want to manage them with Terraform, you can create the resources in terraform then run the following command (e.g. for a VPC) `terraform import aws_vpc.my_vpc2 <vpc_id>`.
 
 ## Reference resources
 
