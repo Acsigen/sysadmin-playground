@@ -16,7 +16,7 @@ It looks like this:
 ```conf
 [client_host_group]
 # Format: <target-IP> ansible_ssh_user=user ansible_ssh_pass=password
-192.168.1.3 ansible_ssh_user=root ansible_ssh_pass=securePassword
+<hostname or IP> ansible_ssh_user=root ansible_ssh_pass=securePassword
 ```
 
 **I do not recommend to use the `root` user, create a dedicated user for ansible. Make sure it has `sudo` access.*
