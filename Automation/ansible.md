@@ -7,7 +7,7 @@
 
 ## Inventory
 
-### Inventyory Configuration
+### Inventory Configuration
 
 The inventory is a file containig configurations for each host.
 
