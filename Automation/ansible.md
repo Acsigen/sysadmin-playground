@@ -3,6 +3,7 @@
 ## ToC
 
 * [Inventory](#inventory)
+* [Tasks](#tasks)
 * [Playbook](#playbook)
 
 ## Inventory
@@ -52,6 +53,22 @@ ansible --list-hosts ansible_server,web_server # list multiple targets
 ansible --list-hosts web_server[0] # In case you have multiple hosts in a group and you want only the first one
 ansible --list-hosts \!web_server # Negation
 ```
+
+## Tasks
+
+Let's try an example with the `ping` module:
+
+```bash
+# This will check connectivity with all the targets
+ansible -m ping all
+
+# Execute the command hostname on targets
+ansible -m command -a "hostname" all
+```
+
+The `command` module is the default one, running `ansible -a "hostname" all` does the same thing as `ansible -m command -a "hostname" all`.
+
+There are plenty of Ansible modules, the ones that were presented here are great for troubleshooting.
 
 ## Playbook
 
