@@ -5,9 +5,13 @@
 * [Client Configuration](#client-configuration)
 * [Playbook](#playbook)
 
-## Client configuration
+## Inventory
 
-On the Ansible server edit the configuration file ```/etc/ansible/hosts```:
+The inventory is a file containig configurations for each host.
+
+The default Ansible inventory is located at `/etc/ansible/hosts`. To prevent an overwrite please use a local inventory and keep it alongside the playbooks.
+
+It looks like this:
 
 ```conf
 [client_host_group]
@@ -15,7 +19,7 @@ On the Ansible server edit the configuration file ```/etc/ansible/hosts```:
 192.168.1.3 ansible_ssh_user=root ansible_ssh_pass=securePassword
 ```
 
-I do not recommend to use the ```root``` user, create a dedicated user for ansible. Make sure it has ```sudo``` access.
+**I do not recommend to use the `root` user, create a dedicated user for ansible. Make sure it has `sudo` access.*
 
 Also, do not use plaintext passwords, use a vault or SSH keys.
 
