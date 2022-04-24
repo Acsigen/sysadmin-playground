@@ -76,25 +76,19 @@ The Ansible playbook is a configuration storing file.
 
 Its format is YAML with the extension ```.yml```.
 
-An example that installs ```vim``` inside an Ubuntu server is presented below:
+An example that runs the `hostname` command inside the target:
 
 ```yaml
 ---
-- name: sample playbook
-  hosts: client_host_group
-  remote_user: root
-  become: true
-  tasks:
-    - name: install vim
-      apt:
-        name: vim
-        state: latest
+  - hosts: all
+    tasks:
+      - command: hostname
 ```
 
 To check the syntax of the playbook, run the following command:
 
 ```bash
- ansible-playbook sample-playbook.yml --syntax-check
+ ansible-playbook hostname.yml --syntax-check
 ```
 
 To run apply the config file just run the previous command without arguments.
