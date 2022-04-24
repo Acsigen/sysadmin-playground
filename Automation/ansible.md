@@ -82,7 +82,8 @@ An example that runs the `hostname` command inside the target:
 ---
   - hosts: all
     tasks:
-      - command: hostname
+      - name: get server hostname
+        command: hostname
 ```
 
 To check the syntax of the playbook, run the following command:
