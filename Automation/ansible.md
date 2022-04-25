@@ -72,6 +72,8 @@ There are plenty of Ansible modules, the ones that were presented here are great
 
 ## Playbook
 
+### Basics
+
 The Ansible playbook is a configuration storing file.
 
 Its format is YAML with the extension ```.yml```.
@@ -93,6 +95,59 @@ To check the syntax of the playbook, run the following command:
 ```
 
 To run apply the config file just run the previous command without arguments.
+
+### APT Module
+
+This is an example on how to use the `apt` module to install packages on target:
+
+```yaml
+---
+- hosts: web_server
+  # Use sudo with command
+  become: true
+  tasks:
+    - name: Install Apache
+      # state can be present or latest
+      apt: name=apache2 state=present update_cache=yes
+```
+
+For multiple packages you could add multiple tasks but ansible allows looping like this:
+
+```yaml
+---
+- hosts: web_server
+  # Use sudo with command
+  become: true
+  tasks:
+    - name: Install Apache, PHP and Python
+      # state can be present or latest
+      apt: name={{item}} state=present update_cache=yes
+      with_items:
+        - apache2
+        - python-pip
+        - php
+```
+
+### Services
+
+We installed Apache, but how do we enable and start the service?
+
+```yaml
+---
+- hosts: web_server
+  # Use sudo with command
+  become: true
+  tasks:
+    - name: Install Apache, PHP and Python
+      # state can be present or latest
+      apt: name={{item}} state=present update_cache=yes
+      with_items:
+        - apache2
+        - python-pip
+        - php
+    - name: Enable the service and start it
+      service: name=apache2 state=started enabled=yes
+```
 
 ## Sources
 
