@@ -225,6 +225,8 @@ What if we need to delete a file on the server?
   file: src=/etc/apache2/sites-available/demo.conf dest=/etc/apache2/sites-enabled/demo.conf state=link
 ```
 
+**For variables, please study the Jinja docs.**
+
 ## Sources
 
 * [Simplilearn YouTube Channel](https://www.youtube.com/watch?v=EcnqJbxBcM0)
