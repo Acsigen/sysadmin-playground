@@ -228,6 +228,7 @@ What if we need to delete a file on the server?
 
 ## Sources
 
+* For encryption, study the Ansible Vault docs
 * For variables, please study the Jinja docs
 * For changing a line in a file please study the `lineinfile` module. It uses regexp to change contents of a file
 * [Simplilearn YouTube Channel](https://www.youtube.com/watch?v=EcnqJbxBcM0)
