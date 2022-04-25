@@ -177,7 +177,7 @@ Ok, but what if we enable an Apache module and then we need to restart the Apach
       service: name=apache2 state=restarted
 ```
 
-### Copy files
+### File operations
 
 Sometimes you need to copy files from the control machine to the target:
 
