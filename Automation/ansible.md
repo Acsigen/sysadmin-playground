@@ -218,8 +218,11 @@ What if we need to delete a file on the server?
 
 ```yaml
 # I won't copy the entire module again, I will only use the tasks
-- name: delete file
+- name: delete the current configuration file
   file: path=/etc/apache2/sites-enabled/000-default.conf state=absent
+  
+- name: copy the new config file as a symlink
+  file: src=/etc/apache2/sites-available/demo.conf dest=/etc/apache2/sites-enabled/demo.conf state=link
 ```
 
 ## Sources
