@@ -205,6 +205,7 @@ Sometimes you need to copy files from the control machine to the target:
       notify: restart apache2
     
     - name: Copy source files
+      # If you want to copy the demo_files folder append / to the end so it will copy the folder and not only the contents
       copy: src=/tmp/demo_files dest=/var/www/html/demo mode=0644
       notify: restart apache2
 
