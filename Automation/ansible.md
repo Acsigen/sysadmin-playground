@@ -214,6 +214,14 @@ Sometimes you need to copy files from the control machine to the target:
       service: name=apache2 state=restarted
 ```
 
+What if we need to delete a file on the server?
+
+```yaml
+# I won't copy the entire module again, I will only use the tasks
+- name: delete file
+  file: path=/etc/apache2/sites-enabled/000-default.conf state=absent
+```
+
 ## Sources
 
 * [Simplilearn YouTube Channel](https://www.youtube.com/watch?v=EcnqJbxBcM0)
