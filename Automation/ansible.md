@@ -225,9 +225,10 @@ What if we need to delete a file on the server?
   file: src=/etc/apache2/sites-available/demo.conf dest=/etc/apache2/sites-enabled/demo.conf state=link
 ```
 
-**For variables, please study the Jinja docs.**
 
 ## Sources
 
+* For variables, please study the Jinja docs
+* For changing a line in a file please study the `lineinfile` module. It uses regexp to change contents of a file
 * [Simplilearn YouTube Channel](https://www.youtube.com/watch?v=EcnqJbxBcM0)
 * [Awesome Ansible GitHub Reposiory - for further development](https://github.com/KeyboardInterrupt/awesome-ansible)
