@@ -149,6 +149,34 @@ We installed Apache, but how do we enable and start the service?
       service: name=apache2 state=started enabled=yes
 ```
 
+Ok, but what if we enable an Apache module and then we need to restart the Apache server to load that module?
+
+```yaml
+---
+- hosts: web_server
+  # Use sudo with command
+  become: true
+  tasks:
+    - name: Install Apache, PHP and Python
+      # state can be present or latest
+      apt: name={{item}} state=present update_cache=yes
+      with_items:
+        - apache2
+        - libapache2-mod-wsgi
+        - python-pip
+        - php
+    - name: Enable the service and start it
+      service: name=apache2 state=started enabled=yes
+
+    - name: Enable WSGI module
+      apache2_module: state=present name=wsgi
+      # This will trigger the handler with the name restart apache2
+      notify: restart apache2
+  handlers:
+    - name: restart apache2
+      service: name=apache2 state=restarted
+```
+
 ## Sources
 
 * [Simplilearn YouTube Channel](https://www.youtube.com/watch?v=EcnqJbxBcM0)
