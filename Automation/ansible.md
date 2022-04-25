@@ -5,6 +5,7 @@
 * [Inventory](#inventory)
 * [Tasks](#tasks)
 * [Playbook](#playbook)
+* [Sources](#sources)
 
 ## Inventory
 
