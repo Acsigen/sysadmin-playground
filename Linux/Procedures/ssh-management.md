@@ -1,5 +1,12 @@
 # SSH secure management
 
+## ToC
+
+- [How to properly manage keys](#how-to-properly-manage-keys)
+- [SSH Bastion](#ssh-bastion)
+- [Hardening the SSH server](#hardening-the-ssh-server)
+- [SFTP Only](#sftp-only)
+
 ## How to properly manage keys
 
 ### The rough idea
@@ -203,7 +210,7 @@ PermitRootLogin no
 
 # Disable password login
 PasswordAuthentication no
-AuthenticationMethods publickey,keyboard-interactive:pam
+AuthenticationMethods publickey,keyboard-interactive:pam # might be broken
 
 # Configure idle time logout in seconds
 ClientAliveInterval 300
@@ -226,6 +233,23 @@ awk '$5 >= 3071' /etc/ssh/moduli > /etc/ssh/moduli.tmp && mv /etc/ssh/moduli.tmp
 ```
 
 Probably the simplest yet most effective control is to implement a second factor authentication in your SSH server. [Google’s Google Authenticator PAM module](https://goteleport.com/blog/ssh-2fa-tutorial/) is the popular choice. But it only supports TOTP-based authentication. For more robust authentication, opt for solutions that enable authentication based on [U2F](https://www.yubico.com/authentication-standards/fido-u2f/) or [WebAuthn](https://en.wikipedia.org/wiki/WebAuthn) for SSH.
+
+## SFTP Only
+
+- Create a user for the SFTP protocol with the following command: `useradd -m sftp.user` then inside `/home/sftp.user` create the path `sftp/upload`.
+- Change the owner of the `/home/sftp.user/sftp` to `root:root` and the `upload` folder to `sftp.user:sftp.user`.
+- Make the following changes in `/etc/sshd/sshd_config`:
+  - `AllowUsers ubuntu sftp.user`
+  - `Subsystem sftp internal-sftp`
+  - ```conf
+    Match User sftp.user
+        ChrootDirectory /home/sftp.user/sftp
+        X11Forwarding no
+        AllowTcpForwarding no
+        ForceCommand internal-sftp
+        PasswordAuthentication yes # optional
+    ```
+- Test the changes `sshd -t` then restart the SSH server `systemctl restart sshd`
 
 ## Sources
 
