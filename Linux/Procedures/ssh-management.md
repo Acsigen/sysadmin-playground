@@ -222,7 +222,7 @@ ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key -N ""
 Deactivate Diffie-Hellman short moduli. Diffie-Hellman (DH) key exchange protocol is used to exchange shared secret (encryption key) between client and server. Short moduli (smaller prime numbers) are vulnerable to the [Logjam attack](https://weakdh.org/). To counter this with respect to OpenSSH configuration, Mozilla suggests [deactivating short moduli](https://infosec.mozilla.org/guidelines/openssh) with the command:
 
 ```bash
-awk "$5 >= 3071" /etc/ssh/moduli > /etc/ssh/moduli.tmp && mv /etc/ssh/moduli.tmp /etc/ssh/moduli
+awk '$5 >= 3071' /etc/ssh/moduli > /etc/ssh/moduli.tmp && mv /etc/ssh/moduli.tmp /etc/ssh/moduli
 ```
 
 Probably the simplest yet most effective control is to implement a second factor authentication in your SSH server. [Google’s Google Authenticator PAM module](https://goteleport.com/blog/ssh-2fa-tutorial/) is the popular choice. But it only supports TOTP-based authentication. For more robust authentication, opt for solutions that enable authentication based on [U2F](https://www.yubico.com/authentication-standards/fido-u2f/) or [WebAuthn](https://en.wikipedia.org/wiki/WebAuthn) for SSH.
