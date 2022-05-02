@@ -26,6 +26,16 @@ curl -fsSL https://get.docker.com -o get-docker.sh
 bash get-docker.sh
 ```
 
+If you want to change the storage location for Docker, let's say a drive mounted at `/media/Seagate500` create a file named `daemon.json` in `/etc/docker` directory with the following content:
+
+```json
+{
+"data-root": "/media/Seagate500/docker-storage"
+}
+```
+
+**Don't forget to create the folder `docker-storage` and give it proper permissions. (I set it with `chown ubuntu:docker`).**
+
 ### Run Docker
 
 Download the container image from [Docker Hub](https://hub.docker.com) and run the container:
