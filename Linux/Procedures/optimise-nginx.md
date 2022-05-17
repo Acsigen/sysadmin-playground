@@ -7,6 +7,8 @@
 - [Not Enabling Keepalive Connections to Upstream Servers](#not-enabling-keepalive-connections-to-upstream-servers)
 - [The `proxy_buffering off` Directive](#the-proxy_buffering-off-directive)
 - [Excessive Health Checks](#excessive-health-checks)
+- [Using `ip_hash` When All Traffic Comes from the Same `/24` CIDR Block](#using-ip_hash-when-all-traffic-comes-from-the-same-24-cidr-block)
+- [Not Taking Advantage of Upstream Groups](#not-taking-advantage-of-upstream-groups)
 
 ## Not Enough File Descriptors per Worker
 
@@ -89,6 +91,99 @@ location @health_check {
     proxy_pass http://b;
 }
 ```
+
+## Using `ip_hash` When All Traffic Comes from the Same `/24` CIDR Block
+
+The `ip_hash` algorithm load balances traffic across the servers in an `upstream{}` block, based on a hash of the client IP address. The hashing key is the first three octets of an IPv4 address or the entire IPv6 address. The method establishes session persistence, which means that requests from a client are always passed to the same server except when the server is unavailable.
+
+Let's consider the following configuration:
+
+```nginx
+http {
+
+    upstream {
+        ip_hash;
+        server 10.10.20.105:8080;
+        server 10.10.20.106:8080;
+        server 10.10.20.108:8080;
+    }
+ 
+    server {# …}
+}
+```
+
+There’s a problem: all of the “*intercepting*” devices are on the same `10.10.0.0/24` network, so to NGINX it looks like all traffic comes from addresses in that CIDR range. Remember that the `ip_hash` algorithm hashes the first three octets of an IPv4 address. In our deployment, the first three octets are the same – `10.10.0` – for every client, so the hash is the same for all of them and there’s no basis for distributing traffic to different servers.
+
+The fix is to use the `hash` algorithm instead with the `$binary_remote_addr` variable as the hash key. That variable captures the complete client address, converting it into a binary representation that is 4 bytes for an IPv4 address and 16 bytes for an IPv6 address. Now the hash is different for each intercepting device and load balancing works as expected.
+
+We also include the `consistent` parameter to use the `ketama` hashing method instead of the default. This greatly reduces the number of keys that get remapped to a different upstream server when the set of servers changes, which yields a higher cache hit ratio for caching servers.
+
+The new configuration looks like this:
+
+```nginx
+http {
+    upstream {
+        hash $binary_remote_addr consistent;
+        server 10.10.20.105:8080;
+        server 10.10.20.106:8080;
+        server 10.10.20.108:8080;
+    }
+
+    server {# …}
+}
+```
+
+## Not Taking Advantage of Upstream Groups
+
+Suppose you are employing NGINX for one of the simplest use cases, as a reverse proxy for a single NodeJS‑based backend application listening on port 3000. A common configuration might look like this:
+
+```nginx
+http {
+
+    server {
+        listen 80;
+        server_name example.com;
+
+        location / {
+            proxy_set_header Host $host;
+            proxy_pass http://localhost:3000/;
+        }
+    }
+}
+```
+
+The mistake here is to assume that because there’s only one server, and thus no reason to configure load balancing, it’s pointless to create an `upstream{}` block. In fact, an `upstream{}` block unlocks several features that improve performance, as illustrated by this configuration:
+
+```nginx
+http {
+
+    upstream node_backend {
+        zone upstreams 64K;
+        server 127.0.0.1:3000 max_fails=1 fail_timeout=2s;
+        keepalive 2;
+    }
+
+    server {
+        listen 80;
+        server_name example.com;
+
+        location / {
+            proxy_set_header Host $host;
+            proxy_pass http://node_backend/;
+            proxy_next_upstream error timeout http_500;
+
+        }
+    }
+}
+```
+
+The `zone` directive establishes a shared memory zone where all NGINX worker processes on the host can access configuration and state information about the upstream servers. Several upstream groups can share the zone.
+
+The `server` directive has several parameters you can use to tune server behavior. In this example we have changed the conditions NGINX uses to determine that a server is unhealthy and thus ineligible to accept requests. Here it considers a server unhealthy if a communication attempt fails even once within each 2-second period (instead of the default of once in a 10-second period).
+
+We’re combining this setting with the `proxy_next_upstream` directive to configure what NGINX considers a failed communication attempt, in which case it passes requests to the next server in the upstream group. To the default error and timeout conditions we add `http_500` so that NGINX considers an HTTP 500 (Internal Server Error) code from an upstream server to represent a failed attempt.
+
+The `keepalive` directive sets the number of idle keepalive connections to upstream servers preserved in the cache of each worker process.
 
 ## Sources
 
