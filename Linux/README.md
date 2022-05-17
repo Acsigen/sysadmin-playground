@@ -46,6 +46,7 @@
   * [I/O Redirection](Procedures/io-redirection.md)
   * [Install Arch Linux](Procedures/install-arch-linux.md)
   * [Manage users and groups](Procedures/groups.md)
+  * [Optimise NGINX Configuration](Procedures/optimise-nginx.md)
   * [Process control](Procedures/process-control.md)
   * [Recover ROOT password](Procedures/recover-root-password.md)
   * [Terminal session recording](Procedures/terminal-session-recording.md)
