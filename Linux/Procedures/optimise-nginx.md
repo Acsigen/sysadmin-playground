@@ -2,9 +2,9 @@
 
 ## ToC
 
-- [1. Not Enough File Descriptors per Worker][#1--not-enough-file-descriptors-per-worker]
+- [Not Enough File Descriptors per Worker](#not-enough-file-descriptors-per-worker)
 
-## 1. Not Enough File Descriptors per Worker
+## Not Enough File Descriptors per Worker
 
 ## Sources
 
