@@ -6,6 +6,7 @@
 - [The `error_log off` Directive](#the-error_log-off-directive)
 - [Not Enabling Keepalive Connections to Upstream Servers](#not-enabling-keepalive-connections-to-upstream-servers)
 - [The `proxy_buffering off` Directive](#the-proxy_buffering-off-directive)
+- [#Excessive Health Checks](#excessive-health-checks)
 
 ## Not Enough File Descriptors per Worker
 
@@ -63,6 +64,31 @@ Proxy buffering means that NGINX stores the response from a server in internal b
 When proxy buffering is disabled, NGINX buffers only the first part of a server’s response before starting to send it to the client, in a buffer that by default is one memory page in size (4 KB or 8 KB depending on the operating system). This is usually just enough space for the response header. NGINX then sends the response to the client synchronously as it receives it, forcing the server to sit idle as it waits until NGINX can accept the next response segment.
 
 Setting the `proxy_buffering off` might reduce the latency experienced by clients, but the effect is negligible while the side effects are numerous: with proxy buffering disabled, rate limiting and caching don’t work even if configured, performance suffers, and so on.
+
+## Excessive Health Checks
+
+It is quite common to configure multiple virtual servers to proxy requests to the same upstream group (in other words, to include the identical `proxy_pass` directive in multiple `server{}` blocks). The mistake in this situation is to include a `health_check` directive in every s`erver{}` block. This just creates more load on the upstream servers without yielding any additional information.
+
+At the risk of being obvious, the fix is to define just one health check per `upstream{}` block.
+
+Here we define the health check for the upstream group named `b` in a special named location, complete with appropriate timeouts and header settings.
+
+```nginx
+location / {
+    proxy_set_header Host $host;
+    proxy_set_header "Connection" "";
+    proxy_http_version 1.1;
+    proxy_pass http://b;
+}
+
+location @health_check {
+    health_check;
+    proxy_connect_timeout 2s;
+    proxy_read_timeout 3s;
+    proxy_set_header Host example.com;
+    proxy_pass http://b;
+}
+```
 
 ## Sources
 
