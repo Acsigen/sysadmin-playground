@@ -1,10 +1,11 @@
-# Avoid NGINX Top 10 Configuration Issues
+# Avoid NGINX Configuration Issues
 
 ## ToC
 
 - [Not Enough File Descriptors per Worker](#not-enough-file-descriptors-per-worker)
 - [The `error_log off` Directive](#the-error_log-off-directive)
 - [Not Enabling Keepalive Connections to Upstream Servers](#not-enabling-keepalive-connections-to-upstream-servers)
+- [The `proxy_buffering off` Directive](#the-proxy_buffering-off-directive)
 
 ## Not Enough File Descriptors per Worker
 
@@ -54,6 +55,14 @@ The recommended value is twice the number of servers listed in the `upstream{}` 
   ```
 
   By default NGINX uses HTTP/1.0 for connections to upstream servers and accordingly adds the `Connection: close` header to the requests that it forwards to the servers. The result is that each connection gets closed when the request completes, despite the presence of the `keepalive` directive in the `upstream{}` block.
+
+## The `proxy_buffering off` Directive
+
+Proxy buffering means that NGINX stores the response from a server in internal buffers as it comes in, and doesn’t start sending data to the client until the entire response is buffered. Buffering helps to optimize performance with slow clients.
+
+When proxy buffering is disabled, NGINX buffers only the first part of a server’s response before starting to send it to the client, in a buffer that by default is one memory page in size (4 KB or 8 KB depending on the operating system). This is usually just enough space for the response header. NGINX then sends the response to the client synchronously as it receives it, forcing the server to sit idle as it waits until NGINX can accept the next response segment.
+
+Setting the `proxy_buffering off` might reduce the latency experienced by clients, but the effect is negligible while the side effects are numerous: with proxy buffering disabled, rate limiting and caching don’t work even if configured, performance suffers, and so on.
 
 ## Sources
 
