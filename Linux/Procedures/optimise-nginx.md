@@ -6,7 +6,7 @@
 - [The `error_log off` Directive](#the-error_log-off-directive)
 - [Not Enabling Keepalive Connections to Upstream Servers](#not-enabling-keepalive-connections-to-upstream-servers)
 - [The `proxy_buffering off` Directive](#the-proxy_buffering-off-directive)
-- [#Excessive Health Checks](#excessive-health-checks)
+- [Excessive Health Checks](#excessive-health-checks)
 
 ## Not Enough File Descriptors per Worker
 
