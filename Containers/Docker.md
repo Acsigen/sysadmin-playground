@@ -336,6 +336,18 @@ To destroy the configuration run `docker-compose down`.
 
 You can also check the logs by running `docker-compose logs -f`. If you want to check only one app run `docker-compose logs -f app`
 
+## Image Building Best Practices
+
+### Security Scanning
+
+When you have built an image, it is good practice to scan it for security vulnerabilities using the `docker scan` command. Docker has partnered with [Snyk](https://snyk.io/) to provide the vulnerability scanning service.
+
+### Image Layering
+
+Using the `docker image history` command, you can see the command that was used to create each layer within an image.
+
+If you add the `--no-trunc` flag, you'll get the full output.
+
 ## Tips & Tricks
 You can name a container with ```--name=name``` option.  
 You need to link containers to make a system work:
@@ -354,3 +366,7 @@ To manage multiple instances in a production environment, use the following orch
 * Docker Swarm (Basic)
 * Kubernetes (Most popular, Made by Google)
 * Mesos (More complicated)
+
+## Source
+
+- [Docker Docs](https://docs.docker.com/)
