@@ -294,7 +294,47 @@ The **Bind Mounting** gives you more control over where to map the data on the h
 
 ## Compose
 
-You can create a configuration file in YAML (docker-compose.yml) format using ```docker compose``` command.  
+Docker Compose is a tool that was developed to help define and share multi-container applications. With Compose, we can create a YAML file to define the services and with a single command, can spin everything up or tear it all down.
+
+You can create a configuration file in YAML (docker-compose.yml) format using ```docker compose``` command.
+
+A `docker-compose` file based on the Docker Getting Started page looks like this:
+
+```yaml
+version: "3.8"
+
+services:
+  app:
+    image: node:12-alpine
+    command: sh -c "yarn install && yarn run dev"
+    ports:
+      - 3000:3000
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_DB: todos
+
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - todo-mysql-data:/var/lib/mysql
+    environment: 
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: todos
+
+volumes:
+  todo-mysql-data:
+```
+
+To run the configuration you need to `cd` into the directory containing the `docker-compose.yml` and run `docker-compose up -d`.
+
+You can also check the logs by running `docker-compose logs -f`. If you want to check only one app run `docker-compose logs -f app`
+
+## Tips & Tricks
 You can name a container with ```--name=name``` option.  
 You need to link containers to make a system work:
 
