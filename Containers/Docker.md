@@ -332,6 +332,8 @@ volumes:
 
 To run the configuration you need to `cd` into the directory containing the `docker-compose.yml` and run `docker-compose up -d`.
 
+To destroy the configuration run `docker-compose down`.
+
 You can also check the logs by running `docker-compose logs -f`. If you want to check only one app run `docker-compose logs -f app`
 
 ## Tips & Tricks
