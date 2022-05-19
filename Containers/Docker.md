@@ -269,12 +269,12 @@ docker volume create data_volume
 
 It creates a folder caled ```data_volume``` in ```/var/lib/docker/volumes```.  
 
-Mount the volume in a container (also called **Volume Mounting**):
+Mount the volume in a container (also called **Volume Mounting** or **Named Volumes**):
 
 ```bash
 docker run -v data_volume:/var/lib/mysql mysql
 ```
-Docker can also create volumes automatically if ```-v``` option is used. It can also be a custom location on the host ```/data/mysql``` (also called **Bind Mounting**).
+Docker can also create volumes automatically if ```-v``` option is used. It can also be a custom location on the host ```/data/mysql``` (also called **Bind Mounting** or **Bind Volumes**).
 
 **WARNING! THE ```-v``` OPTION IS NOT USED ANYMORE. INSTEAD, USE ```--mount```:**
 
