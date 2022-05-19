@@ -165,6 +165,14 @@ Then you run the following command to build the image:
 docker build Dockerfile -t username/app-title
 ```
 
+or
+
+```bash
+# This will build an image on the local registry
+# -t option means tag of image, which is the name of the image
+docker build -t image-name .
+```
+
 You can also use `EXPOSE <port>` to tell Docker that the software in the container listens to a specific port.
 
 `WORKDIR <path/to/dir>` sets the current working directory inside the container image.
