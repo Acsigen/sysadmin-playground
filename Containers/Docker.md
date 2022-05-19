@@ -246,6 +246,14 @@ List all networks: ```docker network ls```.
 
 Docker has an embedded DNS which can help containers to connect to eachother through their names. The DNS address is ```127.0.0.11```
 
+### Network aliases
+
+You could set a network alias for a container. This acts as an A DNS record and other containers in the same network can use the alias as a hostname to connect to that container:
+
+```bash
+docker run ubuntu --network=host --network-alias=ubuntu.home.arpa
+```
+
 ## Storage
 
 Map storage to host: 
