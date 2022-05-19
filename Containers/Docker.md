@@ -176,7 +176,7 @@ docker build -t image-name .
 
 You can also use `EXPOSE <port>` to tell Docker that the software in the container listens to a specific port.
 
-`WORKDIR <path/to/dir>` sets the current working directory inside the container image.
+`WORKDIR <path/to/dir>` sets the current working directory inside the container image. You could also set this by passing the option `-w <path/ro/dir>` into `docker run`.
 
 You can find more details [here](https://docs.docker.com/engine/reference/builder/).
 
