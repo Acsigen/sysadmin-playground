@@ -276,11 +276,13 @@ docker run -v data_volume:/var/lib/mysql mysql
 ```
 Docker can also create volumes automatically if ```-v``` option is used. It can also be a custom location on the host ```/data/mysql``` (also called **Bind Mounting** or **Bind Volumes**).
 
-**WARNING! THE ```-v``` OPTION IS NOT USED ANYMORE. INSTEAD, USE ```--mount```:**
-
 ```bash
 docker run --mount type=bind,source=/data/mysql,target=/var/lib/mysql mysql
 ```
+
+The **Bind Mounting** gives you more control over where to map the data on the host. In case of **Volume Mounting** the location is picked automatically by Docker.
+
+**WARNING! THE ```-v``` OPTION IS NOT USED ANYMORE. INSTEAD, USE ```--mount```:**
 
 ## Compose
 
