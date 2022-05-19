@@ -170,6 +170,7 @@ or
 ```bash
 # This will build an image on the local registry
 # -t option means tag of image, which is the name of the image
+# the . at the end tells docker to look for the Dockerfile in the current directory
 docker build -t image-name .
 ```
 
