@@ -258,7 +258,8 @@ docker run -v /home/ubuntu/public_html:/var/www/html nginx
 Check container logs:
 
 ```bash
-docker logs nginx```
+docker logs nginx
+```
 
 Create volume: 
 
