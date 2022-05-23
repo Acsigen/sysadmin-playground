@@ -82,7 +82,24 @@ By default, the next stage will run after the previous one has succeeded. So whe
 
 If you want your job not to run automatically, Gitlab provides the option to specify when to run the job. The options provided are `manual`, `always`, `on_success`, and `on_failure`.
 
+## Syntax Error
+
+To avoid getting errors you can try the following options:
+
+- [Validate the syntax of your configuration before pushing](https://docs.gitlab.com/ee/api/lint.html)
+- [Configure your own runner](https://docs.gitlab.com/ee/ci/runners/#shared-specific-and-group-runners)
+
+## Optimisation
+
+[You can cache](https://docs.gitlab.com/ee/ci/caching/) the files so that you don’t have to redownload everything everytime you pipeline runs. Another fix is to create your own docker image tailored for your own needs.
+
+When you use Gitlab CI/CD to automate packaging and deployment for your application, you might encounter the need to pass files generated in one job to another job. To do this learn you should learn how to use [artifacts](https://docs.gitlab.com/ee/ci/pipelines/job_artifacts.html#create-job-artifacts).
+
+When using at a larger scale, you might expect a queue if you don’t configure your runner wisely, look more into [shared, specific, and group runner](https://docs.gitlab.com/ee/ci/runners/#shared-specific-and-group-runners) to address that.
+
 ## Sources
 
 - [faun.pub](https://faun.pub/gitlab-ci-cd-crash-course-6e7bcf696940)
 - [GitLab docs](https://docs.gitlab.com/ee/ci/yaml/#when)
+- [GitLab docs quickstart](https://docs.gitlab.com/ee/ci/quick_start/)
+- [GitLab GI/CD keywords reference](https://docs.gitlab.com/ee/ci/yaml/)
