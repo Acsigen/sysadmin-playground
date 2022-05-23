@@ -4,14 +4,6 @@
 
 Docker is a set of platform as a service products that use OS-level virtualization to deliver software in packages called containers.
 
-For demonstration purposes, we will test the following images:
-
-* nginx
-* ubuntu
-* redis
-* flask-app
-* mysql
-
 ## Getting Started
 
 Run all as ROOT or with sudo rights.
