@@ -103,3 +103,4 @@ When using at a larger scale, you might expect a queue if you don’t configure 
 - [GitLab docs](https://docs.gitlab.com/ee/ci/yaml/#when)
 - [GitLab docs quickstart](https://docs.gitlab.com/ee/ci/quick_start/)
 - [GitLab GI/CD keywords reference](https://docs.gitlab.com/ee/ci/yaml/)
+- [Valentin Despa Course Notes](https://gitlab.com/gitlab-course-public/freecodecamp-gitlab-ci/-/blob/main/docs/course-notes.md)
