@@ -313,7 +313,7 @@ services:
       - 3000:3000
     working_dir: /app
     volumes:
-      - ./:/app
+      - ./:/app # bind volume short syntax
     environment:
       MYSQL_HOST: mysql
       MYSQL_USER: root
@@ -323,7 +323,7 @@ services:
   mysql:
     image: mysql:5.7
     volumes:
-      - todo-mysql-data:/var/lib/mysql
+      - todo-mysql-data:/var/lib/mysql # named volume short syntax
     environment: 
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_DATABASE: todos
@@ -339,6 +339,42 @@ To destroy the configuration run `docker-compose down`.
 You can also check the logs by running `docker-compose logs -f`. If you want to check only one app run `docker-compose logs -f app`
 
 A quick guide on `docker compose` can be viewed [here](https://www.youtube.com/watch?v=exmBvjlZr7U).
+
+Regarding the volumes, there is also the possibility for the *long syntax*:
+
+```yaml
+version: "3.8"
+
+services:
+  app:
+    image: node:12-alpine
+    command: sh -c "yarn install && yarn run dev"
+    ports:
+      - 3000:3000
+    working_dir: /app
+    volumes: # bind volume long syntax
+      - type: bind
+        source: ./
+        target: /app
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_DB: todos
+
+  mysql:
+    image: mysql:5.7
+    volumes: # named volume long syntax
+      - type: volume
+        source: todo-mysql-data
+        target: /var/lib/mysql
+    environment: 
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: todos
+
+volumes:
+  todo-mysql-data:
+```
 
 ## Image Building Best Practices
 
