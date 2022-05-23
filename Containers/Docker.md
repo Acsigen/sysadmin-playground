@@ -254,6 +254,8 @@ You could set a network alias for a container. This acts as an A DNS record and 
 docker run ubuntu --network=host --network-alias=ubuntu.home.arpa
 ```
 
+When using `docker compose` the name of the service can be used as the network alias.
+
 ## Storage
 
 Map storage to host: 
