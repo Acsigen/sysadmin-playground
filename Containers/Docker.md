@@ -338,6 +338,8 @@ To destroy the configuration run `docker-compose down`.
 
 You can also check the logs by running `docker-compose logs -f`. If you want to check only one app run `docker-compose logs -f app`
 
+A quick guide on `docker compose` can be viewed [here](https://www.youtube.com/watch?v=exmBvjlZr7U)
+
 ## Image Building Best Practices
 
 ### Security Scanning
