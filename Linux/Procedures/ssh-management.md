@@ -234,6 +234,13 @@ awk '$5 >= 3071' /etc/ssh/moduli > /etc/ssh/moduli.tmp && mv /etc/ssh/moduli.tmp
 
 Probably the simplest yet most effective control is to implement a second factor authentication in your SSH server. [Google’s Google Authenticator PAM module](https://goteleport.com/blog/ssh-2fa-tutorial/) is the popular choice. But it only supports TOTP-based authentication. For more robust authentication, opt for solutions that enable authentication based on [U2F](https://www.yubico.com/authentication-standards/fido-u2f/) or [WebAuthn](https://en.wikipedia.org/wiki/WebAuthn) for SSH.
 
+If, after adding an extra user, and you login via SSH you need to input the password for `sudo`, please run `visudo` and add the following lines then restart `ssh` service (this is made for `ubuntu` user):
+
+```conf
+# User rules for ubuntu
+ubuntu ALL=(ALL) NOPASSWD:ALL
+```
+
 ## SFTP Only
 
 - Create a user for the SFTP protocol with the following command: `useradd -m sftp.user` then inside `/home/sftp.user` create the path `sftp/upload`.
