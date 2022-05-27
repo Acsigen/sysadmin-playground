@@ -63,6 +63,8 @@ Edit ```/boot/firmware/cmdline.txt``` and append the following text to that comm
 zswap.enabled=1 zswap.compressor=lz4 zswap.zpool=z3fold
 ```
 
+**For regular Ubuntu installations, edit `/etc/default/grub` and add the text to `GRUB_CMDLINE_LINUX_DEFAULT` then run `sudo update-grub`.**
+
 Enable ```z3fold``` and ```lz4```:
 
 ```bash
