@@ -39,7 +39,9 @@ When you open a file, by default it is opened in *normal mode*.
 * ```y``` - yank or copy whatever is selected
 * ```yy``` - yank or copy the current line
 * ```p``` - paste the copied text before the cursor
-* ```V``` + ```d``` + ```p```: Select current line, cut, and paste somewehere else
+* ```Vd``` + ```p``` - Select current line, cut, and paste somewehere else
+* `ddk` - Move line down
+* `ddkP` - Move line up
 * ```u``` - undo your last action
 * ```Ctrl-r``` - redo your last action
 * `:r filename.txt` - read the content of the `filename.txt` and copies the content into current file
