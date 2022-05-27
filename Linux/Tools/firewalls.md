@@ -46,7 +46,7 @@ Running a command such as ```iptables -A INPUT -p icmp -j ACCEPT``` will apply t
 This can be done in two ways:
 
 
-* Edit the ```iptables``` rules file by adding ```-A INPUT -p icmp -j ACCEPT``` to the file then run ```systemctl restart iptables```
+* Edit the ```iptables``` rules file by adding ```-A INPUT -p icmp -j ACCEPT``` to the file then run ```systemctl restart iptables``` or run `iptables-apply /etc/iptables/rules.v4`
   * Ubuntu: ```/etc/iptables/rules.v4```
   * RHEL based distributions: ```/etc/sysconfig/iptables```
 * Run the commands that apply the rules on the fly then run ```iptables-save > /etc/iptables/rules.v4```
