@@ -368,6 +368,8 @@ volumes:
   todo-mysql-data:
 ```
 
+If you want to use `host` network with docker compose file, set `network_mode: "host"` and remove port mappings.
+
 ## Image Building Best Practices
 
 ### Security Scanning
