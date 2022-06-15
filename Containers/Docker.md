@@ -258,6 +258,10 @@ docker network create -d macvlan --subnet <host_subnet_cidr> --gateway <gateway_
 
 You could also assign the `<dhcp_range>` to a single ip, such as `192.168.1.253/32`. The first created container in that network will get that IP, then assign IP addresses manually in the configured range.
 
+**If you want `ipvlan`, the procedure is the same, just replace `macvlan` in the syntax.**
+
+The main difference between `macvlan` and `ipvlan` is that *macvlan* will assign a MAC to each container, *ipvlan* will assign only one MAC but can use multple IPs. Also, *ipvlan* can work at L2 and L3 OSI layers.
+
 ## Storage
 
 Map storage to host: 
