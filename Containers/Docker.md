@@ -248,6 +248,16 @@ docker run ubuntu --network=host --network-alias=ubuntu.home.arpa
 
 When using `docker compose` the name of the service can be used as the network alias.
 
+### MACVlan interfaces
+
+You can configure a `macvlan` interface  which will allocate a MAC address to the container and will assign an IP from host DHCP.
+
+```bash
+docker network create -d macvlan --subnet <host_subnet_cidr> --gateway <gateway_ip> --ip-range <dhcp_range> -o parent=<parent_host_interface> <custom_interface_name>
+```
+
+You could also assign the `<dhcp_range>` to a single ip, such as `192.168.1.253/32`. The first created container in that network will get that IP, then assign IP addresses manually in the configured range.
+
 ## Storage
 
 Map storage to host: 
