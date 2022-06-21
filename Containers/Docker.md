@@ -59,7 +59,7 @@ Run container in interactive mode with terminal:
 
 ```bash
 docker run -it ubuntu
-```
+``` 
 
 ### Interacting with containers
 
@@ -83,6 +83,10 @@ Execute command within an already running container:
 # Open a bash shell inside the container (-t: allocate TTY, -i: interactive mode)
 docker exec -t -i ubuntu /bin/bash
 ```
+
+While inside the `ubuntu` container, if you execute `exit`, then the container will stop because `/bin/bash` is the entrypoint. If you want your container to keep running in background, press **CTRL + p CTRL + q** as an escape sequence.
+
+There is an exception for the `exit` command. If the shell is not the entryopoint (e.g. nginx container) then the container will keep running.
 
 Access running container:
 
