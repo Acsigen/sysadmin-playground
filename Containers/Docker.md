@@ -162,7 +162,7 @@ ENTRYPOINT ["/usr/sbin/httpd"]
 CMD ["-D","FOREGROUND"]
 ```
 
-If no entrypoint is pecified, the container will automatically trun `/bin/sh -c`. You will also encounted the `CMD` command being used as an entrypoint.
+If no entrypoint is pecified, the container will automatically trun `/bin/sh -c`. You will also encounter the `CMD` command being used as an entrypoint. **When `CMD` is being used as an entrypoint, the command is executed as an argument to the default entrypoint `sh -c` which can give unexpected results.**
 
 Then you run the following command to build the image:
 
