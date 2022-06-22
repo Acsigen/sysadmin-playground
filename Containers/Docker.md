@@ -410,6 +410,7 @@ Using the `docker image history` command, you can see the command that was used 
 If you add the `--no-trunc` flag, you'll get the full output.
 
 ## Tips & Tricks
+
 You can name a container with ```--name=name``` option.  
 You need to link containers to make a system work:
 
@@ -417,6 +418,8 @@ You need to link containers to make a system work:
 # --link <name of current redis container>:<name of redis from voting-app config file>
 docker run -d --name=vote -p 5000:80 --link redis:redis voting-app
 ```
+
+You can use `docker commit` command to build a custom image after you made some changes to a running container. You can also use `docker save` to export the image to a `.tar` file and `docker import` to import it on another system.
 
 **WARNING! LINKING LIKE THIS IS DEPRECATED. IT IS USED JUST TO DEMONSTRATE THE CONCEPT OF LINKING THE CONTAINERS.**
 
