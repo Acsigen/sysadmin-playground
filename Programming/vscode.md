@@ -9,10 +9,14 @@ I also use Cascadia Code font with a size of 14.
 
 - Visual Studio IntelliCode
 - Prettier - Code formatter
-- Python (the one with 40M+ installs)
+- Python
 - YAML
 - markdownlint
 - Markdown PDF
+- Remote - SSH
+- Remote - Containers
+- Docker
+- shell-format
 
 ## Keyboard Shortcuts
 
