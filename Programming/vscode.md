@@ -27,7 +27,8 @@ I also use Cascadia Code font with a size of 14.
 ```json
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.fontFamily": "'Cascadia Code',Consolas, 'Courier New', monospace",
+  "editor.fontFamily": "'Roboto Mono','Cascadia Code',Consolas, 'Courier New', monospace",
+  "editor.fontSize": 16,
   "editor.accessibilitySupport": "off",
   "editor.autoClosingBrackets": "beforeWhitespace",
   "editor.autoClosingQuotes": "beforeWhitespace",
@@ -44,6 +45,6 @@ I also use Cascadia Code font with a size of 14.
 
 I have three fonts that I really enjoy using:
 
-- Roboto Mono 14 by Google
+- Roboto Mono 14 or 16 by Google
 - Ubuntu Mono 16 by Canonical
 - Cascadia Mono 14 by Microsoft
