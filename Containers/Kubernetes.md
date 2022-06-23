@@ -7,6 +7,7 @@
 - [Create Kubernetes cluster locally](#create-kubernetes-cluster-locally)
 - [Create and scale deployments](#create-and-scale-deployments)
 - [Create services and deployment using YAML](#create-services-and-deployment-using-yaml)
+- [Networking](#networking)
 - [Connect different deployments together](#connect-differnet-deployments-together)
 - [Change container runtime from Docker to CRI-O](#change-container-runtime-from-docker-to-cri-o)
 - [Sources](#sources)
@@ -77,22 +78,9 @@ The command line tool to connect to a cluster is `kubectl`.
 
 ### Dependencies and Installation
 
-To run k8s locally you need to install the following:
+To run k8s locally you need to to use **microk8s** which is a *powerful, lightweight, reliable production-ready Kubernetes distribution* made by Canonical. The setup procedure is simple, just follow [these steps](https://microk8s.io/#install-microk8s).
 
-- `minikube` to run a single node cluster
-- `kubectl` to manage the cluster
-
-**For this guide we use an alias `k="kubectl"` to make it easier to type.**
-
-## Create Kubernetes cluster locally
-
-To start the cluster you need to use the following command: `minikube start --driver=<driver_name>`
-
-For `--driver` please check minikube documentation for compatible drivers (e.g. VirtualBox, Docker, Hyper-V, VMWare, none).
-
-**Make sure that you have the driver packages installed on your system.**
-
-You can access minikube node using SSH by running `minikube ip` to get the IP of the minikube and then run `ssh docker@<minikube_ip>`. The default password is `tcuser`.
+**For this guide we use an alias `k="microk8s kubectl"` to make it easier to type.**
 
 ### Basic commands
 
@@ -104,9 +92,12 @@ You can access minikube node using SSH by running `minikube ip` to get the IP of
 |`k get pods`|List the pods. Append `-o wide` to get more info|
 |`k get namespaces`|Will list the namespaces|
 |`k get pods --namespace=kube-system`|List pods that are running in *kube-system* namespace|
+|`k get all --all-namespaces`|List all resources for all namespaces|
 |`k run nginx --image=nginx`|Run an Nginx pod named *nginx*|
 |`k describe pod nginx`|Get more info about *nginx* pod created earlier|
 |`k delete pod nginx`|Delete *nginx* pod|
+
+Just to clarify, ***namespaces** are a way to organize clusters into virtual sub-clusters, they can be helpful when different teams or projects share a Kubernetes cluster. Any number of namespaces are supported within a cluster, each logically separated from others but with the ability to communicate with each other.*
 
 ## Create and scale deployments
 
@@ -357,6 +348,13 @@ spec:
 
 To delete deployments you can run `k delete -f deployment.yaml -f service.yaml`.
 
+## Networking
+
+- **ClusterIP**: is the default Kubernetes service for internal communications. However, external traffic can access the default Kubernetes ClusterIP service through a proxy. This can be useful for debugging services or displaying internal dashboards. **Services are reachable by pods/services in the Cluster.**
+- **NodePort**: opens ports on the nodes or virtual machines, and traffic is forwarded from the ports to the service. It is most often used for services that don’t always have to be available, such as demo applications. **Services are reachable by clients on the same LAN/clients who can ping the K8s Host Nodes.**
+- **LoadBalancer**: is the standard way to connect a service externally to the internet. In this scenario, a network load balancer forwards all external traffic to a service. Each service gets its own IP address. **Services are reachable by everyone connected to the internet.**
+- **Ingress**: acts as a router or controller to route traffic to services via a load balancer. It is useful if you want to use the same IP address to expose multiple services.
+
 ## Connect different deployments together
 
 It is very common to connect multiple deployments together. Such as a web interface application to a database.
@@ -370,3 +368,5 @@ To change the container runtime you need to delete the current *minikube* setup 
 ## Sources
 
 - [FreeCodeCamp YouTube Channel](https://youtu.be/d6WC5n9G_sM)
+- [VMWare GLossary](https://www.vmware.com/topics/glossary/content/kubernetes-networking.html#:~:text=Kubernetes%20networking%20allows%20Kubernetes%20components,host%20ports%20to%20container%20ports.)
+
