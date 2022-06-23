@@ -4,11 +4,10 @@
 
 - [Prerequisites](#prerequisites)
 - [Introduction](#introduction)
-- [Create Kubernetes cluster locally](#create-kubernetes-cluster-locally)
 - [Create and scale deployments](#create-and-scale-deployments)
 - [Create services and deployment using YAML](#create-services-and-deployment-using-yaml)
 - [Networking](#networking)
-- [Connect different deployments together](#connect-differnet-deployments-together)
+- [Connect different deployments together](#connect-different-deployments-together)
 - [Change container runtime from Docker to CRI-O](#change-container-runtime-from-docker-to-cri-o)
 - [Sources](#sources)
 
