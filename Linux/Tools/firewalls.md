@@ -10,9 +10,10 @@ Iptables minimum required rules:
 
 ```bash
 # Default policies
--P INPUT DROP
--P FORWARD ACCEPT
--P OUTPUT ACCEPT
+# You can set the policies on the fly with -P
+:INPUT DROP [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
 
 # Allow incoming ping packets
 # For IPv6 is "-p ipv6-icmp", the rest is the same
