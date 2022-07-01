@@ -3,7 +3,8 @@
 Create session
 
 ```bash
-tmux new -s session-name
+tmux new-session -s session-name
+# Short version: tmux new -s session-name
 ```
 
 Kill background session.  
