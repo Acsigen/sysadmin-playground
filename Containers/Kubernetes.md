@@ -6,6 +6,7 @@
 - [Introduction](#introduction)
 - [Create and scale deployments](#create-and-scale-deployments)
 - [Create services, pods, and deployments using YAML](#create-services-pods-and-deployments-using-yaml)
+- [Namespaces](#namespaces)
 - [Networking](#networking)
 - [Connect different deployments together](#connect-different-deployments-together)
 - [Change container runtime from Docker to CRI-O](#change-container-runtime-from-docker-to-cri-o)
@@ -96,7 +97,7 @@ A pod contains:
 |`k get pods --namespace=kube-system`|List pods that are running in *kube-system* namespace|
 |`k cluster-info`|List the cluster informations|
 |`k get nodes`|List the nodes. If you use *microk8s* it will list only one|
-|`k get namespaces`|Will list the namespaces|
+|`k get namespaces`|Will list the namespaces. Also works with `k get ns`|
 |`k get all --all-namespaces`|List all resources for all namespaces|
 |`k delete pod nginx-abc-xyz`|Delete *nginx-abc-xyz* pod|
 
@@ -252,7 +253,9 @@ k delete deployment nginx-deployment
 k delete service nginx-deployment
 ```
 
-## Create services, pods and deployments using YAML
+## Create services, pods, and deployments using YAML
+
+### YAML Manifest file
 
 Kubernetes documentation will help you build more complex configuration files.
 
@@ -284,6 +287,8 @@ k explain pod.spec
 k explain --recursive pod.spec
 ```
 
+### Basic YAML configuration
+
 In Visual Studio Code, the Kubernetes extension will help you create a deployment. Just type `deployment`, `pod`, or `service` and click on the suggestion. A template file will be generated automatically. Change it accordingly:
 
 ```yaml
@@ -314,11 +319,48 @@ You can also use a single file and separate the *service*, *deployment*, and *po
 
 To delete deployments you can run `k delete -f mypods.yaml`.
 
+### Generate config files
+
 **It is considered a best practice to generate YAML files and not create them form scratch.** You can generate YAML files by using `--dry-run=client -o yaml > my.yaml` as an argument to `kubectl run` and `kubectl create` commands:
 
 ```bash
 kubectl run mynginx --image=nginx --dry-run=client -o yaml > mynginx.yaml
 ```
+
+### INIT containers
+
+An init container is an additional container in a pod that completes a task before the main container is started. The main container will only be started once the init container has been started.
+
+You can use `initContainers` argument in the YAML configuration file to declare the init container, the rest of the arguments underneath it are standard arguments for one or more containers.
+
+## Namespaces
+
+A Linux NameSpace implements kernel-level resource isolation. Kubernetes offers NameSpace resources that provide the same functionality. Different Namespaces can be used to strictly separate between customer resources.
+
+You can tjink of namespaces as directories used to organise different applications and make sure that components for a specific application are found in the same namespace.
+
+Kubernetes also uses namespaces as a security features such as:
+
+- Role-Based Access Control (RBAC)
+- Quota
+
+You can manage a namespace by running:
+
+```bash
+# Create namespace
+k create namespace mynamespace
+
+# Work in a specific namespace
+k <commands> -n mynamespace
+
+# Delete a namespace
+k delete namespace mynamespace
+
+# Get configuration data of namespace such as quota and limits
+k describe namespace mynamespace 
+```
+
+You can also use `ns` instead of `namespace` in the command to make it quicker to type.
 
 ## Networking
 
