@@ -5,7 +5,7 @@
 - [Prerequisites](#prerequisites)
 - [Introduction](#introduction)
 - [Create and scale deployments](#create-and-scale-deployments)
-- [Create services and deployment using YAML](#create-services-and-deployment-using-yaml)
+- [Create services, pods, and deployments using YAML](#create-services-pods-and-deployments-using-yaml)
 - [Networking](#networking)
 - [Connect different deployments together](#connect-different-deployments-together)
 - [Change container runtime from Docker to CRI-O](#change-container-runtime-from-docker-to-cri-o)
@@ -34,16 +34,6 @@ K8s can be used for the following actions:
 - Auto-scaling
 - Monitorinc and health Check
 - Replacement of failed containers
-
-**Pod** is the smallest unit in the k8s world. Containers are created inside the pod.
-
-A pod can contain:
-
-- Containers
-- Shared Volumes
-- Shared IP Address
-
-Commonly, there is only one container in a single pod.
 
 Anatomy of k8s:
 
@@ -81,20 +71,34 @@ To run k8s locally you need to to use **microk8s** which is a *powerful, lightwe
 
 **For this guide we use an alias `k="microk8s kubectl"` to make it easier to type.**
 
+### Pods
+
+**Pod** is the smallest unit in the k8s world. Containers are created inside the pod. A pod can run multiple containers withn a single namespace, exposed by a single IP address. Kubernetes doesn't manage containers directly, it manages containers through pods.
+
+Although the standard is one container in a pod, multiple containers in a pod are used in specific cases such as logging and monitoring.
+
+There is also the posibility to run *naked* pods, they are the pods that you can create directly through a definition file. Try to avoid these ones, they have many disadvantages (cannot be scaled, cannot be replaced automatically, etc.)
+
+A pod contains:
+
+- Containers
+- Shared Volumes
+- Shared IP Address
+
 ### Basic commands
 
 |Command|Action|
 |---|---|
-|`k exec nginx-deployment-fdfs-dsfsfed -- nslookup google.com`|Execute `nslookup google.com` command inside container|
-|`k cluster-info`|List the cluster informations|
-|`k get nodes`|List the nodes. If you use *minikube* it will list only one|
-|`k get pods`|List the pods. Append `-o wide` to get more info|
-|`k get namespaces`|Will list the namespaces|
+|`k run nginx-abc-xyz --image=nginx`|Run an Nginx pod named *nginx-abc-xyz*|
+|`k exec nginx-deployment-abc-xyz -- nslookup google.com`|Execute `nslookup google.com` command inside container|
+|`k describe pod nginx-abc-xyz`|Get more info about *nginx-abc-xyz* pod created earlier|
+|`k get pods`|List the pods. Append `-o wide` to get more info or `-o yaml` to get the yaml data. **Please specify the name of the pod and pipe it through `less` if you use `-o`, otherwise it will print a lot of data.**|
 |`k get pods --namespace=kube-system`|List pods that are running in *kube-system* namespace|
+|`k cluster-info`|List the cluster informations|
+|`k get nodes`|List the nodes. If you use *microk8s* it will list only one|
+|`k get namespaces`|Will list the namespaces|
 |`k get all --all-namespaces`|List all resources for all namespaces|
-|`k run nginx --image=nginx`|Run an Nginx pod named *nginx*|
-|`k describe pod nginx`|Get more info about *nginx* pod created earlier|
-|`k delete pod nginx`|Delete *nginx* pod|
+|`k delete pod nginx-abc-xyz`|Delete *nginx-abc-xyz* pod|
 
 Just to clarify, ***namespaces** are a way to organize clusters into virtual sub-clusters, they can be helpful when different teams or projects share a Kubernetes cluster. Any number of namespaces are supported within a cluster, each logically separated from others but with the ability to communicate with each other.*
 
@@ -232,7 +236,7 @@ Or you can use an older image and just "update" it to the previous version of th
 ```bash
 k set image deployment nginx-deployment nginx-deployment=nginx/nginx
 ```
- 
+
 ### Clean-up
 
 Delete pods, deployment, and service:
@@ -248,104 +252,73 @@ k delete deployment nginx-deployment
 k delete service nginx-deployment
 ```
 
-## Create services and deployment using YAML
+## Create services, pods and deployments using YAML
 
 Kubernetes documentation will help you build more complex configuration files.
 
-For this case, the example below is more than enough.
+A YAML Manifest file has the following structure:
 
-Create two separate `.yaml` files to configure deployment and service:
+- apiVersion: specifies which version of the API to use for this object
+- kind: indicates the type of object (Deployment, Pod, Service, etc.)
+- metadata: contains administrative information about the object
+- spec: contains the specifics for the object
 
-- `deployment.yaml`
-- `service.yaml`
+The *containers spec* requires different parts:
 
-In Visual Studio Code, the Kubernetes extension will help you create a deployment. Just type `deployment` and click on the suggestion. A template file will be generated automatically. Change it accordingly:
+- name: name of container
+- image: image used
+- command: the command the container should run
+- args: arguments that are used by the command
+- env: environment variables that should be used by the container
 
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: myapp
-spec:
-  selector:
-    matchLabels:
-      app: myapp
-  template:
-    metadata:
-      labels:
-        app: myapp
-    spec:
-      containers:
-      - name: myapp
-        image: <Image>
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
-        ports:
-        - containerPort: <Port>
+**Use `kubectl explain` to get more information about the basic properties to build the YAML file.**
+
+```bash
+# Get info about pod properties
+k explain pod
+
+# Go deeper into the pod properties
+k explain pod.spec
+
+# Even more data
+k explain --recursive pod.spec
 ```
 
-It goes the same way for the service file:
+In Visual Studio Code, the Kubernetes extension will help you create a deployment. Just type `deployment`, `pod`, or `service` and click on the suggestion. A template file will be generated automatically. Change it accordingly:
 
 ```yaml
 apiVersion: v1
-kind: Service
+kind: Pod
 metadata:
-  name: myapp
+  name: mypods
+  namespace: default
 spec:
-  selector:
-    app: myapp
-  ports:
-  - port: <Port>
-    targetPort: <Target Port>
+  containers:
+  - name: busybox
+    image: busybox
+    command:
+      - sleep
+      - "3600"
+  - name: nginx
+    image: nginx
 ```
 
 Apply the YAML file:
 
 ```bash
-k apply -f deployment.yaml
+# You can also use create instead of apply but if the resource already exists, it will return an error
+k apply -f mypods.yaml
 ```
 
-You can also use a single file such as `nginx-dployment.yaml` and separate the *service* and *deployment* configuration using `---`
+You can also use a single file and separate the *service*, *deployment*, and *pod* configuration using `---`
 
-```yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: myapp
-spec:
-  selector:
-    app: myapp
-  ports:
-  - port: <Port>
-    targetPort: <Target Port>
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: myapp
-spec:
-  selector:
-    matchLabels:
-      app: myapp
-  template:
-    metadata:
-      labels:
-        app: myapp
-    spec:
-      containers:
-      - name: myapp
-        image: <Image>
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
-        ports:
-        - containerPort: <Port>
+To delete deployments you can run `k delete -f mypods.yaml`.
+
+**It is considered a best practice to generate YAML files and not create them form scratch.** You can generate YAML files by using `--dry-run=client -o yaml > my.yaml` as an argument to `kubectl run` and `kubectl create` commands:
+
+```bash
+kubectl run mynginx --image=nginx --dry-run=client -o yaml > mynginx.yaml
 ```
-
-To delete deployments you can run `k delete -f deployment.yaml -f service.yaml`.
 
 ## Networking
 
@@ -368,4 +341,3 @@ To change the container runtime you need to delete the current *minikube* setup 
 
 - [FreeCodeCamp YouTube Channel](https://youtu.be/d6WC5n9G_sM)
 - [VMWare GLossary](https://www.vmware.com/topics/glossary/content/kubernetes-networking.html#:~:text=Kubernetes%20networking%20allows%20Kubernetes%20components,host%20ports%20to%20container%20ports.)
-
