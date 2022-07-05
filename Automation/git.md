@@ -10,12 +10,12 @@ A git repository has the following structure:
 Git steps:
 
 - Clone
+- Branch
 - Add
 - Commit
 - Push
-- Branch
 - Merge
-- Pull Request (GitHub only)
+- Pull/Merge Request
 
 ### Installation
 
