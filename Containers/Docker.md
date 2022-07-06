@@ -412,7 +412,7 @@ If you add the `--no-trunc` flag, you'll get the full output.
 
 ### Use docker compose
 
-You can build an image using docker compose file to build an image.
+You can build an image using docker compose file.
 
 The setup looks like this:
 
