@@ -16,7 +16,7 @@ When adding a *Boolean Parameter* you have a checkbox with *Default value*, if t
 
 ## Execute remote jobs using SSH
 
-In order to achieve that you will need to instal the SSH plugin and configure credentials from *Mange Jenkins* menu.
+In order to achieve that you will need to instal the SSH plugin and configure credentials from **Manage Jenkins** menu.
 
 You need to configure SSH hosts from **Manage Jenkins** &rarr; **Configure System**.
 
