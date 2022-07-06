@@ -228,12 +228,62 @@ What if we need to delete a file on the server?
 
 ## Variables
 
-You can use variables like this `{{ VARIABLE_NAME }}`.
+### Simple variables
+You can declare a simple variable like this:
+
+```yaml
+remote_install_path: /opt/my_app_config
+```
+
+To reference that variable:
+
+```yaml
+ansible.builtin.template:
+  src: foo.cfg.j2
+  dest: '{{ remote_install_path }}/foo.cfg'
+```
+
+**If you start a value with `{{ foo }}`, you must quote the whole expression to create valid YAML syntax. If you do not quote the whole expression, the YAML parser cannot interpret the syntax.**
+
+### List variables
+
+You can define variables with multiple values using YAML lists:
+
+```yaml
+region:
+  - northeast
+  - southeast
+  - midwest
+```
+
+Reference an item from the list:
+
+```yaml
+region: "{{ region[0] }}"
+```
+
+### Dictionary variables
+
+You can define more complex variables using YAML dictionaries:
+
+```yaml
+foo:
+  field1: one
+  field2: two
+```
+
+Reference elements from the ditionary:
+
+```yaml
+foo['field1']
+foo.field1
+```
 
 ## Sources
 
 * For encryption, study the Ansible Vault docs
 * For more variables, please study the Jinja docs
 * For changing a line in a file please study the `lineinfile` module. It uses regexp to change contents of a file
+* [Ansible Documentation](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html)
 * [Simplilearn YouTube Channel](https://www.youtube.com/watch?v=EcnqJbxBcM0)
 * [Awesome Ansible GitHub Reposiory - for further development](https://github.com/KeyboardInterrupt/awesome-ansible)
