@@ -21,3 +21,21 @@ In order to achieve that you will need to instal the SSH plugin and configure cr
 You need to configure SSH hosts from **Manage Jenkins** &rarr; **Configure System**.
 
 From **Build** you need to select **Execute shell script on remote host using ssh**, select the host you configured and the rest is the same.
+
+## Ansible integration
+
+To integrate Jenkins with Ansible, you need to perform the following actions:
+
+- Install `ansible` on the Jenkins host/container
+- Configure an inventory
+- Create a playbook
+- Install the Ansible module for Jenkins.
+
+After all the steps are done, you can use **Ansible Playbooks** inside the **Build** menu.
+
+You can also use Jenkins Parameters to pass values inside Ansible:
+
+- Set a parameter in Jenkins
+- Click **Advanced** on Ansible Playbook configuration and **Add Extra Variable**
+- Key should be the name of the variable from the playbook
+- Value should be the name of the Jenkins Parameter with the format `$FOO`
