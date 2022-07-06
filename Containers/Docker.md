@@ -440,7 +440,7 @@ volumes:
   todo-mysql-data:
 ```
 
-Now when you run `docker compose up -d` it will build and use the custom image.
+Now when you run `docker compose build` then `docker compose up -d` it will build and use the custom image.
 
 ## Tips & Tricks
 
