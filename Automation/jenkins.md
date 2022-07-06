@@ -13,3 +13,11 @@ In Jenkins a task is called a job. You can create your first job by clicking on 
 You can also add parameters to the project, these parameters will be passed as variables to the shell command. Now the *Build* button changed to *Build with Parameters*. Even if you configured the default values for the parameters, you will be asked to confirm or edit the default parameters before starting the build.
 
 When adding a *Boolean Parameter* you have a checkbox with *Default value*, if that is checked the value is `true` and `false` if not checked.
+
+## Execute remote jobs using SSH
+
+In order to achieve that you will need to instal the SSH plugin and configure credentials from *Mange Jenkins* menu.
+
+You need to configure SSH hosts from **Manage Jenkins** &rarr; **Configure System**.
+
+From **Build** you need to select **Execute shell script on remote host using ssh**, select the host you configured and the rest is the same.
