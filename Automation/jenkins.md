@@ -11,3 +11,5 @@ According to [this Reddit answer](https://www.reddit.com/r/devops/comments/3vdem
 In Jenkins a task is called a job. You can create your first job by clicking on **New Item** &rarr; **Freestyle Project** and under **Build** add a build step and input your command under **Execute shell** such as `echo "Current date is $(date)"`. You can now click **Build now** to run the command.
 
 You can also add parameters to the project, these parameters will be passed as variables to the shell command. Now the *Build* button changed to *Build with Parameters*. Even if you configured the default values for the parameters, you will be asked to confirm or edit the default parameters before starting the build.
+
+When adding a *Boolean Parameter* you have a checkbox with *Default value*, if that is checked the value is `true` and `false` if not checked.
