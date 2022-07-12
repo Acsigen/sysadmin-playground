@@ -39,3 +39,42 @@ You can also use Jenkins Parameters to pass values inside Ansible:
 - Click **Advanced** on Ansible Playbook configuration and **Add Extra Variable**
 - Key should be the name of the variable from the playbook
 - Value should be the name of the Jenkins Parameter with the format `$FOO`
+
+## Security
+
+Jenkins has authentication enabled by default. **Do not disable it!**
+
+You can access security settings from **Manage Jenkins** &rarr; **Configure Global Security**.
+
+You can improve security by installing **Role-based Authorization Strategy** plugin. Activate it from **Configure Global Security** then go to **Manage Jenkins** &rarr; **Manage and Assign Roles** to configure the roles.
+
+## Jenkinsfile
+
+A *Jenkinsfile* is a way to create pipelines in a declarative way.
+
+We can use a *declarative pipeline* or a *scripted pipeline*. In this guide we will use the *declarative pipeline* since the *scripted pipeline*, which uses Groovy, is out of scope.
+
+A sample of  a Jenkinsfile looks like this:
+
+```jenkinsfile
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                //
+            }
+        }
+        stage('Test') {
+            steps {
+                //
+            }
+        }
+        stage('Deploy') {
+            steps {
+                //
+            }
+        }       
+    }
+}
+```
