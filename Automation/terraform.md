@@ -47,11 +47,14 @@
 
 **By default these commands will apply all the ```.tf``` files in that folder and for each resource in those files.**
 
-There are three other ways to pass the credentials to terraform:
+There are other ways to pass the credentials to terraform:
 
-1. First method is using *AWS CLI*. Remove the `access_key` and `secret_key` from the terraform file and run `aws configure` where you will be prompted to insert your keys. Then, when you apply the terraform configurations, it will use the credentials from the CLI automatically.
-2. Use environment variables: `export AWS_ACCESS_KEY_ID=<key>` and `export AWS_SECRET_KEY_ID-<key>` (on Windows is `setx`).
-3. Use a vault provider
+1. Using *AWS CLI*. Remove the `access_key` and `secret_key` from the terraform file and run `aws configure` where you will be prompted to insert your keys. Then, when you apply the terraform configurations, it will use the credentials from the CLI automatically.
+3. Use environment variables: `export AWS_ACCESS_KEY_ID=<key>` and `export AWS_SECRET_KEY_ID-<key>` (on Windows is `setx`).
+4. Use a shared credentials file and import it in Terraform configuration (Do not forget to add it to `.gitignore` if you are working with a Git Repository.
+5. Use a vault provider.
+
+**If you have multiple AWS CLI Profiles configured, you can use `profile= "NameOfProfile"` to specify which AWS CLI Profile should be used with Terraform.** You can find more details [here](#placeholder) on how to configure cross account access with profiles.
 
 ## Variables
 
