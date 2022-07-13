@@ -58,21 +58,62 @@ A sample of  a Jenkinsfile looks like this:
 
 ```jenkinsfile
 pipeline {
+    <!-- Just use `any` -->
     agent any
+
+    <!-- Declare env vars -->
+    environment {
+        NAME = 'John'
+        LASTNAME = 'Doe'
+
+        <!-- You pass credentials like this. TEST is an env variable configured in Jenkins Credentials -->
+        secret = credentials('TEST')
+    }
+
     stages {
         stage('Build') {
             steps {
-                //
+                <!-- steps supports `bash` commands -->
+                echo 'Building...'
             }
         }
         stage('Test') {
             steps {
-                //
+                <!-- This is how you do multi steps, you can also use multiline with ''' -->
+                sh 'echo "Testing..."'
+                sh '''
+                    echo "Multi-line step"
+                    uname -a
+                '''
             }
         }
         stage('Deploy') {
             steps {
-                //
+                <!-- If it fails, it will retry 3 times -->
+                retry(3){
+                    sh 'echo "Deploying..."'
+                    sh 'echo "$NAME $LATNAME'
+                }
+
+                <!-- Abort if tasks takes more than 3 seconds -->
+                timeout(time: 3, unit: 'SECONDS') {
+                    sh `sleep 5'
+                }
+            }
+            <!-- These are post actions -->
+            post {
+                always {
+                    echo 'This is always printed'
+                }
+                scuccess {
+                    echo 'This will be printed only if there are no errors'
+                }
+                failure {
+                    echo 'This will be printed only if there is an error'
+                }
+                unstable {
+                    echo 'This will be printed only if the job was failing and now it is recovered'
+                }
             }
         }       
     }
