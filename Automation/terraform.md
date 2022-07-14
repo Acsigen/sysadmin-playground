@@ -549,3 +549,4 @@ resource "aws_instance" "ubuntu-server" {
 ## Sources
 
 * [Free Code Camp YouTube Channel](https://www.youtube.com/watch?v=SLB_c_ayRMo)
+* [Terraform Language Documentation](https://www.terraform.io/language)
