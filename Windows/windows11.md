@@ -9,5 +9,7 @@
 
 After you completed the steps above, close the Registry Editor and the CMD window then click the **Back** button from the installation window and try to proceed with the installation again. This time should work.
 
+**I noticed that if you login with your Microsoft account and you had, at some point in time, a Windows 10 key activated on that account, the new Windows 11 installation (Home version) will automatically be activated with the Windows 10 key.**
+
 ## Source
 - [VMWare Knowledge Base](https://kb.vmware.com/s/article/86207)
