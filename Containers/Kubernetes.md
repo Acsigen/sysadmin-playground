@@ -60,6 +60,24 @@ To run k8s locally you need to to use **microk8s** which is a *powerful, lightwe
 
 **For this guide we use an alias `k="microk8s kubectl"` to make it easier to type.**
 
+## Basic commands
+
+|Command|Action|
+|---|---|
+|`k run nginx-abc-xyz --image=nginx`|Run an Nginx pod named *nginx-abc-xyz*|
+|`k exec nginx-deployment-abc-xyz -- nslookup google.com`|Execute `nslookup google.com` command inside container. You can also pass `-it` argument to make it interactive just like in Docker|
+|`k describe pod nginx-abc-xyz`|Get more info about *nginx-abc-xyz* pod created earlier|
+|`k get pods`|List the pods. Append `-o wide` to get more info or `-o yaml` to get the yaml data. **Please specify the name of the pod and pipe it through `less` if you use `-o`, otherwise it will print a lot of data.**|
+|`k get pods --namespace=kube-system`|List pods that are running in *kube-system* namespace|
+|`k explain pods.spec.enableServiceLinks`|Get the documentation of a specific field of a resource. You can also use `k explain pods` only to get the documentation of the resource and its fields|
+|`k cluster-info`|List the cluster informations|
+|`k get nodes`|List the nodes. If you use *microk8s* it will list only one|
+|`k get namespaces`|Will list the namespaces. Also works with `k get ns`|
+|`k get all --all-namespaces`|List all resources for all namespaces|
+|`k delete pod nginx-abc-xyz`|Delete *nginx-abc-xyz* pod|
+
+Just to clarify, ***namespaces** are a way to organize clusters into virtual sub-clusters, they can be helpful when different teams or projects share a Kubernetes cluster. Any number of namespaces are supported within a cluster, each logically separated from others but with the ability to communicate with each other.*
+
 ## Pods
 
 **Pod** is the smallest unit in the k8s world. Containers are created inside the pod. A pod can run multiple containers withn a single namespace, exposed by a single IP address. Kubernetes doesn't manage containers directly, it manages containers through pods.
@@ -91,24 +109,6 @@ You can use `k port-forwarding my-nginx-pod 8080:80 &` to test the accessibility
 ### Pod SecurityContext
 
 A **SecurityContext** defines privilege and access control settings for a Pod or container. Use `k explain pod.spec.securityContext` or `k explain pod.spec.containers.securityContext` for further details.
-
-## Basic commands
-
-|Command|Action|
-|---|---|
-|`k run nginx-abc-xyz --image=nginx`|Run an Nginx pod named *nginx-abc-xyz*|
-|`k exec nginx-deployment-abc-xyz -- nslookup google.com`|Execute `nslookup google.com` command inside container. You can also pass `-it` argument to make it interactive just like in Docker|
-|`k describe pod nginx-abc-xyz`|Get more info about *nginx-abc-xyz* pod created earlier|
-|`k get pods`|List the pods. Append `-o wide` to get more info or `-o yaml` to get the yaml data. **Please specify the name of the pod and pipe it through `less` if you use `-o`, otherwise it will print a lot of data.**|
-|`k get pods --namespace=kube-system`|List pods that are running in *kube-system* namespace|
-|`k explain pods.spec.enableServiceLinks`|Get the documentation of a specific field of a resource. You can also use `k explain pods` only to get the documentation of the resource and its fields|
-|`k cluster-info`|List the cluster informations|
-|`k get nodes`|List the nodes. If you use *microk8s* it will list only one|
-|`k get namespaces`|Will list the namespaces. Also works with `k get ns`|
-|`k get all --all-namespaces`|List all resources for all namespaces|
-|`k delete pod nginx-abc-xyz`|Delete *nginx-abc-xyz* pod|
-
-Just to clarify, ***namespaces** are a way to organize clusters into virtual sub-clusters, they can be helpful when different teams or projects share a Kubernetes cluster. Any number of namespaces are supported within a cluster, each logically separated from others but with the ability to communicate with each other.*
 
 ## Jobs
 
@@ -146,7 +146,13 @@ When using a deployment, use `k set resources` to change resource limitations on
 
 You can also use resource limitations in combination with quota on namespaces to restrict these applications in specific namespaces only.
 
-## Create and scale deployments
+## Deployments
+
+Deployments is the standard for running applications in K8s.
+
+In case of deployments, pods are managed entities, you cannot manage pods independently if they are inside a deployment.
+
+The deployment is helped by the replica set. The replica set takes care of the replication and if the desired number is not fulfilled it will start pods automatically to meet the requirements.
 
 ### Create deployments
 
@@ -191,6 +197,16 @@ k scale deployment nginx-deployment --replicas=3
 # This willr eturn 3 pods
 k get pods
 ```
+
+#### AutoScaling
+
+In real clusters, Pods are often automatically scaled based on resource usage properties that are collected by the *Metrics Server*.
+
+In microk8s you can enable the Metrics Server with `microk8s enable metrics-server` command.
+
+The command that handles autoscaling works like this `k autoscale deployment my-nginx-deployment --cpu-percent=50 --min=1 --max=10`
+
+For more details run `k autoscale -h`.
 
 ### Port mapping
 
@@ -238,7 +254,9 @@ k expose deployment nginx-deployment --type=LoadBalancer --port=80
 
 ### Update deployment
 
-By default, the strategy type is *RollingUpdate*. This means that **new pods will be created with the updated image while the current pods are still running**.
+By default, the strategy type is *RollingUpdate*. This means that **new pods will be created with the updated image while the current pods are still running**. A new ReplicaSet will be created while the old one is still active. This is done one pod at a time to ensure that there is no downtime.
+
+By default, the `deployment.spec.revisionHistoryLimit` is set to keep the last 10 ReplicaSets.
 
 Set an image for a particular deployment:
 
