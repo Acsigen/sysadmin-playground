@@ -453,6 +453,37 @@ It is very common to connect multiple deployments together. Such as a web interf
 
 The web interface usually has a *LoadBalancer* or *NodePort* type and the database has a *ClusterIP* type.
 
+The User will connect to the frontend via *NodePort* or *LoadBalancer* and the frontend will communicate with the backend via *ClusterIP*.
+
+### Ingress Controller
+
+An Ingress Controller is basically a Load Balancer. The outside users will interact with your application through this load balancer which forwards the connection to the cluster nodes.
+
+The ingress controller also has an API component. Once the user reaches the ingress controller, an API call will be used to connect to the services inside the cluster.
+
+Ingress controllers are provided by the community (HAProxy, NGINX, Traefik, etc.).
+
+## Storage
+
+In Kubernetes, the Pod storage maps the storage defined at the container level to any type of storage (local or cloud).
+
+You can use a Pod Volume or PVC (Persistent Volume Claim).
+
+Pod Volumes are used to allocate storage that outlives a container and stays available during Pod lifetime and it can be directly bound to a specific storage type (e.g. storage on the node like you bind storage on the Docker host).
+
+With PVC, you request a bind access to a persistent volume. If there is not an exact match of specifications, the PVC will request a Storage Class which will create the Persistent Volume on demand according to your needs.
+
+### Volume Types
+
+There are multiple types of Pod Volumes (`pod.spec.volumes`):
+
+- `emptyDir`: Temporary directory that will be created on the host
+- `hostPath`: Persistent directory that will be mapped to an existing directory on the host
+
+To mount these volumes you need to configure `pod.spec.containers.volumeMounts`.
+
+For more volume types check `k explain pod.spec.volumes`.
+
 ## Change container runtime from Docker to CRI-O
 
 To change the container runtime you need to delete the current *minikube* setup and create a new one, then append `--container-runtime=cri-o` or `--container-runtime=containerd` to the `minikube start --driver=<driver_type>` command.
@@ -460,4 +491,4 @@ To change the container runtime you need to delete the current *minikube* setup 
 ## Sources
 
 - [FreeCodeCamp YouTube Channel](https://youtu.be/d6WC5n9G_sM)
-- [VMWare GLossary](https://www.vmware.com/topics/glossary/content/kubernetes-networking.html#:~:text=Kubernetes%20networking%20allows%20Kubernetes%20components,host%20ports%20to%20container%20ports.)
+- [VMWare Glossary](https://www.vmware.com/topics/glossary/content/kubernetes-networking.html#:~:text=Kubernetes%20networking%20allows%20Kubernetes%20components,host%20ports%20to%20container%20ports.)
