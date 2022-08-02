@@ -219,6 +219,8 @@ To connect to specific deployments using specific IP addresses you need to creat
   - Expose the deployment to the IP address of the node
   - Use a load balancer (**most common solution**)
 
+For more details check [Networking section](#networking)
+
 #### Create service to expose a specific port with a *cluster IP*
 
 This is usually used to allow services to talk to eachother inside a cluster.
