@@ -484,6 +484,86 @@ To mount these volumes you need to configure `pod.spec.containers.volumeMounts`.
 
 For more volume types check `k explain pod.spec.volumes`.
 
+## ConfigMaps
+
+### Create ConfigMaps
+
+It's best practice to separate site-specific information from code.
+
+Kubernetes provides *ConfigMaps* to deal with this issue.
+
+A ConfigMap is being used to define the variables and the Deployment will point to the ConfigMap.
+
+You can use ConfigMaps for the following purposes:
+
+- Pass variables
+- Provide configuration files
+- Pass command line arguments
+
+**The ConfigMap should exist in the cluster before running the application.**
+
+You can create a ConfigMap with `k create cm` and you can pass variables and config files like this:
+
+- `k create cm --from-env-file=my_var_file`
+- `k create cm --from-literal=MYSQL_USER=my_db_user`
+- `k create cm myConfigMap --from-file=/path/to/file.conf`
+
+**You can only use one `--from-env-file` but multiple `--form-literal`.**
+
+**The configuration file will be treated as a volume so you will need to mount it in order to use it with ConfigMap inside the Pod.**
+
+To use the ConfigMap in your Deployment run `k set env --from=configmap/myConfigMap deploy/my_app`.
+
+You can also use the `--dru-run=client` and the redirect operator on `k create deploy` and `k set env` commands to generate the ConfigMap YAML configuration file.
+
+### Secrets
+
+There are three types of secrets that you can use:
+
+- `docker-registry`: Used for authenticating in a private registry
+- `TLS`: Used to store TLS keys
+- `generic`: Creates a secret from a local file, firectory, or literal value
+
+Secrets are not encrypted they are only `base64` encoded.
+
+All Kubernetes resources need to access TLS keys. These keys are provided by Secrets and used through ServiceAccounts.
+
+A ServiceAccount acts like a user that comes with credentials that allows a Pod to fetch the required informations from the Kubernetes cluster.
+
+Example of `coredns` secrets:
+
+```bash
+# The coredns Pod has a secret named coredns-token-blabla
+k get sa -n kube-system coredns -o yaml | less
+
+# To view that secret (a certificate file, namespace and a token)
+k get secret -n kube-system coredns-token-blabla -o yaml | less
+```
+
+You can decode the base64 values with `echo "my_value" | base64 -d`.
+
+Example of how to provide secrets to an application:
+
+```bash
+# TLS Keys
+k create secret tls my_tls_key --cert=tls/my_cert.crt --key=tls/my_key.key
+
+# Passwords
+k create secret generic my_password --from-literal=password=pa5sw0rd
+
+# Files
+k create secret generic my_ssh_key --from-file=ssh-private-key=.ssh/id_rsa
+
+# Docker Registry
+k create secret docker-registry my_docker-creds --docker-username=john --docker-password-myP@ss --docker-email=john@doe.com --docker-server=my.registry:5000
+```
+
+**A Secret is basically an encoded ConfigMap.**
+
+If the secret contains variables use `k set env`. If it contains files, mount the Secret.
+
+**While mounting the Secret in the Pod spec, it is best practice to use `defualtMode` to set the permissions to `0400`.**
+
 ## Change container runtime from Docker to CRI-O
 
 To change the container runtime you need to delete the current *minikube* setup and create a new one, then append `--container-runtime=cri-o` or `--container-runtime=containerd` to the `minikube start --driver=<driver_type>` command.
