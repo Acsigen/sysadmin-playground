@@ -1,17 +1,5 @@
 # Kubernetes
 
-## ToC
-
-- [Prerequisites](#prerequisites)
-- [Introduction](#introduction)
-- [Create and scale deployments](#create-and-scale-deployments)
-- [Create services, pods, and deployments using YAML](#create-services-pods-and-deployments-using-yaml)
-- [Namespaces](#namespaces)
-- [Networking](#networking)
-- [Connect different deployments together](#connect-different-deployments-together)
-- [Change container runtime from Docker to CRI-O](#change-container-runtime-from-docker-to-cri-o)
-- [Sources](#sources)
-
 ## Prerequisites
 
 Kubernetes is a container orchestration system.
@@ -72,7 +60,7 @@ To run k8s locally you need to to use **microk8s** which is a *powerful, lightwe
 
 **For this guide we use an alias `k="microk8s kubectl"` to make it easier to type.**
 
-### Pods
+## Pods
 
 **Pod** is the smallest unit in the k8s world. Containers are created inside the pod. A pod can run multiple containers withn a single namespace, exposed by a single IP address. Kubernetes doesn't manage containers directly, it manages containers through pods.
 
@@ -86,7 +74,25 @@ A pod contains:
 - Shared Volumes
 - Shared IP Address
 
-### Basic commands
+### Pod Troubleshooting
+
+#### Check errors
+
+You can use `k describe pod my-pod` command (as seen in the [Basic commands](#basic-commands) section) to check why the pod is not starting or if it has an error. This will tell you the reason and exit code of the error
+
+You can dig deeper with `k logs podname` command to figure out what is going wrong when an application generates a non-zero exit code.
+
+#### Test pod accessibility
+
+You can use `k port-forwarding my-nginx-pod 8080:80 &` to test the accessibility of the pod. You can then run `curl localhost:8080` to check the results.
+
+**Use this for testing only, do not use this to expose ports, for networking check [Networking Section](#networking)**
+
+### Pod SecurityContext
+
+A **SecurityContext** defines privilege and access control settings for a Pod or container. Use `k explain pod.spec.securityContext` or `k explain pod.spec.containers.securityContext` for further details.
+
+## Basic commands
 
 |Command|Action|
 |---|---|
@@ -95,6 +101,7 @@ A pod contains:
 |`k describe pod nginx-abc-xyz`|Get more info about *nginx-abc-xyz* pod created earlier|
 |`k get pods`|List the pods. Append `-o wide` to get more info or `-o yaml` to get the yaml data. **Please specify the name of the pod and pipe it through `less` if you use `-o`, otherwise it will print a lot of data.**|
 |`k get pods --namespace=kube-system`|List pods that are running in *kube-system* namespace|
+|`k explain pods.spec.enableServiceLinks`|Get the documentation of a specific field of a resource. You can also use `k explain pods` only to get the documentation of the resource and its fields|
 |`k cluster-info`|List the cluster informations|
 |`k get nodes`|List the nodes. If you use *microk8s* it will list only one|
 |`k get namespaces`|Will list the namespaces. Also works with `k get ns`|
@@ -103,7 +110,45 @@ A pod contains:
 
 Just to clarify, ***namespaces** are a way to organize clusters into virtual sub-clusters, they can be helpful when different teams or projects share a Kubernetes cluster. Any number of namespaces are supported within a cluster, each logically separated from others but with the ability to communicate with each other.*
 
+## Jobs
+
+Pods are normally created to run forever. If you want to create a pod that performs a task and then stops, use a *Job* instead (Tasks like: backup, calculation, batch processing, etc.). You can also use `spec.ttlSecondsAfterFinished` to clean up completed *Jobs* automatically ebcause you don't want to keep those *completed Jobs* and *completed pods* forever.
+
+There are three different Job types:
+
+|Name|Description|Configuration|
+|---|---|---|
+|Non-parallel Jobs (default)|One pod is started, unless the pod fails|- `completions=1` <br> - `parallelism=1`|
+|Parallel Jobs with a fixed completion count|The Job is complete after successfully running as many times as specified in `jobs.spec.completions`|- `completions=x` <br> - `parallelism=y`|
+|Parallel Jobs with a work queue|Multiple Jobs are started, when one completes successfully, the Jobs is complete. Frequently, the `parallelism` is set equal to the number of nodes on which you want this job to run|- `completions=1` <br> - `parallelism=x`|
+
+You can also use a **CronJob* to schedule a Job. It works just like a `cron` job works in Linux. Check the syntax by running `k create cronjob -h`.
+
+## GUI/Web interface
+
+Kubernetes dashboard provides a web interface to manage kubernetes.
+
+In microk8s it is quite easy to deploy, just use `microk8s enable dashboard`.
+
+For other environments it might be more difficult because you need to secure access to the dashboard.
+
+**Do not use dashboard on the public internet!**
+
+## Resource limitations and quota
+
+By default, the pod wont't have any resource limitations in terms of CPU and memory to perform the tasks.
+
+This can be managed by using Memory/CPU requests and limits in `pod.spec.containers.resources`. A request is an initial request for resources, think of it as the minimum required amount of resources. A limit defines the upper treshold.
+
+CPU limits are expressed in milicore ore milicpu, 1/1000 of a CPU core: `500 milicore = 0.5 CPU`
+
+When using a deployment, use `k set resources` to change resource limitations on running applications with zero downtime. This doesn't work on pods, they don't provide an update mechanism.
+
+You can also use resource limitations in combination with quota on namespaces to restrict these applications in specific namespaces only.
+
 ## Create and scale deployments
+
+### Create deployments
 
 The most common way to create multiple pods, for scaling purposes, is by using deployments.
 
@@ -124,16 +169,6 @@ k describe deployment nginx-deployment
 ```
 
 In this casem the pods are managed by the deployment.
-
-### GUI/Web interface
-
-Kubernetes dashboard provides a web interface to manage kubernetes.
-
-In minikube it is quite easy to deploy, just use `minikube dashboard`.
-
-For other environtments it might be more difficult because you need to secure access to the dashboard.
-
-**Do not use dashboard on the public internet!**
 
 ### Scale the deployment
 
@@ -218,7 +253,7 @@ Always run the following command. This will return status messages related to th
 k rollout status deployment nginx-deployment
 ```
 
-#### Rollback
+### Rollback
 
 Well, sometimes things won't go as planned and you need to undo the update.
 
