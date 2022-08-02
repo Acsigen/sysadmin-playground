@@ -417,16 +417,39 @@ You can also use `ns` instead of `namespace` in the command to make it quicker t
 
 ## Networking
 
+### Network types
+
+In Kubernetes, networking is all about the Pods. We have three types of networks:
+
+- Pod network: Internal
+- Cluster Network: Internal
+- Node Network: External
+
+Pods are connected only to the pod network while Nodes are connected to the Cluster network and Node network.
+
+When a users are using your application, they are connecting to the Node Netowrk.
+
+![Kubernetes Network](K8s-network.png)
+
+### Services
+
+In Kubernetes a service has a different meaning when compared to Linux services:
+
+- Linux Service (systemd) is the equivalent of a K8s Pod
+- K8s Service is used to expose your application in a network
+
+Service types:
+
 - **ClusterIP**: is the default Kubernetes service for internal communications. However, external traffic can access the default Kubernetes ClusterIP service through a proxy. This can be useful for debugging services or displaying internal dashboards. **Services are reachable by pods/services in the Cluster.**
 - **NodePort**: opens ports on the nodes or virtual machines, and traffic is forwarded from the ports to the service. It is most often used for services that don’t always have to be available, such as demo applications. **Services are reachable by clients on the same LAN/clients who can ping the K8s Host Nodes.**
 - **LoadBalancer**: is the standard way to connect a service externally to the internet. In this scenario, a network load balancer forwards all external traffic to a service. Each service gets its own IP address. **Services are reachable by everyone connected to the internet.**
 - **Ingress**: acts as a router or controller to route traffic to services via a load balancer. It is useful if you want to use the same IP address to expose multiple services.
 
-## Connect different deployments together
+### Connect different deployments together
 
 It is very common to connect multiple deployments together. Such as a web interface application to a database.
 
-The web interface usually has a *LoadBalancer* type and the database has a *ClusterIP* type.
+The web interface usually has a *LoadBalancer* or *NodePort* type and the database has a *ClusterIP* type.
 
 ## Change container runtime from Docker to CRI-O
 
