@@ -566,7 +566,7 @@ If the secret contains variables use `k set env`. If it contains files, mount th
 
 ## Change container runtime from Docker to CRI-O
 
-To change the container runtime you need to delete the current *minikube* setup and create a new one, then append `--container-runtime=cri-o` or `--container-runtime=containerd` to the `minikube start --driver=<driver_type>` command.
+To change the container runtime you need to change the microk8s configuration in `/var/snap/microk8s/current/args/kubelet`. There, you need to change `--container-runtime=containerd`. Then run `microk8s stop && microk8s start`.
 
 ## Sources
 
