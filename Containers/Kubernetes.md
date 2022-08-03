@@ -530,6 +530,10 @@ All Kubernetes resources need to access TLS keys. These keys are provided by Sec
 
 A ServiceAccount acts like a user that comes with credentials that allows a Pod to fetch the required informations from the Kubernetes cluster.
 
+Every single pod has its own ServiceAccount.
+
+RBAC is used to connect a ServiceAccount to a specific Role.
+
 Example of `coredns` secrets:
 
 ```bash
@@ -564,9 +568,102 @@ If the secret contains variables use `k set env`. If it contains files, mount th
 
 **While mounting the Secret in the Pod spec, it is best practice to use `defualtMode` to set the permissions to `0400`.**
 
+## Helm
+
+Helm is used to streamline installing and managing Kubernetes applications. It consists of the helm tool, and a chart which is the package itself that contains:
+
+- A description of the package
+- Templates containing K8s manifest files
+
+Helm charts can be stored locally or can be accessed from Helm repositories.
+
+Install Helm like this:
+
+```bash
+# Get the archive from https://github.com/helm/helm/releases
+tar xzvf gelm-xxx.tar.gz
+sydo mv linux-amd64/helm /usr/local/bin
+helm version
+```
+
+Or install Helm for microk8s by running `microk8s enable helm` or `microk8s enable helm3`.
+
+The main repository for Helm charts is [artifacthub.io](https://artifacthub.io). You will find instructions for each package. Another popular repository is Bitnami.
+
+Basic Helm commands:
+
+- `helm repo update`: update repositories
+- `helm pull`: fetch a local copy of the helm chart as an archive (you can edit this manually and I consider it a best practice to avoid default values)
+- `helm install`: install package from remote repository
+- `helm instal -f local-chart.yaml`: install package from local file
+- `helm list`: list currently installed charts
+- `helm delete`: remove installed charts
+
+One way to check what default values a helm chart for NGINX from Bitnami repository is using is to run `helm show values bitnami/nginx`. Pull the chart, extract the archive then edit `values.yaml` file.
+
+To check the values that will be used run `helm template --debug <chart-directory-name>`.
+
+## Kustomization
+
+Kustomization is the equivalent of Docker Compose for K8s.
+
+A sample file looks like this:
+
+```yaml
+# Defines which resources (YAML files) will be applied
+resources:
+  - deployment.yaml
+  - service.yaml
+# Defines a prefix that will be added to all names
+namePrefix: my_prefix-
+# Defines the namespace
+namespace: my_namespace
+# Labels that will be applied to all objects
+commonLabels:
+  environment: my_environment
+```
+
+To apply the configuration run `k apply -k .`. To delete the configuration run `k delete -k .`
+
+For more details check the Kubernetes Documentation.
+
+## Kubernetes Troubleshooting
+
+### Standard Strategy
+
+This is the flow of actions when you start a Pod **`k run ...` &rarr; api-server &rarr; etcd &rarr; scheduler &rarr; kubelet &rarr; run container**.
+
+No matter what you are going to do, your resources will end up added in `etcd` so the best tools to help you are `k describe` and `k logs podname`commands.
+
+### Cluster Event Logs
+
+`k get events` or `k get events -o wide` will provide an overview of cluster events.
+
+### Authentication Problems
+
+Access to the cluster is provided by `~/.kube/config` file. This file is copied from the control node in the cluster located at `/etc/kubernetes/admin.conf`
+
+Use `k config view` to check contents of this file
+
+For additional authorisation based issues, as an example, run `k auth can-i create pod`.
+
+### Probes
+
+Probes can be used to test access to Pods. a *readinessProbe* is uesed to make sure a Pod is not published as available unless the *readinessProbe* has been able to access it.
+
+The *livenessProbe* is uesed to continuously check the availability of a Pod.
+
+The *startupProbe* is used for legacy applications that require additional startup time on firt initialisation.
+
+The probe is actually a simple command. The following probe types are defined in `pods.container.spec`:
+
+- `exec`: a command is executed and returns a zero exit value
+- `httpGet`: an HTTP request returns a response code between 200 and 399
+- `tcpSocket`: connectivity to a TCP socket (available port) is successful
+
 ## Change container runtime from Docker to CRI-O
 
-To change the container runtime you need to change the microk8s configuration in `/var/snap/microk8s/current/args/kubelet`. There, you need to change `--container-runtime=containerd`. Then run `microk8s stop && microk8s start`.
+To change the container runtime you need to change the microk8s configuration in `/var/snap/microk8s/current/args/kubelet`. There, you need to change `--container-runtime=containerd`. Then run `microk8s stop && microk8s start`. To install run: `helm install -f nginx/values.yaml my-nginx nginx/`.
 
 ## Sources
 
