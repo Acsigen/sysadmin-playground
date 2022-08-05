@@ -322,6 +322,8 @@ While stateless applications are deployed using Deployments, stateful applicatio
 
 When compared to Deployment Pods, the Pods created by a StatefulSet are not interchangeble. Each Pod has it's own unique identity.
 
+The unique ID is required because, when using multiple database replicas, one Pod will act as the Master (rw) and the other ones as Slaves (ro). Also, each Pod will use a difrerent physical storage.
+
 Check the K8s Documentation for further details.
 
 ## Create services, pods, and deployments using YAML
