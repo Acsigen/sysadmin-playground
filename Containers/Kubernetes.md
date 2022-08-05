@@ -154,6 +154,10 @@ In case of deployments, pods are managed entities, you cannot manage pods indepe
 
 The deployment is helped by the replica set. The replica set takes care of the replication and if the desired number is not fulfilled it will start pods automatically to meet the requirements.
 
+In K8s, Deployments are considered stateless applications because they don't need to store and keep track of data. Every interaction is considered new.
+
+Also check [Stateful Sets](#statefulsets) for stateful applications.
+
 ### Create deployments
 
 The most common way to create multiple pods, for scaling purposes, is by using deployments.
@@ -307,6 +311,14 @@ k delete deployment nginx-deployment
 # Delete service
 k delete service nginx-deployment
 ```
+
+## StatefulSets
+
+In K8s, a StatefulSet is a component that is specific to stateful applications.
+
+An example of a stateful applcation is a database or any other application that needs to store and track the state of data.
+
+While stateless applications are deployed using Deployments, stateful applications are deployed using StatefulSets. Check the K8s Documentation for further details.
 
 ## Create services, pods, and deployments using YAML
 
