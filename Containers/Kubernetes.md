@@ -318,7 +318,11 @@ In K8s, a StatefulSet is a component that is specific to stateful applications.
 
 An example of a stateful applcation is a database or any other application that needs to store and track the state of data.
 
-While stateless applications are deployed using Deployments, stateful applications are deployed using StatefulSets. Check the K8s Documentation for further details.
+While stateless applications are deployed using Deployments, stateful applications are deployed using StatefulSets.
+
+When compared to Deployment Pods, the Pods created by a StatefulSet are not interchangeble. Each Pod has it's own unique identity.
+
+Check the K8s Documentation for further details.
 
 ## Create services, pods, and deployments using YAML
 
