@@ -38,3 +38,4 @@ As a rule of thumb, each flashcard should have one and only one idea (optionally
 
 * [University of Waterloo](https://uwaterloo.ca/campus-wellness/curve-forgetting)
 * [Nicky Case's blog](https://ncase.me/remember/)
+* [SuperMemo](https://www.supermemo.com/en/about-supermemo-method)
