@@ -18,6 +18,12 @@ Find directory. If you don't know the exact name of the directory you can use ``
 find /home -type d -name .ssh
 ```
 
+Find all files modified in the last 90 minutes.
+    
+```bash
+find . -type f -mmin -90  
+```
+
 ## Alternative
 
 An alternative to find is `mlocate`. It indexes filenames in a database.
