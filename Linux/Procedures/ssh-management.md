@@ -263,6 +263,7 @@ ubuntu ALL=(ALL) NOPASSWD:ALL
 * [paepper.com](https://www.paepper.com/blog/posts/how-to-properly-manage-ssh-keys-for-server-access/)
 * [goteleport.com](https://goteleport.com/blog/ssh-bastion-host/)
 * [Visual Guide to SSH tunnels](https://robotmoon.com/ssh-tunnels/)
+* [`ssh_config` Docs](https://man7.org/linux/man-pages/man5/ssh_config.5.html)
 
 ## Future Update
 
