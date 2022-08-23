@@ -21,6 +21,7 @@
 * [Rsync](Tools/rsync.md)
 * [Samba](Tools/smb.md)
 * [Sed](Tools/sed.md)
+* [Strace](Tools/strace.md)
 * [Systemctl](Tools/systemctl.md)
 * [Tar](Tools/tar.md)
 * [TCPDump](Tools/tcpdump.md)
