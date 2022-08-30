@@ -276,6 +276,7 @@ ubuntu ALL=(ALL) NOPASSWD:ALL
 * [goteleport.com](https://goteleport.com/blog/ssh-bastion-host/)
 * [Visual Guide to SSH tunnels](https://robotmoon.com/ssh-tunnels/)
 * [`ssh_config` Docs](https://man7.org/linux/man-pages/man5/ssh_config.5.html)
+* [ssh-audit.com](https://www.sshaudit.com/hardening_guides.html)
 
 ## Future Update
 
