@@ -67,7 +67,7 @@ The easiest and safest way to authenticate to remote git servers is to use key p
 |`git log branchB..branchA`|Show the commits on branchA that are not on branchB|
 |`git log --follow <file>`|Show the commits that changed file, even across renames|
 |`git diff branchB...branchA`|Show the diff of what is in branchA that is not in branchB|
-|`git show <SHA>`|Show any object in Git in human-readable format|
+|`git show <SHA>`|Show the changes from a specific commit (git object) in human-readable format|
 
 ### Share & Update
 
