@@ -89,6 +89,7 @@ The easiest and safest way to authenticate to remote git servers is to use key p
 |`git log --stat -M`|Show all commit logs with indication of any paths that moved|
 |~~`git checkout -- <file>`~~|~~Discard uncommited changes for `<file>`~~|
 |`git restore <file>`|Discard uncommited changes for `<file>`|
+|`git clean -fd`|Cleans the working tree by recursively removing files that are not under version control, starting from the current directory. Append `-n` to perform a dry run. More details [here](https://git-scm.com/docs/git-clean)|
 
 ### Rewrite History
 
