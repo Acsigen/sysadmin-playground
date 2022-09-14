@@ -87,6 +87,8 @@ The easiest and safest way to authenticate to remote git servers is to use key p
 |`git rm <file>`|Delete the file from project and stage the removal for commit|
 |`git mv <existing-path> <new-path>`|Change an existing file path and stage the move|
 |`git log --stat -M`|Show all commit logs with indication of any paths that moved|
+|~~`git checkout -- <file>`~~|~~Discard uncommited changes for `<file>`~~|
+|`git restore <file>`|Discard uncommited changes for `<file>`|
 
 ### Rewrite History
 
