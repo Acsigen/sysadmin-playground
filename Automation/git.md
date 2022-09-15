@@ -27,6 +27,8 @@ git config --global user.email "<your_email>"
 git config --global color.ui auto
 ```
 
+You can also configure the settings for each repository by replacing `--global` with `--local`.
+
 The easiest and safest way to authenticate to remote git servers is to use key pairs (SSH key pairs).
 
 ### Setup & init
@@ -104,14 +106,47 @@ The easiest and safest way to authenticate to remote git servers is to use key p
 |---|---|
 |`git stash`|Save modified and staged changes|
 |`git stash list`|List stack-order of stashed file changes|
-|`git stash pop`|Write working from top of stash stack|
+|`git stash pop`|Write your stashed changes to active branch from top of stash stack|
 |`git stash drop`|Discard the changes from top of stash stack|
 
 ### Ignoring Patterns
 
 To avoid uploading specific files to the remote repository, in the local repository, create a file named `.gitignore` and append the paths with wildcards such as: `logs/`, `*.notes`, `pattern*/`.
 
+## Sign commits with SSH keys
+
+In order to sign the commits you need to configure git to use the keys. You can do this globally or locally as mentioned [here](#installation).
+
+```bash
+git config --local commit.gpgsign true
+git config --local gpg.format ssh
+```
+
+Add your SSH key with `ssh-add` if you do not have it under `~/.ssh/` directory. Get the key ID with `ssh-add -L` then configure git to use the key.
+
+```bash
+git config --local user.signingkey "ssh-ed25519 <your-key-id>"
+```
+
+Run an empty commit to test it:
+
+```bash
+git commit --allow-empty --message="Test SSH signing"
+```
+
+SSH doesn’t have this *web of trust*. Instead, it uses files like `~/.ssh/authorized_keys` and `~/.ssh/known_hosts` to configure what keys and hosts it should trust, respectively. For verification, we’ll need to create a file to configure allowed signers.
+
+While there’s no formal place to store this file yet, it makes sense to store a global *database* of allowed signers in `~/.ssh/allowed_signers` and a project-specific file might be stored in `/.git/allowed_signers` if you'd like to maintain your own list or `/.allowed_signers` if you want to commit the file and share it.
+
+```bash
+git config --local gpg.ssh.allowedSignersFile .git/allowed_signers
+touch .git/allowed_signers
+echo "user@example.com ssh-ed25519 <ssh-key-id>" > .git/allowed_signers
+git show --show-signature
+```
+
 ## Sources
 
 - [education.github.com](https://education.github.com/git-cheat-sheet-education.pdf)
 - [MIT](https://missing.csail.mit.edu/2020/version-control/)
+- [calebhearth.com](https://calebhearth.com/sign-git-with-ssh)
