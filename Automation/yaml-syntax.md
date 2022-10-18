@@ -35,6 +35,14 @@ microservice:
     - 1.7
     - 1.9
     - 2.0
+
+    multilineString: |
+      This is a multiline string,
+      this will be interpreted as a single line
+    
+    multilineSingleString: >
+      This is a multiline string.
+      This will be interpreted as multiple lines
 ```
 
 ## Sources
