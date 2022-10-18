@@ -56,8 +56,6 @@ jobs:
     
     - name: Build with Gradle
       run: .gradlew build
-    
-    
 
   publish:
     needs: build
