@@ -16,11 +16,12 @@ By day 7, we remember even less, and by day 30, we retain about 2%-3% of the ori
 
 You can change the shape of the curve! Reprocessing the same chunk of information sends a big signal to your brain to hold onto that data. When the same thing is repeated, your brain says, "Oh - there it is again, I better keep that." When you are exposed to the same information repeatedly, it takes less and less time to "activate" the information in your long term memory and it becomes easier for you to retrieve the information when you need it.
 
-__The formula:__
+**The formula:**
 
-* within 24 hours of getting the information - spend 10 minutes reviewing and you will raise the curve almost to 100% again
-* a week later (day 7), it only takes 5 minutes to "reactivate" the same material, and again raise the curve
-* by day 30, your brain will only need 2-4 minutes to give you the feedback, "yes, I know that...".
+- within 24 hours of getting the information - spend 10 minutes reviewing and you will raise the curve almost to 100% again
+- a week later (day 7), it only takes 5 minutes to "reactivate" the same material, and again raise the curve
+- by day 30, your brain will only need 2-4 minutes to give you the feedback, "yes, I know that...".
+- an alternative is to recap on days: 1, 2, 4, 8, 16 (increase the space exponentially with 1.5 or 2)
 
 ## The Leitner Box
 
@@ -36,6 +37,6 @@ As a rule of thumb, each flashcard should have one and only one idea (optionally
 
 ## Sources
 
-* [University of Waterloo](https://uwaterloo.ca/campus-wellness/curve-forgetting)
-* [Nicky Case's blog](https://ncase.me/remember/)
-* [SuperMemo](https://www.supermemo.com/en/about-supermemo-method)
+- [University of Waterloo](https://uwaterloo.ca/campus-wellness/curve-forgetting)
+- [Nicky Case's blog](https://ncase.me/remember/)
+- [SuperMemo](https://www.supermemo.com/en/about-supermemo-method)
