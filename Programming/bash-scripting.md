@@ -2,25 +2,26 @@
 
 ## ToC
 
-* [Prerequisites](#prerequisites)
-* [Scripts location](#scripts-location)
-* [Comments and sheband](#comments-and-shebang)
-* [Variables](#variables)
-* [Here Documents](#here-documents)
-* [Functions](#functions)
-* [IF](#if)
-* [CASE](#case)
-* [Read Keyboard Input](#read-keyboard-input)
-* [WHILE Loop](#while-loop)
-* [FOR Loop](#for-loop)
-* [Operators](#operators)
-* [Arrays](#arrays)
-* [Positional Parameters (Command Arguments)](#positional-parameters-command-arguments)
-* [Traps](#traps)
-* [Asynchronous Execution](#asynchronous-execution)
-* [Named Pipes](#named-pipes)
-* [Troubleshooting](#troubleshooting)
-* [Sources](#sources)
+- [Prerequisites](#prerequisites)
+- [Scripts location](#scripts-location)
+- [Comments and sheband](#comments-and-shebang)
+- [Variables](#variables)
+- [Here Documents](#here-documents)
+- [Functions](#functions)
+- [IF](#if)
+- [CASE](#case)
+- [Read Keyboard Input](#read-keyboard-input)
+- [WHILE Loop](#while-loop)
+- [FOR Loop](#for-loop)
+- [Operators](#operators)
+- [Arrays](#arrays)
+- [Positional Parameters (Command Arguments)](#positional-parameters-command-arguments)
+- [Traps](#traps)
+- [Asynchronous Execution](#asynchronous-execution)
+- [Named Pipes](#named-pipes)
+- [Troubleshooting](#troubleshooting)
+- [Best Practices](#best-practices)
+- [Sources](#sources)
 
 ## Prerequisites
 
@@ -32,9 +33,9 @@ This guide provides snippets of a script that generates an HTML file containing 
 
 As a rule of thumb you can use the following directories:
 
-* `~/bin` - Scripts intended for personal use
-* `/usr/local/bin` - Scripts intended for use by anyone in the system
-* `/usr/local/sbin` - Scripts intended for use by system administrator
+- `~/bin` - Scripts intended for personal use
+- `/usr/local/bin` - Scripts intended for use by anyone in the system
+- `/usr/local/sbin` - Scripts intended for use by system administrator
 
 In most cases, scripts or compiled programs should be placed in `/usr/local` hierarchy.
 
@@ -186,14 +187,14 @@ Declare a function:
 ```bash
 # Formal version
 function name {
-	commands
-	return
+    commands
+    return
 }
 
 # Simpler version
 name () {
-	commands
-	return
+    commands
+    return
 }
 ```
 
@@ -1066,7 +1067,7 @@ while [[ $# -gt 0 ]]; do
 done
 ```
 
-It is sometimes useful to manage all the positional parameters as a group. 
+It is sometimes useful to manage all the positional parameters as a group.
 
 The shell provides two special parameters for this purpose. They both expand into the complete list of positional parameters but differ in rather subtle ways:
 
@@ -1092,9 +1093,9 @@ $2 = Hello World
 $3 =
 ```
 
-* `$*` and `$@` produce: *Hello World*
-* `"$*"` produces: *"Hello World"*
-* `"$@"` produces: *"Hello" "Hello World"*
+- `$*` and `$@` produce: *Hello World*
+- `"$*"` produces: *"Hello World"*
+- `"$@"` produces: *"Hello" "Hello World"*
 
 A more complete example:
 
@@ -1252,7 +1253,61 @@ Be careful with filenames. Just don't use spaces and special characters.
 
 To trace an error, add `echo "This was executed"` to segments of the script to better locate the error.
 
+## Best Practices
+
+- Make the first line `#!/usr/bin/env bash` even if you don't give executable permission to the script file.
+- Use `set -o errexit` at the start of your script so that when a command fails, `bash` exits instead of conrinuing running the rest of the script.
+- Use `set -o nounset` because it make the script fail, when accessing an unset variable. Saves from horrible unintended consequences, with typos in variable names. When you want to access a variable that may or may not have been set, use `"${VARNAME-}"` instead of `"$VARNAME"`, and you’re good.
+- Use `set -o pipefail` it will ensure that a pipeline command is treated as failed, even if one command in the pipeline fails.
+- Use `set -o xtrace` with a check on `$TRACE` env variable
+  - `if [[ "${TRACE-0}" == "1" ]]; then set -o xtrace; fi` it helps in debugging your script.
+  - People can now enable debug mode, by running your script as `TRACE=1 ./script.sh`.
+- Use `[[ ]]` for conditions in `if` / `while` statements, instead of `[ ]` or `test`. `[[ ]]` is mor powerful.
+- Always qupte variable accesses with double-quotes.
+- Use `local` variables in functions.
+- Accept multiple ways that users can ask for help and respond in kind.
+  - Check if the first arg is `-h` or `--help` or `help` or just `h` or even `-help` and in all these cases, print help text and exit.
+- When printing error messages, please redirect to stderr.
+  - Use `echo 'Something unexpected happened' >&2` for this
+- Use long options where possible such as `--silent` instead of `-s`. These will helpl you document your commands easier.
+  - Be carefoul though, MacOS does not support long options.
+- If appropiate, change the script directory close to the start of the script. `cd "$(dirname "$0")"`.
+- Use `shellcheck`. pay attention to its warnings.
+
+An example of the best practices can be seen below:
+
+```bash
+#!/usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+if [[ "${TRACE-0}" == "1" ]]; then
+    set -o xtrace
+fi
+
+if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
+    echo 'Usage: ./script.sh arg-one arg-two
+
+This is an awesome bash script to make your life better.
+
+'
+    exit
+fi
+
+cd "$(dirname "$0")"
+
+main() {
+    echo do awesome stuff
+}
+
+main "$@"
+```
+
+Thank you [Shrikant Sharat Kandula](sharats.me) for your post regarding the best practices. I took the liberty to reproduce your advices because I agree with you and also I dont usually follow my own advice sometimes.
+
 ## Sources
 
-* The Linux Command Line 2nd Edition
-* [baeldung.com](https://www.baeldung.com/linux/sigint-and-other-termination-signals)
+- The Linux Command Line 2nd Edition
+- [baeldung.com](https://www.baeldung.com/linux/sigint-and-other-termination-signals)
+- [sharats.me](https://sharats.me/posts/shell-script-best-practices/)
