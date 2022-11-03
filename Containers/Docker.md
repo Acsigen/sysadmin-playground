@@ -506,6 +506,10 @@ You can use `docker commit` command to build a custom image after you made some 
 
 **WARNING! LINKING LIKE THIS IS DEPRECATED. IT IS USED JUST TO DEMONSTRATE THE CONCEPT OF LINKING THE CONTAINERS.**
 
+If you want to use the docker-compose file to just run a command use `docker compose run <name-of-service> <command>`.
+
+Also, if you want to use Docker containers to act as a VM, in docker-compose file use a basic image such as `ubuntu:latest` and add `command: ["sleep","infinity"]` to the file so it won't exit after `docker compose up -d` then run `docker exec -it ubuntu-container /bin/bash` to access it.
+
 ## Orchestration
 
 To manage multiple instances in a production environment, use the following orchestrating solutions:
