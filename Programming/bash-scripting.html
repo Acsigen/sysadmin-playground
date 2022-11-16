@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>bash-scripting.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="bash-scripting">Bash Scripting</h1>
+<h2 id="toc">ToC</h2>
+<ul>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#scripts-location">Scripts location</a></li>
+<li><a href="#comments-and-shebang">Comments and sheband</a></li>
+<li><a href="#variables">Variables</a></li>
+<li><a href="#here-documents">Here Documents</a></li>
+<li><a href="#functions">Functions</a></li>
+<li><a href="#if">IF</a></li>
+<li><a href="#case">CASE</a></li>
+<li><a href="#read-keyboard-input">Read Keyboard Input</a></li>
+<li><a href="#while-loop">WHILE Loop</a></li>
+<li><a href="#for-loop">FOR Loop</a></li>
+<li><a href="#operators">Operators</a></li>
+<li><a href="#arrays">Arrays</a></li>
+<li><a href="#positional-parameters-command-arguments">Positional Parameters (Command Arguments)</a></li>
+<li><a href="#traps">Traps</a></li>
+<li><a href="#asynchronous-execution">Asynchronous Execution</a></li>
+<li><a href="#named-pipes">Named Pipes</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+<li><a href="#best-practices">Best Practices</a></li>
+<li><a href="#sources">Sources</a></li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>Basics of bash scripting.</p>
+<p>This guide provides snippets of a script that generates an HTML file containing system information. Thus, touching the most common scripting syntax.</p>
+<h2 id="scripts-location">Scripts location</h2>
+<p>As a rule of thumb you can use the following directories:</p>
+<ul>
+<li><code>~/bin</code> - Scripts intended for personal use</li>
+<li><code>/usr/local/bin</code> - Scripts intended for use by anyone in the system</li>
+<li><code>/usr/local/sbin</code> - Scripts intended for use by system administrator</li>
+</ul>
+<p>In most cases, scripts or compiled programs should be placed in <code>/usr/local</code> hierarchy.</p>
+<p><code>/bin/</code> or <code>/usr/bin</code> are specified by the <em>Linux Filesystem Hierarchy Standard</em> to contain only files supplied and maintained by Linux distributor.</p>
+<h2 id="comments-and-shebang">Comments and shebang</h2>
+<p>To write a comment in bash you append the line with <code>#</code>.</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># This is a comment</span>
+</div></code></pre>
+<p>The shebang is used to tell the kernel the name of the interpreter that should be used to execute the script that follows. Every shell script should include this as its first line.</p>
+<pre class="hljs"><code><div><span class="hljs-meta">#!/bin/bash
+</span>
+<span class="hljs-comment"># The rest of your script</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">'Hello world!'</span>
+</div></code></pre>
+<h2 id="variables">Variables</h2>
+<p>Since the shell doesn't care about the type of data, you can declare and call variables quite easy:</p>
+<pre class="hljs"><code><div><span class="hljs-meta">#!/bin/bash
+</span>
+<span class="hljs-comment"># Program to output a system information page</span>
+
+<span class="hljs-comment"># Declare variable</span>
+title=<span class="hljs-string">"System Information Report"</span>
+
+<span class="hljs-comment"># Call the variable using $ symbol</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"&lt;html&gt;
+ &lt;head&gt;
+ &lt;title&gt;<span class="hljs-variable">$title</span>&lt;/title&gt;
+ &lt;/head&gt;
+ &lt;body&gt;
+ &lt;h1&gt;<span class="hljs-variable">$title</span>&lt;/h1&gt;
+ &lt;/body&gt;
+&lt;/html&gt;"</span>
+</div></code></pre>
+<p><strong>There must be no spaces between variable name, the equal sign, and the value.</strong></p>
+<p>You can also call constants. Constants are like variables but their value don't change:</p>
+<pre class="hljs"><code><div>title=<span class="hljs-string">"System Information Report For <span class="hljs-variable">$HOSTNAME</span>"</span>
+</div></code></pre>
+<p>The convention is that variables are designated in <code>lowercase</code> and constants in <code>UPPERCASE</code>.</p>
+<p>The shell actually does provide a way to enforce the immutability of constants, through the use of the declare built-in command with the <code>-r</code> (read-only) option.<br>
+Had we assigned <code>TITLE</code> this way: <code>declare -r TITLE=&quot;Page Title&quot;</code> the shell would prevent any subsequent assignment to <code>TITLE</code>. This feature is rarely used, but it exists for very formal scripts.</p>
+<p>Other examples:</p>
+<table>
+<thead>
+<tr>
+<th>Assignment</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>a=z</code></td>
+<td>Assign the string &quot;z&quot; to variable a</td>
+</tr>
+<tr>
+<td><code>b=&quot;a string&quot;</code></td>
+<td>Embedded spaces must be within quotes</td>
+</tr>
+<tr>
+<td><code>c=&quot;a string and $b&quot;</code></td>
+<td>Other expansions such as variables can be expanded into the assignment</td>
+</tr>
+<tr>
+<td><code>d=&quot;$(ls -l foo.txt)&quot;</code></td>
+<td>Results of a command</td>
+</tr>
+<tr>
+<td><code>e=$((5 * 7))</code></td>
+<td>Arithmetic expansion</td>
+</tr>
+<tr>
+<td><code>f=&quot;\t\ta string\n&quot;</code></td>
+<td>Escape sequences such as tabs and newlines</td>
+</tr>
+<tr>
+<td><code>a=5 b=&quot;a string&quot;</code></td>
+<td>Multiple variable assignments may be done on a single line</td>
+</tr>
+</tbody>
+</table>
+<p>During expansion, variable names may be surrounded by optional braces, <code>{}</code>. This is useful in cases where a variable name becomes ambiguous because of its surrounding context.<br>
+Here, we try to change the name of a file from <code>myfile</code> to <code>myfile1</code>, using a variable:</p>
+<pre class="hljs"><code><div>filename=<span class="hljs-string">"myfile"</span>
+touch <span class="hljs-string">"<span class="hljs-variable">$filename</span>"</span>
+
+<span class="hljs-comment"># This fails because variable filename1 does not exist</span>
+mv <span class="hljs-string">"<span class="hljs-variable">$filename</span>"</span> <span class="hljs-string">"<span class="hljs-variable">$filename1</span>"</span>
+
+<span class="hljs-comment"># To overcome this issue we can use {}</span>
+mv <span class="hljs-string">"<span class="hljs-variable">$filename</span>"</span> <span class="hljs-string">"<span class="hljs-variable">${filename}</span>1"</span>
+</div></code></pre>
+<p>By adding the surrounding braces, the shell no longer interprets the trailing 1 as part of the variable name.</p>
+<h2 id="here-documents">Here Documents</h2>
+<p>A here document is an additional form of I/O redirection in which we embed a body of text into our script and feed it into the standard input of a command.</p>
+<p>It looks like this:</p>
+<pre class="hljs"><code><div><span class="hljs-built_in">command</span> &lt;&lt; token
+text
+token
+</div></code></pre>
+<p>The string <code>_EOF_</code> (meaning <em>end of file</em>, a common convention) was selected as the token and marks the end of the embedded text. Tthe token must appear alone and that there must not be trailing spaces on the line.</p>
+<p>Our script will look like this:</p>
+<pre class="hljs"><code><div><span class="hljs-meta">#!/bin/bash
+</span>
+<span class="hljs-comment"># Program to output a system information page</span>
+
+TITLE=<span class="hljs-string">"System Information Report For <span class="hljs-variable">$HOSTNAME</span>"</span>
+CURRENT_TIME=<span class="hljs-string">"<span class="hljs-variable">$(date +"%x %r %Z")</span>"</span>
+TIMESTAMP=<span class="hljs-string">"Generated <span class="hljs-variable">$CURRENT_TIME</span>, by <span class="hljs-variable">$USER</span>"</span>
+
+cat &lt;&lt; _EOF_
+&lt;html&gt;
+ &lt;head&gt;
+ &lt;title&gt;<span class="hljs-variable">$TITLE</span>&lt;/title&gt;
+ &lt;/head&gt;
+ &lt;body&gt;
+ &lt;h1&gt;<span class="hljs-variable">$TITLE</span>&lt;/h1&gt;
+ &lt;p&gt;<span class="hljs-variable">$TIMESTAMP</span>&lt;/p&gt;
+ &lt;/body&gt;
+&lt;/html&gt;
+_EOF_
+</div></code></pre>
+<p>When using a here document, by default, single and double quotes within here documents lose their special meaning to the shell.</p>
+<pre class="hljs"><code><div>foo=<span class="hljs-string">"some text"</span>
+cat &lt;&lt; _EOF_
+<span class="hljs-variable">$foo</span>
+<span class="hljs-string">"<span class="hljs-variable">$foo</span>"</span>
+<span class="hljs-string">'$foo'</span>
+\<span class="hljs-variable">$foo</span>
+_EOF_
+some text
+<span class="hljs-string">"some text"</span>
+<span class="hljs-string">'some text'</span>
+<span class="hljs-variable">$foo</span>
+</div></code></pre>
+<p>If we change the redirection operator from <code>&lt;&lt;</code> to <code>&lt;&lt;-</code>, the shell will ignore leading tab characters (but not spaces) in the here document. This allows a here document to be indented, which can improve readability.</p>
+<p>This feature can be somewhat problematic because many text editors (and programmers themselves) will prefer to use spaces instead of tabs to achieve indentation in their scripts.</p>
+<h2 id="functions">Functions</h2>
+<p>Declare a function:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># Formal version</span>
+<span class="hljs-keyword">function</span> name {
+    commands
+    <span class="hljs-built_in">return</span>
+}
+
+<span class="hljs-comment"># Simpler version</span>
+<span class="hljs-function"><span class="hljs-title">name</span></span> () {
+    commands
+    <span class="hljs-built_in">return</span>
+}
+</div></code></pre>
+<p>To call a function just simply type the name of the function:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">function</span> step2 {
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"Step 2"</span>
+<span class="hljs-built_in">return</span>
+}
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"Step 1"</span>
+step2
+</div></code></pre>
+<p>When using <code>_EOF_</code> you can call the function using the following syntax: <code>$(function_name)</code>. It goes the same for system commands (e.g. <code>uptime</code>)</p>
+<p>In functions is recommended to use local variables.</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># Global variable</span>
+foo=0
+
+<span class="hljs-keyword">function</span> funct_1 {
+<span class="hljs-comment"># Local variable</span>
+<span class="hljs-built_in">local</span> foo
+foo=1
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"fnct_1 foo = <span class="hljs-variable">$foo</span>"</span>
+}
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"Global foo = <span class="hljs-variable">$foo</span>"</span> <span class="hljs-comment">#Will output 0</span>
+fnct_1 <span class="hljs-comment">#Will output 1</span>
+</div></code></pre>
+<p>Shell functions make excellent replacements for aliases and are actually the preferred method of creating small commands for personal use. Aliases are limited in the kind of commands and shell features they support, whereas shell functions allow anything that can be scripted.</p>
+<h2 id="if">IF</h2>
+<h3 id="if-syntax">IF Syntax</h3>
+<p>Basic IF statement:</p>
+<pre class="hljs"><code><div>x=5
+
+<span class="hljs-keyword">if</span> [ <span class="hljs-string">"<span class="hljs-variable">$x</span>"</span> -eq 5]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"x equals 5."</span>
+<span class="hljs-keyword">elif</span> [ <span class="hljs-string">"<span class="hljs-variable">$x</span>"</span> -eq 4]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"x not equal to 4."</span>
+<span class="hljs-keyword">else</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"x does not equal to 5."</span>
+<span class="hljs-keyword">fi</span>
+</div></code></pre>
+<h3 id="exit-status">Exit Status</h3>
+<p>Commands issue a value to the system when they terminate, called an <em>exit status</em>. This value can take a value from 0 to 255. By convention, a value of zero indicates success and any other value indicates failure. Most common values can be seen below:</p>
+<ul>
+<li>0: Success</li>
+<li>1: Error</li>
+<li>2: Error</li>
+</ul>
+<p>Man pages usually include a section entitlew <em>Exit Status</em> describing what codes are used.</p>
+<p>The shell provides two extremely simple builtin commands that do nothing except terminate with either a 0 or 1 exit status. The <code>true</code> command always executes successfully, and the <code>false</code> command always executes unsuccessfully.</p>
+<h3 id="if-test">IF Test</h3>
+<p>The <code>test</code> command performs a variety of checks and comparisons. It has two equivalent forms:</p>
+<ul>
+<li><code>test expression</code></li>
+<li><code>[ expression ]</code></li>
+</ul>
+<p><code>expression</code> is an expression that is evaluated as either <code>true</code> or <code>false</code>.</p>
+<p>The <code>test</code> command returns an exit status of <code>0</code> when the expression is <strong>true</strong> and a status of <code>1</code> when the expression is <strong>false</strong>.</p>
+<h4 id="file-expressions">File Expressions</h4>
+<p>The following table lists the expressions used to evaluate the satus of files:</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Is true if:</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>file1 -ef file2</code></td>
+<td>file1 and file2 have the same inode numbers (the two filenames refer to the same file by hard linking).</td>
+</tr>
+<tr>
+<td><code>file1 -nt file2</code></td>
+<td>file1 is newer than file2.</td>
+</tr>
+<tr>
+<td><code>file1 -ot file2</code></td>
+<td>file1 is older than file2.</td>
+</tr>
+<tr>
+<td><code>-b file</code></td>
+<td>file exists and is a block-special (device) file.</td>
+</tr>
+<tr>
+<td><code>-c file</code></td>
+<td>file exists and is a character-special (device) file.</td>
+</tr>
+<tr>
+<td><code>-d file</code></td>
+<td>file exists and is a directory.</td>
+</tr>
+<tr>
+<td><code>-e file</code></td>
+<td>file exists.</td>
+</tr>
+<tr>
+<td><code>-f file</code></td>
+<td>file exists and is a regular file.</td>
+</tr>
+<tr>
+<td><code>-g file</code></td>
+<td>file exists and is set-group-ID.</td>
+</tr>
+<tr>
+<td><code>-G file</code></td>
+<td>file exists and is owned by the effective group ID.</td>
+</tr>
+<tr>
+<td><code>-k file</code></td>
+<td>file exists and has its “sticky bit” set.</td>
+</tr>
+<tr>
+<td><code>-L file</code></td>
+<td>file exists and is a symbolic link.</td>
+</tr>
+<tr>
+<td><code>-O file</code></td>
+<td>file exists and is owned by the effective user ID.</td>
+</tr>
+<tr>
+<td><code>-p file</code></td>
+<td>file exists and is a named pipe.</td>
+</tr>
+<tr>
+<td><code>-r file</code></td>
+<td>file exists and is readable (has readable permission for the effective user).</td>
+</tr>
+<tr>
+<td><code>-s file</code></td>
+<td>file exists and has a length greater than zero.</td>
+</tr>
+<tr>
+<td><code>-S file</code></td>
+<td>file exists and is a network socket.</td>
+</tr>
+<tr>
+<td><code>-t fd</code></td>
+<td>fd is a file descriptor directed to/from the terminal. This can be used to determine whether standard input/output/error is being redirected.</td>
+</tr>
+<tr>
+<td><code>-u file</code></td>
+<td>file exists and is setuid.</td>
+</tr>
+<tr>
+<td><code>-w file</code></td>
+<td>file exists and is writable</td>
+</tr>
+<tr>
+<td><code>-x file</code></td>
+<td>file exists and is executable (has execute/search permission for the effective user).</td>
+</tr>
+</tbody>
+</table>
+<p>The following script evaluates the file assigned to the constant <code>FILE</code> and displays its results as the evaluation is performed. There are two interesting things to note about this script. First, notice how the parameter <code>$FILE</code> is quoted within the expressions. This is not required to syntactically complete the expression; rather, it is a defense against the parameter being empty or containing only whitespace. If the parameter expansion of <code>$FILE</code> were to result in an empty value, it would cause an error. Using the quotes around the parameter ensures that the operator is always followed by a string, even if the string is empty.</p>
+<p>Second, notice the presence of the <code>exit</code> command near the end of the script. The <code>exit</code> command accepts a single, optional argument, which becomes the script’s exit status. When no argument is passed, the exit status defaults to the exit status of the last command executed. Using <code>exit</code> in this way allows the script to indicate failure if <code>$FILE</code> expands to the name of a nonexistent file. The <code>exit</code> command appearing on the last line of the script is there as a formality. When a script <em>runs off the end</em> (reaches end of file), it terminates with an exit status of the last command executed.</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># test-file: Evaluate the status of a file</span>
+FILE=~/.bashrc
+<span class="hljs-keyword">if</span> [ -e <span class="hljs-string">"<span class="hljs-variable">$FILE</span>"</span> ]; <span class="hljs-keyword">then</span>
+    <span class="hljs-keyword">if</span> [ -f <span class="hljs-string">"<span class="hljs-variable">$FILE</span>"</span> ]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$FILE</span> is a regular file."</span>
+    <span class="hljs-keyword">fi</span>
+    <span class="hljs-keyword">if</span> [ -d <span class="hljs-string">"<span class="hljs-variable">$FILE</span>"</span> ]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$FILE</span> is a directory."</span>
+    <span class="hljs-keyword">fi</span>
+    <span class="hljs-keyword">if</span> [ -r <span class="hljs-string">"<span class="hljs-variable">$FILE</span>"</span> ]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$FILE</span> is readable."</span>
+    <span class="hljs-keyword">fi</span>
+    <span class="hljs-keyword">if</span> [ -w <span class="hljs-string">"<span class="hljs-variable">$FILE</span>"</span> ]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$FILE</span> is writable."</span>
+    <span class="hljs-keyword">fi</span>
+    <span class="hljs-keyword">if</span> [ -x <span class="hljs-string">"<span class="hljs-variable">$FILE</span>"</span> ]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$FILE</span> is executable/searchable."</span>
+    <span class="hljs-keyword">fi</span>
+<span class="hljs-keyword">else</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$FILE</span> does not exist"</span>
+    <span class="hljs-built_in">exit</span> 1
+<span class="hljs-keyword">fi</span>
+<span class="hljs-built_in">exit</span>
+</div></code></pre>
+<p>Similarly, shell functions can return an exit status by including an integer argument to the return command (e.g. <code>return 1</code> will return exit status <code>1</code>)</p>
+<h4 id="string-expressions">String Expressions</h4>
+<p>The following table lists the expressions used to evaluate strings:</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Is true if:</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>string</code></td>
+<td>string is not null.</td>
+</tr>
+<tr>
+<td><code>-n string</code></td>
+<td>The length of string is greater than zero.</td>
+</tr>
+<tr>
+<td><code>-z string</code></td>
+<td>The length of string is zero.</td>
+</tr>
+<tr>
+<td><code>string1 = string2</code> or <code>string1 == string2</code></td>
+<td>string1 and string2 are equal. Single or double qual signs may be used. The use of double equal signs is greatly preferred, but it is not POSIX compliant.</td>
+</tr>
+<tr>
+<td><code>string1 != string2</code></td>
+<td>string1 and string2 are not equal.</td>
+</tr>
+<tr>
+<td><code>string1 &gt; string2</code></td>
+<td>string1 sorts after string2.</td>
+</tr>
+<tr>
+<td><code>string1 &lt; string2</code></td>
+<td>string1 sorts before string2.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The <code>&gt;</code> and <code>&lt;</code> expression operators must be quoted (or escaped with a backslash) when used with <code>test</code>. If they are not, they will be interpreted by the shell as redirection operators.</strong></p>
+<p>Example:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># test-string: evaluate the value of a string</span>
+ANSWER=maybe
+<span class="hljs-keyword">if</span> [ -z <span class="hljs-string">"<span class="hljs-variable">$ANSWER</span>"</span> ]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"There is no answer."</span> &gt;&amp;2
+    <span class="hljs-built_in">exit</span> 1
+<span class="hljs-keyword">fi</span>
+<span class="hljs-keyword">if</span> [ <span class="hljs-string">"<span class="hljs-variable">$ANSWER</span>"</span> = <span class="hljs-string">"yes"</span> ]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"The answer is YES."</span>
+<span class="hljs-keyword">elif</span> [ <span class="hljs-string">"<span class="hljs-variable">$ANSWER</span>"</span> = <span class="hljs-string">"no"</span> ]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"The answer is NO."</span>
+<span class="hljs-keyword">elif</span> [ <span class="hljs-string">"<span class="hljs-variable">$ANSWER</span>"</span> = <span class="hljs-string">"maybe"</span> ]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"The answer is MAYBE."</span>
+<span class="hljs-keyword">else</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"The answer is UNKNOWN."</span>
+<span class="hljs-keyword">fi</span>
+</div></code></pre>
+<h4 id="integer-expressions">Integer Expressions</h4>
+<p>The following table lists the expressions used to compare integers:</p>
+<table>
+<thead>
+<tr>
+<th>Expression</th>
+<th>Is true if:</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>integer1 -eq integer2</code></td>
+<td>integer1 is equal to integer2.</td>
+</tr>
+<tr>
+<td><code>integer1 -ne integer2</code></td>
+<td>integer1 is not equal to integer2.</td>
+</tr>
+<tr>
+<td><code>integer1 -le integer2</code></td>
+<td>integer1 is less than or equal to integer2.</td>
+</tr>
+<tr>
+<td><code>integer1 -lt integer2</code></td>
+<td>integer1 is less than integer2.</td>
+</tr>
+<tr>
+<td><code>integer1 -ge integer2</code></td>
+<td>integer1 is greater than or equal to integer2.</td>
+</tr>
+<tr>
+<td><code>integer1 -gt integer2</code></td>
+<td>integer1 is greater than integer2</td>
+</tr>
+</tbody>
+</table>
+<p>Example:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># test-integer: evaluate the value of an integer.</span>
+INT=-5
+<span class="hljs-keyword">if</span> [ -z <span class="hljs-string">"<span class="hljs-variable">$INT</span>"</span> ]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"INT is empty."</span> &gt;&amp;2
+    <span class="hljs-built_in">exit</span> 1
+<span class="hljs-keyword">fi</span>
+<span class="hljs-keyword">if</span> [ <span class="hljs-string">"<span class="hljs-variable">$INT</span>"</span> -eq 0 ]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"INT is zero."</span>
+<span class="hljs-keyword">else</span>
+    <span class="hljs-keyword">if</span> [ <span class="hljs-string">"<span class="hljs-variable">$INT</span>"</span> -lt 0 ]; <span class="hljs-keyword">then</span>
+        <span class="hljs-built_in">echo</span> <span class="hljs-string">"INT is negative."</span>
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-built_in">echo</span> <span class="hljs-string">"INT is positive."</span>
+    <span class="hljs-keyword">fi</span>
+    <span class="hljs-keyword">if</span> [ $((INT % 2)) -eq 0 ]; <span class="hljs-keyword">then</span>
+        <span class="hljs-built_in">echo</span> <span class="hljs-string">"INT is even."</span>
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-built_in">echo</span> <span class="hljs-string">"INT is odd."</span>
+    <span class="hljs-keyword">fi</span>
+<span class="hljs-keyword">fi</span>
+</div></code></pre>
+<h4 id="modern-version-of-test">Modern version of test</h4>
+<p>Modern versions of bash include a compound command that acts as an enhanced replacement for <code>test</code>. It uses the following syntax: <code>[[ expression ]]</code>.</p>
+<p>The <code>[[ ]]</code> command is similar to <code>test</code> (it supports all of its expressions) but adds an important new string expression: <code>string1 =~ regex</code>. This returns <code>true</code> if <code>string1</code> is matched by the extended regular expression <code>regex</code>. This opens up a lot of possibilities for performing such tasks as data validation.</p>
+<p>Example:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># test-integer2: evaluate the value of an integer.</span>
+INT=-5
+<span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$INT</span>"</span> =~ ^-?[0-9]+$ ]]; <span class="hljs-keyword">then</span>
+    <span class="hljs-keyword">if</span> [ <span class="hljs-string">"<span class="hljs-variable">$INT</span>"</span> -eq 0 ]; <span class="hljs-keyword">then</span>
+        <span class="hljs-built_in">echo</span> <span class="hljs-string">"INT is zero."</span>
+    <span class="hljs-keyword">else</span>
+    <span class="hljs-keyword">if</span> [ <span class="hljs-string">"<span class="hljs-variable">$INT</span>"</span> -lt 0 ]; <span class="hljs-keyword">then</span>
+        <span class="hljs-built_in">echo</span> <span class="hljs-string">"INT is negative."</span>
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-built_in">echo</span> <span class="hljs-string">"INT is positive."</span>
+    <span class="hljs-keyword">fi</span>
+    <span class="hljs-keyword">if</span> [ $((INT % 2)) -eq 0 ]; <span class="hljs-keyword">then</span>
+        <span class="hljs-built_in">echo</span> <span class="hljs-string">"INT is even."</span>
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-built_in">echo</span> <span class="hljs-string">"INT is odd."</span>
+    <span class="hljs-keyword">fi</span>
+    <span class="hljs-keyword">fi</span>
+<span class="hljs-keyword">else</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"INT is not an integer."</span> &gt;&amp;2
+    <span class="hljs-built_in">exit</span> 1
+<span class="hljs-keyword">fi</span>
+</div></code></pre>
+<p>Another added feature of <code>[[ ]]</code> is that the <code>==</code> operator supports pattern matching the same way pathname expansion does.</p>
+<p>Example:</p>
+<pre class="hljs"><code><div>FILE=foo.bar
+<span class="hljs-keyword">if</span> [[ <span class="hljs-variable">$FILE</span> == foo.* ]]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$FILE</span> matches pattern 'foo.*'"</span>
+<span class="hljs-keyword">fi</span>
+<span class="hljs-comment"># Output: foo.bar matches pattern 'foo.*'</span>
+</div></code></pre>
+<p>In addition to the <code>[[ ]]</code> compound command, bash also provides the <code>(( ))</code> compound command, which is useful for operating on integers.<br>
+<code>(( ))</code> is used to perform arithmetic truth tests. An arithmetic truth test results in true if the result of the arithmetic evaluation is non-zero.</p>
+<p>Example:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># test-integer2a: evaluate the value of an integer.</span>
+INT=-5
+<span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$INT</span>"</span> =~ ^-?[0-9]+$ ]]; <span class="hljs-keyword">then</span>
+    <span class="hljs-keyword">if</span> ((INT == 0)); <span class="hljs-keyword">then</span>
+        <span class="hljs-built_in">echo</span> <span class="hljs-string">"INT is zero."</span>
+    <span class="hljs-keyword">else</span>
+    <span class="hljs-keyword">if</span> ((INT &lt; 0)); <span class="hljs-keyword">then</span>
+        <span class="hljs-built_in">echo</span> <span class="hljs-string">"INT is negative."</span>
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-built_in">echo</span> <span class="hljs-string">"INT is positive."</span>
+    <span class="hljs-keyword">fi</span>
+    <span class="hljs-keyword">if</span> (( ((INT % 2)) == 0)); <span class="hljs-keyword">then</span>
+        <span class="hljs-built_in">echo</span> <span class="hljs-string">"INT is even."</span>
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-built_in">echo</span> <span class="hljs-string">"INT is odd."</span>
+    <span class="hljs-keyword">fi</span>
+    <span class="hljs-keyword">fi</span>
+<span class="hljs-keyword">else</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"INT is not an integer."</span> &gt;&amp;2
+    <span class="hljs-built_in">exit</span> 1
+<span class="hljs-keyword">fi</span>
+</div></code></pre>
+<h4 id="combine-expressions">Combine Expressions</h4>
+<p>It’s also possible to combine expressions to create more complex evaluations. xpressions are combined by using logical operators. They are <code>AND</code>, <code>OR</code>, and <code>NOT</code>.</p>
+<p>Logical operators:</p>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th><code>test</code></th>
+<th><code>[[]]</code> and <code>(())</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AND</td>
+<td><code>-a</code></td>
+<td><code>&amp;&amp;</code></td>
+</tr>
+<tr>
+<td>OR</td>
+<td><code>-o</code></td>
+<td><code>\|\|</code></td>
+</tr>
+<tr>
+<td>NOT</td>
+<td><code>!</code></td>
+<td><code>!</code></td>
+</tr>
+</tbody>
+</table>
+<p>Example:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># test-integer3: determine if an integer is within a</span>
+<span class="hljs-comment"># specified range of values.</span>
+MIN_VAL=1
+MAX_VAL=100
+INT=50
+<span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$INT</span>"</span> =~ ^-?[0-9]+$ ]]; <span class="hljs-keyword">then</span>
+    <span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$INT</span>"</span> -ge <span class="hljs-string">"<span class="hljs-variable">$MIN_VAL</span>"</span> &amp;&amp; <span class="hljs-string">"<span class="hljs-variable">$INT</span>"</span> -le <span class="hljs-string">"<span class="hljs-variable">$MAX_VAL</span>"</span> ]]; <span class="hljs-keyword">then</span>
+        <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$INT</span> is within <span class="hljs-variable">$MIN_VAL</span> to <span class="hljs-variable">$MAX_VAL</span>."</span>
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$INT</span> is out of range."</span>
+    <span class="hljs-keyword">fi</span>
+<span class="hljs-keyword">else</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"INT is not an integer."</span> &gt;&amp;2
+    <span class="hljs-built_in">exit</span> 1
+<span class="hljs-keyword">fi</span>
+</div></code></pre>
+<p>The <code>!</code> negation operator reverses the outcome of an expression. It returns true if an expression is false, and it returns false if an expression is true.</p>
+<p>We also include parentheses around the expression, for grouping. If these were not included, the negation would only apply to the first expression and not the combination of the two.</p>
+<p><strong><code>[[]]</code> is specific to <code>bash</code> and a few other modern shells. It is important to know how to use <code>test</code> since it is widely used.</strong></p>
+<h4 id="control-operators">Control operators</h4>
+<p><code>bash</code> provides two control operators that can perform branching. The <code>&amp;&amp;</code> (AND) and <code>||</code> (OR) operators work like the logical operators in <code>[[]]</code> compound command.</p>
+<p>Example:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># Create directory called temp and, if it succeeds, change the directory to temp</span>
+mkdir temp &amp;&amp; <span class="hljs-built_in">cd</span> temp
+
+<span class="hljs-comment"># Check if temp directory exists, if it fails, create the directory</span>
+[[ -d temp ]] || mkdir temp
+</div></code></pre>
+<h2 id="case">CASE</h2>
+<p>In <code>bash</code>, the multiple-choice compound command is called <code>case</code>.</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># case-menu: a menu driven system information program</span>
+clear
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"
+Please Select:
+1. Display System Information
+2. Display Disk Space
+3. Display Home Space Utilization
+0. Quit
+"</span>
+<span class="hljs-built_in">read</span> -p <span class="hljs-string">"Enter selection [0-3] &gt; "</span>
+<span class="hljs-keyword">case</span> <span class="hljs-string">"<span class="hljs-variable">$REPLY</span>"</span> <span class="hljs-keyword">in</span>
+    0) <span class="hljs-built_in">echo</span> <span class="hljs-string">"Program terminated."</span>
+       <span class="hljs-built_in">exit</span>
+       ;;
+    1) <span class="hljs-built_in">echo</span> <span class="hljs-string">"Hostname: <span class="hljs-variable">$HOSTNAME</span>"</span>
+       uptime
+       ;;
+    2) df -h
+       ;;
+    3) <span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$(id -u)</span>"</span> -eq 0 ]]; <span class="hljs-keyword">then</span>
+           <span class="hljs-built_in">echo</span> <span class="hljs-string">"Home Space Utilization (All Users)"</span>
+           du -sh /home/*
+       <span class="hljs-keyword">else</span>
+           <span class="hljs-built_in">echo</span> <span class="hljs-string">"Home Space Utilization (<span class="hljs-variable">$USER</span>)"</span>
+           du -sh <span class="hljs-string">"<span class="hljs-variable">$HOME</span>"</span>
+       <span class="hljs-keyword">fi</span>
+       ;;
+    *) <span class="hljs-built_in">echo</span> <span class="hljs-string">"Invalid entry"</span> &gt;&amp;2
+       <span class="hljs-built_in">exit</span> 1
+       ;;
+<span class="hljs-keyword">esac</span>
+</div></code></pre>
+<p>The patterns used by <code>case</code> are the same as those used by pathname expansion. Patterns are terminated with a <code>)</code> character (e.g. <code>???)</code> matches if the <em>word</em> is exactly three characters long)</p>
+<p><code>*)</code> Matches any value of word. It is a good practice to use it as the default option in case nothing else matches the patterns.</p>
+<p>It is also possible to use multiple patterns at once by using <code>|</code> as a separator. Creating an <em>or</em> conditional pattern (e.g. <code>q|Q)</code>).</p>
+<p><code>case</code> will stop comparing values after the first match. To overcome this, you can place <code>&amp;</code> after <code>;;</code>. This way, <code>case</code> will continue running the next comparison instead of terminating.</p>
+<h2 id="read-keyboard-input">Read Keyboard Input</h2>
+<h3 id="basic-keyboard-input">Basic keyboard input</h3>
+<p>The <code>read</code> builtin command is used to read a single line of standard input. It can be used to read keyboard input or, when using redirection, a line of data from a file.</p>
+<p>Example:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># read-integer: evaluate the value of an integer.</span>
+<span class="hljs-built_in">echo</span> -n <span class="hljs-string">"Please enter an integer -&gt; "</span>
+<span class="hljs-comment"># Store the input to variable named int</span>
+<span class="hljs-built_in">read</span> int
+<span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$int</span>"</span> =~ ^-?[0-9]+$ ]]; <span class="hljs-keyword">then</span>
+    <span class="hljs-keyword">if</span> [ <span class="hljs-string">"<span class="hljs-variable">$int</span>"</span> -eq 0 ]; <span class="hljs-keyword">then</span>
+        <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$int</span> is zero."</span>
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-keyword">if</span> [ <span class="hljs-string">"<span class="hljs-variable">$int</span>"</span> -lt 0 ]; <span class="hljs-keyword">then</span>
+            <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$int</span> is negative."</span>
+        <span class="hljs-keyword">else</span>
+            <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$int</span> is positive."</span>
+        <span class="hljs-keyword">fi</span>
+        <span class="hljs-keyword">if</span> [ $((int % 2)) -eq 0 ]; <span class="hljs-keyword">then</span>
+            <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$int</span> is even."</span>
+        <span class="hljs-keyword">else</span>
+            <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$int</span> is odd."</span>
+        <span class="hljs-keyword">fi</span>
+    <span class="hljs-keyword">fi</span>
+<span class="hljs-keyword">else</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Input value is not an integer."</span> &gt;&amp;2
+    <span class="hljs-built_in">exit</span> 1
+<span class="hljs-keyword">fi</span>
+</div></code></pre>
+<p>We use echo with the <code>-n</code> option (which suppresses the trailing newline on output) to display a prompt.</p>
+<p>Read can work with multiple values at a time. Separate them with spaces.</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># read-multiple: read multiple values from keyboard</span>
+<span class="hljs-built_in">echo</span> -n <span class="hljs-string">"Enter one or more values &gt; "</span>
+<span class="hljs-built_in">read</span> var1 var2 var3 var4 var5
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"var1 = '<span class="hljs-variable">$var1</span>'"</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"var2 = '<span class="hljs-variable">$var2</span>'"</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"var3 = '<span class="hljs-variable">$var3</span>'"</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"var4 = '<span class="hljs-variable">$var4</span>'"</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"var5 = '<span class="hljs-variable">$var5</span>'"</span>
+</div></code></pre>
+<p>If <code>read</code> receives fewer than the expected number, the extra variables are empty, while an excessive amount of input results in the final variable containing all of the extra input.</p>
+<p>If no variables are listed after the <code>read</code> command, a shell variable, <code>REPLY</code>, will be assigned all the input.</p>
+<p><code>read</code> supports options:</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-a array</code></td>
+<td>Assign the input to array, starting with index zero.</td>
+</tr>
+<tr>
+<td><code>-d delimiter</code></td>
+<td>The first character in the string delimiter is used to indicate the end of input, rather than a newline character.</td>
+</tr>
+<tr>
+<td><code>-e</code></td>
+<td>Use Readline to handle input. This permits input editing in the same manner as the command line.</td>
+</tr>
+<tr>
+<td><code>-i string</code></td>
+<td>Use string as a default reply if the user simply presses enter. Requires the <code>-e</code> option.</td>
+</tr>
+<tr>
+<td><code>-n num</code></td>
+<td>Read <code>num</code> characters of input, rather than an entire line.</td>
+</tr>
+<tr>
+<td><code>-p prompt</code></td>
+<td>Display a prompt for input using the string prompt.</td>
+</tr>
+<tr>
+<td><code>-r</code></td>
+<td>Raw mode. Do not interpret backslash characters as escapes.</td>
+</tr>
+<tr>
+<td><code>-s</code></td>
+<td>Silent mode. Do not echo characters to the display as they are typed. This is useful when inputting passwords and other confidential information.</td>
+</tr>
+<tr>
+<td><code>-t seconds</code></td>
+<td>Timeout. Terminate input after seconds. read returns a non-zero exit status if an input times out.</td>
+</tr>
+<tr>
+<td><code>-u fd</code></td>
+<td>Use input from file descriptor <code>fd</code>, rather than standard input.</td>
+</tr>
+</tbody>
+</table>
+<p>Example on how you candle password input:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># read-secret: input a secret passphrase</span>
+<span class="hljs-keyword">if</span> <span class="hljs-built_in">read</span> -t 10 -sp <span class="hljs-string">"Enter secret passphrase &gt; "</span> secret_pass; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> -e <span class="hljs-string">"\nSecret passphrase = '<span class="hljs-variable">$secret_pass</span>'"</span>
+<span class="hljs-keyword">else</span>
+    <span class="hljs-built_in">echo</span> -e <span class="hljs-string">"\nInput timed out"</span> &gt;&amp;2
+    <span class="hljs-built_in">exit</span> 1
+<span class="hljs-keyword">fi</span>
+</div></code></pre>
+<p>Example on how you handle default values if user only presses <code>Enter</code>:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># read-default: supply a default value if user presses Enter key.</span>
+<span class="hljs-built_in">read</span> -e -p <span class="hljs-string">"What is your user name? "</span> -i <span class="hljs-variable">$USER</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"You answered: '<span class="hljs-variable">$REPLY</span>'"</span>
+</div></code></pre>
+<h4 id="internal-field-separator-ifs">Internal Field Separator (IFS)</h4>
+<p>Normally, the shell performs word-splitting on the input provided to <code>read</code>.</p>
+<p>The default value of IFS contains a <em>space</em>, a <em>tab</em>, and a <em>newline</em> character, each of which will separate items from one another.</p>
+<p>We can adjust the value of IFS to control the separation of fields input to read:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># read-ifs: read fields from a file</span>
+FILE=/etc/passwd
+<span class="hljs-built_in">read</span> -p <span class="hljs-string">"Enter a username &gt; "</span> user_name
+file_info=<span class="hljs-string">"<span class="hljs-variable">$(grep "^$user_name:" $FILE)</span>"</span>
+<span class="hljs-keyword">if</span> [ -n <span class="hljs-string">"<span class="hljs-variable">$file_info</span>"</span> ]; <span class="hljs-keyword">then</span>
+
+<span class="hljs-comment"># The line consists of three parts: a variable assignment, a read command with a list of variable names as arguments, and a strange new redirection operator.</span>
+
+<span class="hljs-comment">#The shell allows one or more variable assignments to take place immediately before a command. These assignments alter the environment for the command that follows. The effect of the assignment is temporary, changing the environment only for the duration of the command</span>
+
+<span class="hljs-comment"># The &lt;&lt;&lt; operator indicates a here string. A here string is like a here document, only shorter, consisting of a single string.</span>
+    IFS=<span class="hljs-string">":"</span> <span class="hljs-built_in">read</span> user pw uid gid name home shell &lt;&lt;&lt; <span class="hljs-string">"<span class="hljs-variable">$file_info</span>"</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"User = '<span class="hljs-variable">$user</span>'"</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"UID = '<span class="hljs-variable">$uid</span>'"</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"GID = '<span class="hljs-variable">$gid</span>'"</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Full Name = '<span class="hljs-variable">$name</span>'"</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Home Dir. = '<span class="hljs-variable">$home</span>'"</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Shell = '<span class="hljs-variable">$shell</span>'"</span>
+<span class="hljs-keyword">else</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"No such user '<span class="hljs-variable">$user_name</span>'"</span> &gt;&amp;2
+    <span class="hljs-built_in">exit</span> 1
+<span class="hljs-keyword">fi</span>
+</div></code></pre>
+<p><strong>You cannot pipe <code>read</code>. While the read command normally takes input from standard input, you cannot do this: <code>echo &quot;foo:&quot; | read</code></strong></p>
+<h4 id="menus">Menus</h4>
+<p>We can create menus so the user can pick an option:</p>
+<pre class="hljs"><code><div>clear
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"
+Please Select:
+1. Display System Information
+2. Display Disk Space
+3. Display Home Space Utilization
+0. Quit
+"</span>
+<span class="hljs-built_in">read</span> -p <span class="hljs-string">"Enter selection [0-3] &gt; "</span>
+<span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$REPLY</span>"</span> =~ ^[0-3]$ ]]; <span class="hljs-keyword">then</span>
+    <span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$REPLY</span>"</span> == 0 ]]; <span class="hljs-keyword">then</span>
+        <span class="hljs-built_in">echo</span> <span class="hljs-string">"Program terminated."</span>
+        <span class="hljs-built_in">exit</span>
+    <span class="hljs-keyword">fi</span>
+    <span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$REPLY</span>"</span> == 1 ]]; <span class="hljs-keyword">then</span>
+        <span class="hljs-built_in">echo</span> <span class="hljs-string">"Hostname: <span class="hljs-variable">$HOSTNAME</span>"</span>
+        uptime
+        <span class="hljs-built_in">exit</span>
+    <span class="hljs-keyword">fi</span>
+    <span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$REPLY</span>"</span> == 2 ]]; <span class="hljs-keyword">then</span>
+        df -h
+        <span class="hljs-built_in">exit</span>
+    <span class="hljs-keyword">fi</span>
+    <span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$REPLY</span>"</span> == 3 ]]; <span class="hljs-keyword">then</span>
+        <span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$(id -u)</span>"</span> -eq 0 ]]; <span class="hljs-keyword">then</span>
+            <span class="hljs-built_in">echo</span> <span class="hljs-string">"Home Space Utilization (All Users)"</span>
+            du -sh /home/*
+        <span class="hljs-keyword">else</span>
+            <span class="hljs-built_in">echo</span> <span class="hljs-string">"Home Space Utilization (<span class="hljs-variable">$USER</span>)"</span>
+            du -sh <span class="hljs-string">"<span class="hljs-variable">$HOME</span>"</span>
+        <span class="hljs-keyword">fi</span>
+        <span class="hljs-built_in">exit</span>
+    <span class="hljs-keyword">fi</span>
+<span class="hljs-keyword">else</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Invalid entry."</span> &gt;&amp;2
+    <span class="hljs-built_in">exit</span> 1
+<span class="hljs-keyword">fi</span>
+</div></code></pre>
+<h2 id="while-loop">WHILE Loop</h2>
+<p>The syntax looks like this: <code>while commands; do commands; done</code>.</p>
+<p>Basic while loop:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># while-count: display a series of numbers</span>
+count=1
+<span class="hljs-keyword">while</span> [[ <span class="hljs-string">"<span class="hljs-variable">$count</span>"</span> -le 5 ]]; <span class="hljs-keyword">do</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$count</span>"</span>
+    count=$((count + 1))
+<span class="hljs-keyword">done</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Finished."</span>
+</div></code></pre>
+<p>The <code>break</code> command immediately terminates a loop, and program control resumes with the next statement following the loop. The <code>continue</code> command causes the remainder of the loop to be skipped, and program control resumes with the next iteration of the loop.</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># while-menu2: a menu driven system information program</span>
+DELAY=3 <span class="hljs-comment"># Number of seconds to display results</span>
+<span class="hljs-keyword">while</span> <span class="hljs-literal">true</span>; <span class="hljs-keyword">do</span>
+    clear
+    cat &lt;&lt;- _EOF_
+    Please Select:
+    1. Display System Information
+    2. Display Disk Space
+    3. Display Home Space Utilization
+    0. Quit
+_EOF_
+    <span class="hljs-built_in">read</span> -p <span class="hljs-string">"Enter selection [0-3] &gt; "</span>
+    <span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$REPLY</span>"</span> =~ ^[0-3]$ ]]; <span class="hljs-keyword">then</span>
+        <span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$REPLY</span>"</span> == 1 ]]; <span class="hljs-keyword">then</span>
+            <span class="hljs-built_in">echo</span> <span class="hljs-string">"Hostname: <span class="hljs-variable">$HOSTNAME</span>"</span>
+            uptime
+            sleep <span class="hljs-string">"<span class="hljs-variable">$DELAY</span>"</span>
+            <span class="hljs-built_in">continue</span>
+        <span class="hljs-keyword">fi</span>
+        <span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$REPLY</span>"</span> == 2 ]]; <span class="hljs-keyword">then</span>
+            df -h
+            sleep <span class="hljs-string">"<span class="hljs-variable">$DELAY</span>"</span>
+            <span class="hljs-built_in">continue</span>
+        <span class="hljs-keyword">fi</span>
+        <span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$REPLY</span>"</span> == 3 ]]; <span class="hljs-keyword">then</span>
+            <span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$(id -u)</span>"</span> -eq 0 ]]; <span class="hljs-keyword">then</span>
+                <span class="hljs-built_in">echo</span> <span class="hljs-string">"Home Space Utilization (All Users)"</span>
+                du -sh /home/*
+            <span class="hljs-keyword">else</span>
+                <span class="hljs-built_in">echo</span> <span class="hljs-string">"Home Space Utilization (<span class="hljs-variable">$USER</span>)"</span>
+                du -sh <span class="hljs-string">"<span class="hljs-variable">$HOME</span>"</span>
+            <span class="hljs-keyword">fi</span>
+            sleep <span class="hljs-string">"<span class="hljs-variable">$DELAY</span>"</span>
+            <span class="hljs-built_in">continue</span>
+        <span class="hljs-keyword">fi</span>
+    <span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$REPLY</span>"</span> == 0 ]]; <span class="hljs-keyword">then</span>
+        <span class="hljs-built_in">break</span>
+    <span class="hljs-keyword">fi</span>
+    <span class="hljs-keyword">else</span>
+        <span class="hljs-built_in">echo</span> <span class="hljs-string">"Invalid entry."</span>
+        sleep <span class="hljs-string">"<span class="hljs-variable">$DELAY</span>"</span>
+    <span class="hljs-keyword">fi</span>
+<span class="hljs-keyword">done</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Program terminated."</span>
+</div></code></pre>
+<p>The <code>until</code> compound command is much like <code>while</code>, except instead of exiting a loop when a non-zero exit status is encountered, it does the opposite. An until loop continues until it receives a zero exit status.</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># until-count: display a series of numbers</span>
+
+count=1
+until [[ <span class="hljs-string">"<span class="hljs-variable">$count</span>"</span> -gt 5 ]]; <span class="hljs-keyword">do</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$count</span>"</span>
+    count=$((count + 1))
+<span class="hljs-keyword">done</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Finished."</span>
+</div></code></pre>
+<p>You can also read lines from files with <code>while</code> and <code>until</code>:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># while-read: read lines from a file</span>
+<span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> distro version release; <span class="hljs-keyword">do</span>
+    <span class="hljs-built_in">printf</span> <span class="hljs-string">"Distro: %s\tVersion: %s\tReleased: %s\n"</span> \
+    <span class="hljs-string">"<span class="hljs-variable">$distro</span>"</span> \
+    <span class="hljs-string">"<span class="hljs-variable">$version</span>"</span> \
+    <span class="hljs-string">"<span class="hljs-variable">$release</span>"</span>
+<span class="hljs-keyword">done</span> &lt; distros.txt
+</div></code></pre>
+<p>To redirect a file to the loop, we place the redirection operator after the <code>done</code> statement.</p>
+<p>It is also possible to pipe standard input into a loop:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># while-read2: read lines from a file</span>
+sort -k 1,1 -k 2n distros.txt | <span class="hljs-keyword">while</span> <span class="hljs-built_in">read</span> distro version release; <span class="hljs-keyword">do</span>
+    <span class="hljs-built_in">printf</span> <span class="hljs-string">"Distro: %s\tVersion: %s\tReleased: %s\n"</span> \
+    <span class="hljs-string">"<span class="hljs-variable">$distro</span>"</span> \
+    <span class="hljs-string">"<span class="hljs-variable">$version</span>"</span> \
+    <span class="hljs-string">"<span class="hljs-variable">$release</span>"</span>
+<span class="hljs-keyword">done</span>
+</div></code></pre>
+<h2 id="for-loop">FOR Loop</h2>
+<p>The syntax for this type of loop looks like this:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> A B C D; <span class="hljs-keyword">do</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-variable">$i</span>
+<span class="hljs-keyword">done</span>
+
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> {A..D}; <span class="hljs-keyword">do</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-variable">$i</span>
+<span class="hljs-keyword">done</span>
+</div></code></pre>
+<p>The C-like language form:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">for</span> ((i=0;i&lt;=5;i++)); <span class="hljs-keyword">do</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-variable">$i</span>
+<span class="hljs-keyword">done</span>
+</div></code></pre>
+<h2 id="operators">Operators</h2>
+<h3 id="assignment-operators">Assignment operators</h3>
+<p>In addition to <code>=</code> notation, the shell provides notation that perform some assignments:</p>
+<table>
+<thead>
+<tr>
+<th>Notation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>parameter = value</code></td>
+<td>Simple assignment. Assigns value to parameter.</td>
+</tr>
+<tr>
+<td><code>parameter += value</code></td>
+<td>Addition. Equivalent to parameter = parameter + value.</td>
+</tr>
+<tr>
+<td><code>parameter -= value</code></td>
+<td>Subtraction. Equivalent to parameter = parameter – value.</td>
+</tr>
+<tr>
+<td><code>parameter *= value</code></td>
+<td>Multiplication. Equivalent to parameter = parameter * value.</td>
+</tr>
+<tr>
+<td><code>parameter /= value</code></td>
+<td>Integer division. Equivalent to parameter = parameter / value.</td>
+</tr>
+<tr>
+<td><code>parameter %= value</code></td>
+<td>Modulo. Equivalent to parameter = parameter % value.</td>
+</tr>
+<tr>
+<td><code>parameter++</code></td>
+<td>Variable post-increment. Equivalent to parameter = parameter + 1</td>
+</tr>
+<tr>
+<td><code>parameter−−</code></td>
+<td>Variable post-decrement. Equivalent to parameter = parameter − 1.</td>
+</tr>
+<tr>
+<td><code>++parameter</code></td>
+<td>Variable pre-increment. Equivalent to parameter = parameter + 1.</td>
+</tr>
+<tr>
+<td><code>--parameter</code></td>
+<td>Variable pre-decrement. Equivalent to parameter = parameter − 1.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The shell only performs integer arithmetic. It cannot do floating point arithmetic. To achieve that, please use <code>bc</code>.</strong></p>
+<h3 id="logic-operators">Logic operators</h3>
+<table>
+<thead>
+<tr>
+<th>Operator</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;=</code></td>
+<td>Less than or equal to.</td>
+</tr>
+<tr>
+<td><code>&gt;=</code></td>
+<td>Greater than or equal to.</td>
+</tr>
+<tr>
+<td><code>&lt;</code></td>
+<td>Less than.</td>
+</tr>
+<tr>
+<td><code>&gt;</code></td>
+<td>Greater than.</td>
+</tr>
+<tr>
+<td><code>==</code></td>
+<td>Equal to.</td>
+</tr>
+<tr>
+<td><code>!=</code></td>
+<td>Not equal to.</td>
+</tr>
+<tr>
+<td><code>&amp;&amp;</code></td>
+<td>Logical AND.</td>
+</tr>
+<tr>
+<td><code>\|\|</code></td>
+<td>Logical OR.</td>
+</tr>
+<tr>
+<td><code>expr1?expr2:expr3</code></td>
+<td>Comparison (ternary) operator. If expression expr1 evaluates to be nonzero (arithmetic true), then expr2; else expr3.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="arrays">Arrays</h2>
+<p><strong>Bash only supports single dimensional arrays.</strong></p>
+<h3 id="declare-an-array">Declare an array</h3>
+<p>To declare an array use the following syntax:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># Create the array</span>
+a[1]=foo
+
+<span class="hljs-comment"># Access a specific element</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-variable">${a[1]}</span>
+&gt; foo
+
+<span class="hljs-comment"># You can also use the declare command. -a option creates the array a</span>
+<span class="hljs-built_in">declare</span> -a a
+
+<span class="hljs-comment"># Declare an array with multiple values</span>
+days=(Mon Tue Wed Thu Fri Sat Sun)
+
+<span class="hljs-comment"># Declare an array with multiple values and assign them to a specific position</span>
+days([0]=Mon [1]=Tue [2]=Wed [3]=Thu [4]=Fri [5]=Sat [6]=Sun)
+</div></code></pre>
+<h3 id="display-contents">Display contents</h3>
+<p>Iterate through the array:</p>
+<pre class="hljs"><code><div>days=(Mon Tue Wed Thu Fri Sat Sun)
+
+<span class="hljs-comment"># You can use @ or *. @ will insert a new line, while * will print everythin on a single row.</span>
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-string">"<span class="hljs-variable">${days[*]}</span>"</span>; <span class="hljs-keyword">do</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-variable">$i</span>
+<span class="hljs-keyword">done</span>
+</div></code></pre>
+<p>You can use <code>@</code> or <code>*</code> to iterate through all the contents of an array.</p>
+<p>The <code>*</code> notation results in a single word containing the array’s contents, while the <code>@</code> notation results in seven single-word strings, which matches the array’s <em>real</em> contents. This difference appears only if the doublequotes are being used (recommended).</p>
+<p>Find the length:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># The length of an array</span>
+a[100]=foo
+<span class="hljs-built_in">echo</span> <span class="hljs-variable">${#a[@]}</span> <span class="hljs-comment"># number of array elements, 1 in this case</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-variable">${#a[100]}</span> <span class="hljs-comment"># length of element 100, 3 in this case</span>
+</div></code></pre>
+<p>Find the allocated suscripts:</p>
+<pre class="hljs"><code><div>foo=([2]=a [4]=b [6]=c)
+
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-string">"<span class="hljs-variable">${foo[@]}</span>"</span>; <span class="hljs-keyword">do</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-variable">$i</span>
+<span class="hljs-keyword">done</span>
+<span class="hljs-comment"># Output: a b c</span>
+
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-string">"<span class="hljs-variable">${!foo[@]}</span>"</span>; <span class="hljs-keyword">do</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-variable">$i</span>
+<span class="hljs-keyword">done</span>
+<span class="hljs-comment"># Output: 2 4 6</span>
+</div></code></pre>
+<h3 id="array-manipulation">Array manipulation</h3>
+<p>Append an element:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># By using the += assignment operator, we can auto-matically append values to the end of an array</span>
+foo=(a b c)
+foo+=(d e f)
+<span class="hljs-built_in">echo</span> <span class="hljs-variable">${foo[@]}</span> <span class="hljs-comment"># a b c d e f</span>
+</div></code></pre>
+<p>Sort an array:</p>
+<pre class="hljs"><code><div>a=(f e d c b a)
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"Original array: <span class="hljs-variable">${a[@]}</span>"</span>
+a_sorted=($(<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-string">"<span class="hljs-variable">${a[@]}</span>"</span>; <span class="hljs-keyword">do</span> <span class="hljs-built_in">echo</span> <span class="hljs-variable">$i</span>; <span class="hljs-keyword">done</span> | sort))
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"Sorted array:
+<span class="hljs-variable">${a_sorted[@]}</span>"</span>
+</div></code></pre>
+<p>Replace an element just by overriding it.</p>
+<p>Delete an element by using <code>unset foo[2]</code>.</p>
+<p>Delete an entire array by using <code>unset array_name</code>.</p>
+<p><strong>Any reference to an array variable without a subscript refers to element zero of the array.</strong></p>
+<h3 id="associative-arrays">Associative arrays</h3>
+<p>Associative arrays use string indexes instead of numbers:</p>
+<pre class="hljs"><code><div><span class="hljs-built_in">declare</span> -A colors
+colors[<span class="hljs-string">"red"</span>]=<span class="hljs-string">"#ff0000"</span>
+colors[<span class="hljs-string">"green"</span>]=<span class="hljs-string">"#00ff00"</span>
+colors[<span class="hljs-string">"blue"</span>]=<span class="hljs-string">"#0000ff"</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-variable">${colors["blue"]}</span> <span class="hljs-comment"># #0000ff</span>
+</div></code></pre>
+<h2 id="positional-parameters-command-arguments">Positional Parameters (Command Arguments)</h2>
+<p>The shell provides a set of variables called positional parameters that contain the individual words on the command line. The variables are named 0 through 9. They can be demonstrated this way:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># posit-param: script to view command line parameters</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"
+Number of arguments: <span class="hljs-variable">$#</span>
+\$0 = <span class="hljs-variable">$0</span>
+\$1 = <span class="hljs-variable">$1</span>
+\$2 = <span class="hljs-variable">$2</span>
+\$3 = <span class="hljs-variable">$3</span>
+\$4 = <span class="hljs-variable">$4</span>
+\$5 = <span class="hljs-variable">$5</span>
+\$6 = <span class="hljs-variable">$6</span>
+\$7 = <span class="hljs-variable">$7</span>
+\$8 = <span class="hljs-variable">$8</span>
+\$9 = <span class="hljs-variable">$9</span>
+"</span>
+</div></code></pre>
+<p>When running <code>./posit-param a b c d</code> the output is:</p>
+<pre class="hljs"><code><div>Number of arguments: 4
+$0 = /home/me/bin/posit-param
+$1 = a
+$2 = b
+$3 = c
+$4 = d
+$5 =
+$6 =
+$7 =
+$8 =
+$9 =
+</div></code></pre>
+<p>Even when no arguments are provided, <code>$0</code> will always contain the first item appearing on the command line, which is the pathname of the program being executed.</p>
+<p>The shell also provides a variable, <code>$#</code>, that contains the number of arguments on the command line.</p>
+<p>The <code>shift</code> command causes all the parameters to <em>move down one</em> each time it is executed. In fact, by using shift, it is possible to get by with only one parameter (in addition to <code>$0</code>, which never changes).</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># posit-param2: script to display all arguments</span>
+count=1
+<span class="hljs-keyword">while</span> [[ <span class="hljs-variable">$#</span> -gt 0 ]]; <span class="hljs-keyword">do</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Argument <span class="hljs-variable">$count</span> = <span class="hljs-variable">$1</span>"</span>
+    count=$((count + 1))
+    <span class="hljs-built_in">shift</span>
+<span class="hljs-keyword">done</span>
+</div></code></pre>
+<p>It is sometimes useful to manage all the positional parameters as a group.</p>
+<p>The shell provides two special parameters for this purpose. They both expand into the complete list of positional parameters but differ in rather subtle ways:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$*</code></td>
+<td>Expands into the list of positional parameters, starting with 1. When surrounded by double quotes, it expands into a double-quoted string containing all of the positional parameters, each separated by the first character of the IFS shell variable (by default a space character).</td>
+</tr>
+<tr>
+<td><code>$@</code></td>
+<td>Expands into the list of positional parameters, starting with 1. When surrounded by double quotes, it expands each positional parameter into a separate word as if it was surrounded by double quotes.</td>
+</tr>
+</tbody>
+</table>
+<pre class="hljs"><code><div> $* :
+<span class="hljs-variable">$1</span> = Hello
+<span class="hljs-variable">$2</span> = World
+
+ <span class="hljs-string">"$*"</span> :
+<span class="hljs-variable">$1</span> = Hello World
+<span class="hljs-variable">$2</span> =
+ <span class="hljs-variable">$@</span> :
+<span class="hljs-variable">$1</span> = Hello
+<span class="hljs-variable">$2</span> = World
+ <span class="hljs-string">"<span class="hljs-variable">$@</span>"</span> :
+<span class="hljs-variable">$1</span> = Hello
+<span class="hljs-variable">$2</span> = Hello World
+<span class="hljs-variable">$3</span> =
+</div></code></pre>
+<ul>
+<li><code>$*</code> and <code>$@</code> produce: <em>Hello World</em></li>
+<li><code>&quot;$*&quot;</code> produces: <em>&quot;Hello World&quot;</em></li>
+<li><code>&quot;$@&quot;</code> produces: <em>&quot;Hello&quot; &quot;Hello World&quot;</em></li>
+</ul>
+<p>A more complete example:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># display a message when the help option is invoked or an unknown option is attempted</span>
+<span class="hljs-function"><span class="hljs-title">usage</span></span> () {
+ <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$PROGNAME</span>: usage: <span class="hljs-variable">$PROGNAME</span> [-f file | -i]"</span>
+ <span class="hljs-built_in">return</span>
+}
+<span class="hljs-comment"># process command line options</span>
+interactive=
+filename=
+
+<span class="hljs-comment"># This loop continues while the positional parameter $1 is not empty</span>
+<span class="hljs-keyword">while</span> [[ -n <span class="hljs-string">"<span class="hljs-variable">$1</span>"</span> ]]; <span class="hljs-keyword">do</span>
+    <span class="hljs-comment"># Examine the current positional parameter to see whether it matches any of the supported choices</span>
+    <span class="hljs-keyword">case</span> <span class="hljs-string">"<span class="hljs-variable">$1</span>"</span> <span class="hljs-keyword">in</span>
+        <span class="hljs-comment"># When detected, it causes an additional shift to occur, which advances the positional parameter $1 to the filename argument supplied to the -f option</span>
+        -f | --file)        <span class="hljs-built_in">shift</span>
+                            filename=<span class="hljs-string">"<span class="hljs-variable">$1</span>"</span>
+                            ;;
+        -i | --interactive) interactive=1
+                            ;;
+        -h | --<span class="hljs-built_in">help</span>)        usage
+                            <span class="hljs-built_in">exit</span>
+                            ;;
+        *)                  usage &gt;&amp;2
+                            <span class="hljs-built_in">exit</span> 1
+                            ;;
+    <span class="hljs-keyword">esac</span>
+    <span class="hljs-comment"># advance the positional parameters to ensure that the loop will eventually terminate</span>
+    <span class="hljs-built_in">shift</span>
+<span class="hljs-keyword">done</span>
+</div></code></pre>
+<h2 id="traps">Traps</h2>
+<p>When we design a large, complicated script, it is important to consider what happens if the user logs off or shuts down the computer while the script is running.</p>
+<p>When such an event occurs, a signal will be sent to all affected processes. In turn, the programs representing those processes can perform actions to ensure a proper and orderly termination of the program.</p>
+<p>In the following example, every time program receives <code>SIGINT</code> or <code>SIGTERM</code> signal, it displays a message:</p>
+<pre class="hljs"><code><div><span class="hljs-built_in">trap</span> <span class="hljs-string">"echo 'I am ignoring you.'"</span> SIGINT SIGTERM
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> {1..5}; <span class="hljs-keyword">do</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Iteration <span class="hljs-variable">$i</span> of 5"</span>
+    sleep 5
+<span class="hljs-keyword">done</span>
+</div></code></pre>
+<p>A list of signals can be found bellow:</p>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SIGINT</code></td>
+<td>The signal sent when we press <strong>CTRL + C</strong>.</td>
+</tr>
+<tr>
+<td><code>SIGTERM</code> and <code>SIGQUIT</code></td>
+<td><code>SIGTERM</code> is the default signal when we use the <code>kill</code> command. <code>SIGQUIT</code> also generates a core dump before exiting.</td>
+</tr>
+<tr>
+<td><code>SIGKILL</code></td>
+<td>We use this signal to forcefully terminate the process. We should be careful as the process won’t be able to execute any clean-up routine.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Use <code>SIGINT</code> only when you want to trap the interruption caused by the user. In other cases, use the other signals accordingly.</strong></p>
+<p>It is a good practice to use <code>trap</code> with functions:</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-title">exit_on_signal_SIGINT</span></span> () {
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Script interrupted."</span> 2&gt;&amp;1
+    <span class="hljs-built_in">exit</span> 0
+}
+
+<span class="hljs-function"><span class="hljs-title">exit_on_signal_SIGTERM</span></span> () {
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Script terminated."</span> 2&gt;&amp;1
+    <span class="hljs-built_in">exit</span> 0
+}
+
+<span class="hljs-built_in">trap</span> exit_on_signal_SIGINT SIGINT
+<span class="hljs-built_in">trap</span> exit_on_signal_SIGTERM SIGTERM
+
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> {1..5}; <span class="hljs-keyword">do</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"Iteration <span class="hljs-variable">$i</span> of 5"</span>
+    sleep 5
+<span class="hljs-keyword">done</span>
+</div></code></pre>
+<p><strong>One reason signal handlers are included in scripts is to remove temporary files that the script may create to hold intermediate results during execution.</strong></p>
+<p>It is important to give temporary files nonpredictable file-names. This avoids an exploit known as a temp race attack. One way to create a nonpredictable (but still descriptive) name is to do something like this:</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># This will create a filename consisting of the program’s name, followed by its PID followed by a random integer.</span>
+tempfile=/tmp/$(basename <span class="hljs-variable">$0</span>).$$.<span class="hljs-variable">$RANDOM</span>
+
+<span class="hljs-comment"># An even better way</span>
+<span class="hljs-comment"># This will create a filename consisting of the file name, followed by the PID and X random numbers and letters. /tmp/foobar.6593.UOZuvM6654</span>
+tempfile=$(mktemp /tmp/foobar.$$.XXXXXXXXXX)`
+</div></code></pre>
+<p>For scripts that are run by regular users, avoid using <code>/tmp</code> directory. Instead, create a <code>tmp</code> directory inside their <code>home</code> directory.</p>
+<h2 id="asynchronous-execution">Asynchronous Execution</h2>
+<p>When a script runs another scripts, it becomes difficult to keep the parent and child coordinated. To overcome this we can use <code>wait</code>.</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># Parent script</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"Parent: starting..."</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"Parent: launching child script..."</span>
+async-child &amp;
+pid=$!
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"Parent: child (PID= <span class="hljs-variable">$pid</span>) launched."</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"Parent: continuing..."</span>
+sleep 2
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"Parent: pausing to wait for child to finish..."</span>
+<span class="hljs-built_in">wait</span> <span class="hljs-string">"<span class="hljs-variable">$pid</span>"</span>
+
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"Parent: child is finished. Continuing..."</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"Parent: parent is done. Exiting."</span>
+</div></code></pre>
+<p>The process ID of the child script is recorded by assigning the <code>pid</code> variable with the value of the <code>$!</code> shell parameter, which will always contain the process ID of the last job put into the background.</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># Child script</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"Child: child is running..."</span>
+sleep 5
+<span class="hljs-built_in">echo</span> <span class="hljs-string">"Child: child is done. Exiting."</span>
+</div></code></pre>
+<h2 id="named-pipes">Named pipes</h2>
+<p>Named pipes are behaving like buffer files (FIFO buffer) between two processes.</p>
+<pre class="hljs"><code><div><span class="hljs-comment"># Create the pipe</span>
+mkfifo pipe1
+
+<span class="hljs-comment"># Store the output of ls -lh to pipe1</span>
+ls -lh &gt; pipe1
+
+<span class="hljs-comment"># Read the buffer of pipe1</span>
+cat &lt; pipe1
+
+<span class="hljs-comment"># This acts as ls -lh | cat</span>
+</div></code></pre>
+<p>After we press <em>enter</em>, the command <code>ls -lh &gt; pipe1</code> will appear to hang. This is because there is nothing receiving data from the other end of the pipe yet. When this occurs, it is said that the pipe is <em>blocked</em>. This condition will clear once we attach a process to the other end and it begins to read input from the pipe with <code>cat &lt; pipe1</code>.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>As a general rule, always precede wildcards (such as <code>*</code> and <code>?</code>) with <code>./</code> to prevent misinterpretation by commands. This includes things like <code>*.pdf</code> and <code>???.mp3</code>, for example.</p>
+<p>Be careful with filenames. Just don't use spaces and special characters.</p>
+<p>To trace an error, add <code>echo &quot;This was executed&quot;</code> to segments of the script to better locate the error.</p>
+<h2 id="best-practices">Best Practices</h2>
+<ul>
+<li>Make the first line <code>#!/usr/bin/env bash</code> even if you don't give executable permission to the script file.</li>
+<li>Use <code>set -o errexit</code> at the start of your script so that when a command fails, <code>bash</code> exits instead of conrinuing running the rest of the script.</li>
+<li>Use <code>set -o nounset</code> because it make the script fail, when accessing an unset variable. Saves from horrible unintended consequences, with typos in variable names. When you want to access a variable that may or may not have been set, use <code>&quot;${VARNAME-}&quot;</code> instead of <code>&quot;$VARNAME&quot;</code>, and you’re good.</li>
+<li>Use <code>set -o pipefail</code> it will ensure that a pipeline command is treated as failed, even if one command in the pipeline fails.</li>
+<li>Use <code>set -o xtrace</code> with a check on <code>$TRACE</code> env variable
+<ul>
+<li><code>if [[ &quot;${TRACE-0}&quot; == &quot;1&quot; ]]; then set -o xtrace; fi</code> it helps in debugging your script.</li>
+<li>People can now enable debug mode, by running your script as <code>TRACE=1 ./script.sh</code>.</li>
+</ul>
+</li>
+<li>Use <code>[[ ]]</code> for conditions in <code>if</code> / <code>while</code> statements, instead of <code>[ ]</code> or <code>test</code>. <code>[[ ]]</code> is mor powerful.</li>
+<li>Always qupte variable accesses with double-quotes.</li>
+<li>Use <code>local</code> variables in functions.</li>
+<li>Accept multiple ways that users can ask for help and respond in kind.
+<ul>
+<li>Check if the first arg is <code>-h</code> or <code>--help</code> or <code>help</code> or just <code>h</code> or even <code>-help</code> and in all these cases, print help text and exit.</li>
+</ul>
+</li>
+<li>When printing error messages, please redirect to stderr.
+<ul>
+<li>Use <code>echo 'Something unexpected happened' &gt;&amp;2</code> for this</li>
+</ul>
+</li>
+<li>Use long options where possible such as <code>--silent</code> instead of <code>-s</code>. These will helpl you document your commands easier.
+<ul>
+<li>Be carefoul though, MacOS does not support long options.</li>
+</ul>
+</li>
+<li>If appropiate, change the script directory close to the start of the script. <code>cd &quot;$(dirname &quot;$0&quot;)&quot;</code>.</li>
+<li>Use <code>shellcheck</code>. pay attention to its warnings.</li>
+</ul>
+<p>An example of the best practices can be seen below:</p>
+<pre class="hljs"><code><div><span class="hljs-meta">#!/usr/bin/env bash
+</span>
+<span class="hljs-built_in">set</span> -o errexit
+<span class="hljs-built_in">set</span> -o nounset
+<span class="hljs-built_in">set</span> -o pipefail
+<span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">${TRACE-0}</span>"</span> == <span class="hljs-string">"1"</span> ]]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">set</span> -o xtrace
+<span class="hljs-keyword">fi</span>
+
+<span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">${1-}</span>"</span> =~ ^-*h(elp)?$ ]]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">'Usage: ./script.sh arg-one arg-two
+
+This is an awesome bash script to make your life better.
+
+'</span>
+    <span class="hljs-built_in">exit</span>
+<span class="hljs-keyword">fi</span>
+
+<span class="hljs-built_in">cd</span> <span class="hljs-string">"<span class="hljs-variable">$(dirname "$0")</span>"</span>
+
+<span class="hljs-function"><span class="hljs-title">main</span></span>() {
+    <span class="hljs-built_in">echo</span> <span class="hljs-keyword">do</span> awesome stuff
+}
+
+main <span class="hljs-string">"<span class="hljs-variable">$@</span>"</span>
+</div></code></pre>
+<p>Thank you <a href="sharats.me">Shrikant Sharat Kandula</a> for your post regarding the best practices. I took the liberty to reproduce your advices because I agree with you and also I dont usually follow my own advice sometimes.</p>
+<h2 id="sources">Sources</h2>
+<ul>
+<li>The Linux Command Line 2nd Edition</li>
+<li><a href="https://www.baeldung.com/linux/sigint-and-other-termination-signals">baeldung.com</a></li>
+<li><a href="https://sharats.me/posts/shell-script-best-practices/">sharats.me</a></li>
+</ul>
+
+</body>
+</html>
