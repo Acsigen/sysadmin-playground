@@ -10,7 +10,7 @@
 * [Tuple methods](#tuple-methods)
 * [Set methods](#set-methods)
 * [File methods](#file-methods)
-* [Exceptions](#Exceptions)
+* [Exceptions](#exceptions)
 * [Sources](#sources)
 
 ## Keywords
