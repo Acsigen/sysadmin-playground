@@ -17,6 +17,7 @@ I also use Cascadia Code font with a size of 14.
 - Remote - Containers
 - Docker
 - shell-format
+- shellcheck
 
 ## Keyboard Shortcuts
 
