@@ -1306,6 +1306,10 @@ main "$@"
 
 Thank you [Shrikant Sharat Kandula](sharats.me) for your post regarding the best practices. I took the liberty to reproduce your advices because I agree with you and also I dont usually follow my own advice sometimes.
 
+## ToDo
+
+- Add code snippet for [SC2181](https://www.shellcheck.net/wiki/SC2181)
+
 ## Sources
 
 - The Linux Command Line 2nd Edition
