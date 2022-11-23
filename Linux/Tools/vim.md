@@ -49,6 +49,7 @@ When you open a file, by default it is opened in *normal mode*.
 * `:set tabstop=4` - set the number of columns occupied by a tab character
 * `:set autoindent`- turn on auto indent
 * `:set hlsearch` - turn on highlight search results
+* `:set number` - turn on line number (use `nonumber` to turn it off)
 
 ### Search & Replace
 
