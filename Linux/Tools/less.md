@@ -11,6 +11,7 @@ Quick commands for ```less```:
 |G|Move to the end of the text file|
 |g|Move to the beginning of the text file|
 |/characters|Search forward to the next occurrence of characters|
-|n|Search for the next occurrence of the previous search|
+|n|Next item of the search result|
+|N|Previous item of the search result|
 |h|Display help screen|
 |q|Quit|
