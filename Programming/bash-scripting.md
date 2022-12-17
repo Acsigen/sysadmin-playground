@@ -479,6 +479,29 @@ else
 fi
 ```
 
+You can also use if to execute code depending on the exit status of a command:
+
+```bash
+if ls /home/ubuntu; then
+    echo "The commane is OK"
+else
+    echo "The command is not ok"
+fi
+```
+
+Or, if you are not comfortable to run a command inside `if`, you can store the exit inside a variable:
+
+```bash
+ls /home/ubuntu
+exit_status="$?"
+
+if [[ exit_status -eq 0 ]]; then
+    echo "The commane is OK"
+else
+    echo "The command is not ok"
+fi
+```
+
 #### Combine Expressions
 
 It’s also possible to combine expressions to create more complex evaluations. xpressions are combined by using logical operators. They are `AND`, `OR`, and `NOT`.
@@ -526,6 +549,7 @@ Example:
 ```bash
 # Create directory called temp and, if it succeeds, change the directory to temp
 mkdir temp && cd temp
+echo $? # Print the exit code of previous command, you can also store it in a variable
 
 # Check if temp directory exists, if it fails, create the directory
 [[ -d temp ]] || mkdir temp
@@ -1305,10 +1329,6 @@ main "$@"
 ```
 
 Thank you [Shrikant Sharat Kandula](sharats.me) for your post regarding the best practices. I took the liberty to reproduce your advices because I agree with you and also I dont usually follow my own advice sometimes.
-
-## ToDo
-
-- Add code snippet for [SC2181](https://www.shellcheck.net/wiki/SC2181)
 
 ## Sources
 
