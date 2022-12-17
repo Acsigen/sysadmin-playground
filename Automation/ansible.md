@@ -280,6 +280,10 @@ foo['field1']
 foo.field1
 ```
 
+## Playbook filters
+
+[Ansible Playbook filtes documentation](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_filters.html)
+
 ## Sources
 
 * For encryption, study the Ansible Vault docs
