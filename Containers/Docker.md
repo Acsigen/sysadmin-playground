@@ -362,7 +362,11 @@ docker run --mount type=bind,source=/data/mysql,target=/var/lib/mysql mysql
 
 The **Bind Mounting** gives you more control over where to map the data on the host. In case of **Volume Mounting** the location is picked automatically by Docker.
 
-**WARNING! THE `-v` OPTION IS NOT USED ANYMORE. INSTEAD, USE `--mount`:**
+**WARNING! The `-v` is part of older Docker implementation. Even though it is still widely popular please use `--mount`.**
+
+**WARNING! Bind Mounting will override the contents of the directory inside Docker container with the contents of the directory on the host. For Volume Mounting this is not the case.**
+
+**Use Volume Mounting for data persistence and Bind Mounting for custom configurations.**
 
 ## Compose
 
