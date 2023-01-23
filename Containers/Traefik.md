@@ -19,13 +19,13 @@ The traefik configuration will be applied only to NGINX container:
 ```yaml
 labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.${COMPOSE_PROJECT_NAME}.entrypoints=web'
-      - 'traefik.http.routers.${COMPOSE_PROJECT_NAME}.rule=Host(`${APP_HOSTNAME}`)'
-      - 'traefik.http.routers.${COMPOSE_PROJECT_NAME}-secure.entrypoints=websecure'
-      - 'traefik.http.routers.${COMPOSE_PROJECT_NAME}-secure.rule=Host(`${APP_HOSTNAME}`)'
-      - 'traefik.http.routers.${COMPOSE_PROJECT_NAME}-secure.tls=true'
-      - 'traefik.http.services.${COMPOSE_PROJECT_NAME}.loadbalancer.server.port=80'
-      - 'traefik.http.services.${COMPOSE_PROJECT_NAME}.loadbalancer.server.scheme=http'
+      - 'traefik.http.routers.{{ SERVICE_NAME }}.entrypoints=web'
+      - 'traefik.http.routers.{{ SERVICE_NAME }}.rule=Host(`example.com`)'
+      - 'traefik.http.routers.{{ SERVICE_NAME }}-secure.entrypoints=websecure'
+      - 'traefik.http.routers.{{ SERVICE_NAME }}-secure.rule=Host(`example.com`)'
+      - 'traefik.http.routers.{{ SERVICE_NAME }}-secure.tls=true'
+      - 'traefik.http.services.{{ SERVICE_NAME }}.loadbalancer.server.port=80'
+      - 'traefik.http.services.{{ SERVICE_NAME }}.loadbalancer.server.scheme=http'
 ```
 
 For the Traefik container follow the Traefik Documentation.
