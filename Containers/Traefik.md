@@ -54,8 +54,8 @@ vscode-traefik:
       - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - './certs:/certs'
-      - './conf:/configuration/'
+      - ./certs:/certs
+      - ./conf:/configuration/
 ```
 
 Inside `./conf` there is a `certs.yml` file containig the certificates path:
