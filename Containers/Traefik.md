@@ -28,7 +28,44 @@ labels:
       - 'traefik.http.services.{{ SERVICE_NAME }}.loadbalancer.server.scheme=http'
 ```
 
-For the Traefik container follow the Traefik Documentation.
+For the Traefik container follow the Traefik Documentation or apply the following config:
+
+```YAML
+vscode-traefik:
+    image: traefik:v2.3
+    container_name: vscode-traefik
+    command:
+      - "--log.level=INFO"
+      - "--api.dashboard"
+      - "--api.insecure"
+      - "--entryPoints.traefik.address=:8080"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.websecure.http.tls=true"
+      - "--providers.docker.exposedbydefault=false"
+      # - --providers.file.directory=/etc/traefik/dynamic_conf
+      - "--providers.file.directory=/configuration/"
+      - "--providers.file.watch=true"
+    ports:
+      #- 80:80
+      - 8082:443
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - './certs:/certs'
+      - './conf:/configuration/'
+```
+
+Inside `./conf` there is a `certs.yml` file containig the certificates path:
+
+```yaml
+tls:
+  certificates:
+    - certFile: /certs/ecert.pem
+      keyFile: /certs/key.pem
+```
 
 ### Alternatives
 
