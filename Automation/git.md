@@ -97,7 +97,7 @@ The easiest and safest way to authenticate to remote git servers is to use key p
 
 |Command|Description|
 |---|---|
-|`git rebase [branch]`|Apply any commits of current branch ahead of specified one|
+|`git rebase [branch]`|Replay a branch's changes onto a different branch or commit. In this case, the current branch will receive the history of [branch].|
 |`git reset --hard [commit]`|Clear staging area, rewrite working tree from specified commit|
 
 ### Temporary Commits
