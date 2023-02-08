@@ -42,7 +42,11 @@ I also use Cascadia Code font with a size of 14.
   "update.enableWindowsBackgroundUpdates": false,
   "telemetry.telemetryLevel": "error",
   "editor.acceptSuggestionOnEnter": "off"
-  "editor.detectIndentation": false
+  "editor.detectIndentation": false,
+  "workbench.colorCustomizations": {
+      "editor.background": "#222222",
+		  "editor.foreground": "#F2F2F2",
+    }
 }
 ```
 
