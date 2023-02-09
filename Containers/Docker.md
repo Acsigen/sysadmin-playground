@@ -374,35 +374,39 @@ Docker Compose is a tool that was developed to help define and share multi-conta
 
 You can create a configuration file in YAML (docker-compose.yml) format using `docker compose` command.
 
-A `docker compose` file based on the Docker Getting Started page looks like this:
+**To-Do: Refactor this using a easier sample and explain the structure of a docker-compose.yml file.**
+
+A basic start for a `docker compose` file looks like this:
 
 ```yaml
-version: "3.8"
+version: "3.8" # Mandatory - Use version 3.x
 
-services:
-  app:
-    image: node:12-alpine
-    command: sh -c "yarn install && yarn run dev"
-    ports:
+services: # Mandatory
+  ubuntu-server: # Mandatory - Application/Service name, must be unique
+    image: ubuntu:latest # Mandatory - usually from Docker Hub, can also be a local one
+    container_name: "ubuntu-machine" # Optional - Useful for finding the container in the list
+    command: ["sleep","infinity"] # Optional - Usually used as extra args for the main command running inside the container, also great for debugging or use the container as a VM with `bash sleep infinity` as in this case
+    restart: unless-stopped # Optional - Restart policy (always, unless-stopped, never)
+    ports: # Optional - this wil expose ports host_port:container_port. Normally, Docker will open them automatically in firewall if specified. You do not need to open ports for the containers to connect to eachother on the same stack
       - 3000:3000
-    working_dir: /app
-    volumes:
+    volumes: # Optional - You can map files or directories inside the container for data persistency or configs. The destination will be overriden by the source.
       - ./:/app # bind volume short syntax
-    environment:
-      MYSQL_HOST: mysql
-      MYSQL_USER: root
-      MYSQL_PASSWORD: secret
-      MYSQL_DB: todos
-
-  mysql:
+    environment: # Optional - Pass env variables, can be used with VAR=test or VAR: "test". Do not use quotes when using VAR=test because they will be considered characters.
+      MYSQL_HOST: "mysql"
+      MYSQL_USER: "root"
+      MYSQL_PASSWORD: "secret"
+      MYSQL_DB: "todos"
+  mysql: # Define a second service
     image: mysql:5.7
     volumes:
-      - todo-mysql-data:/var/lib/mysql # named volume short syntax
+      - todo-mysql-data:/var/lib/mysql # Use a named volume instead of a directory.
     environment:
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_DATABASE: todos
+    env_file: # Optional - Import extra env vars
+      - extra.env
 
-volumes:
+volumes: # Optional - define named volumes
   todo-mysql-data:
 ```
 
@@ -412,45 +416,31 @@ To destroy the configuration run `docker compose down`.
 
 You can also check the logs by running `docker compose logs -f`. If you want to check only one app run `docker compose logs -f app`
 
-A quick guide on `docker compose` can be viewed [here](https://www.youtube.com/watch?v=exmBvjlZr7U).
-
 Regarding the volumes, there is also the possibility for the _long syntax_:
 
 ```yaml
-version: "3.8"
-
-services:
-  app:
-    image: node:12-alpine
-    command: sh -c "yarn install && yarn run dev"
-    ports:
-      - 3000:3000
-    working_dir: /app
+...
     volumes: # bind volume long syntax
       - type: bind
         source: ./
         target: /app
     environment:
-      MYSQL_HOST: mysql
-      MYSQL_USER: root
-      MYSQL_PASSWORD: secret
-      MYSQL_DB: todos
-
-  mysql:
-    image: mysql:5.7
+...
+...
     volumes: # named volume long syntax
       - type: volume
         source: todo-mysql-data
         target: /var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: todos
+...
 
 volumes:
   todo-mysql-data:
 ```
 
 If you want to use `host` network with docker compose file, set `network_mode: "host"` and remove port mappings.
+
+You can use a `.env` file alongside docker-compose.yml to automatically import environment variables. The `environment` section will override the values inside `.env`. Also, you can expand values from the `.env` to other sections of the file with `${VARIABLE}`.  
+You can also include other environment files by using `env_files` option in `docker-compose.yml`. **Beware though, you cannot expand the values inside those files, it only works with `.env`!**
 
 ## Image Building Best Practices
 
@@ -494,7 +484,7 @@ volumes:
   todo-mysql-data:
 ```
 
-Now when you run `docker compose build` then `docker compose up -d` it will build and use the custom image.
+Now when you run `docker compose build` then `docker compose up -d` (or `docker compose up --build -d`) it will build and use the custom image.
 
 ## Tips & Tricks
 
