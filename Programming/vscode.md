@@ -45,7 +45,7 @@ I also use Cascadia Code font with a size of 14.
   "editor.detectIndentation": false,
   "workbench.colorCustomizations": {
       "editor.background": "#222222",
-		  "editor.foreground": "#F2F2F2",
+      "editor.foreground": "#F2F2F2"
     }
 }
 ```
