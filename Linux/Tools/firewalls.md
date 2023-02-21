@@ -34,10 +34,10 @@ Iptables minimum required rules:
 # Allow incoming SSH from IP
 -A INPUT -p tcp -s 1.2.3.4/32 --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 
-COMMIT
-
 # Allow incoming http/https
 -A INPUT -p tcp -m multiport --dports 80,443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+
+COMMIT
 ```
 
 ### Configure iptables on the fly
