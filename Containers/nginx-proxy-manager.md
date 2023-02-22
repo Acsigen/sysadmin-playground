@@ -10,42 +10,80 @@ We have the following setup:
 
 - A Docker network in bridge mode with the name of `nginx_proxy_network`.
 - SSL Certificates and their keys
-- Portainer as the application sitting behind the NGINX proxy.
+- Firefly-iii as the application sitting behind the NGINX proxy and MariaDB as the DB for Firefly-iii.
 - NGINX Proxy Manager
 
 ## Deployment
 
 First, you need to create the proxy network. We need this network so we won't have to expose ports from the Portainer container to the host. In this case, the only ports that will be exposed to the host are the NGINX Proxy Manager ports (80,80,443)
-If you do not use a proxy network, you will need to configure NXING Proxy Manager container to use the host network and then expose the required port of the Portainer container to the host.
+If you do not use a proxy network, you will need to configure NXING Proxy Manager container to use the host network and then expose the required port of the Firefly-iii container to the host.
 
 ```bash
 docker network create nginx_proxy_network
 ```
 
-Then we have the following `docker-compoe.yml` file:
+Then we have the following `docker-compoe.yml` file for the application:
 
 ```yml
 version: "3.8"
 
 services:
-  portainer:
-    image: portainer/portainer-ce:latest
-    restart: always
-    container_name: portainer
-    privileged: true
-    environment:
-      TZ: "Europe/Bucharest"
+  firefly-iii:
+    image: fireflyiii/core:latest
+    container_name: firefly
+    restart: unless-stopped
     networks:
       - nginx_proxy_network
-    # ports:
-    #   - 8000:8000
-    #   - 9443:9443
+      - firefly_internal
+    environment:
+      TZ: "Europe/Bucharest"
+      APP_KEY: "random_string"
+      DB_HOST: "mariadb"
+      DB_PORT: 3306
+      DB_CONNECTION: "mysql"
+      DB_DATABASE: "firefly"
+      DB_USERNAME: "fifefly_user"
+      DB_PASSWORD: "firefly_password"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
-  nginx-proxy:
+      - firefly_upload:/var/www/html/storage/upload
+
+  mariadb:
+    image: mariadb:10.11.2
+    container_name: firefly-maria-db
+    restart: unless-stopped
+    networks:
+      - firefly_internal
+    environment:
+      TZ: "Europe/Bucharest"
+      MARIADB_USER: "firefly_user"
+      MARIADB_PASSWORD: "firefly_password"
+      MARIADB_DATABASE: "firefly"
+      MARIADB_ROOT_PASSWORD: "my_root_pass"
+    links:
+      - "firefly-iii"
+    volumes:
+      - firefly_mariadb_data:/var/lib/mysql
+
+networks:
+  nginx_proxy_network:
+    external: true
+  firefly_internal:
+    external: false
+
+volumes:
+  firefly_upload:
+  firefly_mariadb_data:
+```
+
+And the following `docker-compose.yml` file for the NGINX:
+
+```yml
+version: "3.8"
+
+services:
+  nginx-proxy-manager:
     image: 'jc21/nginx-proxy-manager:latest'
-    restart: always
+    restart: unless-stopped
     container_name: nginx_proxy_manager
     networks:
       - nginx_proxy_network
@@ -66,7 +104,7 @@ services:
 
       # Uncomment this if IPv6 is not enabled on your host
       TZ: "Europe/Bucharest"
-      DISABLE_IPV6: 'true'
+      DISABLE_IPV6: "true"
     healthcheck:
       test: ["CMD", "/bin/check-health"]
       interval: 10s
@@ -76,7 +114,6 @@ services:
       - nginx-letsencrypt:/etc/letsencrypt
 
 volumes:
-  portainer_data:
   nginx_data:
   nginx-letsencrypt:
 
@@ -85,7 +122,9 @@ networks:
     external: true
 ```
 
-Now it is time do deploy with `docker compose up -d`.
+Firefly-iii will communicate with NGINX through the proxy network, which is external, and with the database through the internal network. Since we do not expose ports for MariaDB, we do not need to add it to the proxy network.
+
+Now it is time to deploy with `docker compose up -d`.
 
 When the NGINX container is healthy, go to `http://localhost:81` and login with `admin@example.com` and password `changeme`. You will need to change these after login.
 
