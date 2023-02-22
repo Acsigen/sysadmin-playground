@@ -15,7 +15,7 @@ We have the following setup:
 
 ## Deployment
 
-First, you need to create the proxy network. We need this network so we won't have to expose ports from the Portainer container to the host. In this case, the only ports that will be exposed to the host are the NGINX Proxy Manager ports (80,80,443)
+First, you need to create the proxy network. We need this network so we won't have to expose ports from the Firefly-iii container to the host. In this case, the only ports that will be exposed to the host are the NGINX Proxy Manager ports (80,80,443)
 If you do not use a proxy network, you will need to configure NXING Proxy Manager container to use the host network and then expose the required port of the Firefly-iii container to the host.
 
 ```bash
@@ -59,8 +59,6 @@ services:
       MARIADB_PASSWORD: "firefly_password"
       MARIADB_DATABASE: "firefly"
       MARIADB_ROOT_PASSWORD: "my_root_pass"
-    links:
-      - "firefly-iii"
     volumes:
       - firefly_mariadb_data:/var/lib/mysql
 
