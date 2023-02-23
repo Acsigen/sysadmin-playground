@@ -18,11 +18,57 @@ We have the following setup:
 First, you need to create the proxy network. We need this network so we won't have to expose ports from the Firefly-iii container to the host. In this case, the only ports that will be exposed to the host are the NGINX Proxy Manager ports (80,80,443)
 If you do not use a proxy network, you will need to configure NXING Proxy Manager container to use the host network and then expose the required port of the Firefly-iii container to the host.
 
-```bash
-docker network create nginx_proxy_network
+We have the following `docker-compose.yml` file for the NGINX:
+
+```yml
+version: "3.8"
+
+services:
+  nginx-proxy-manager:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    container_name: nginx_proxy_manager
+    networks:
+      - nginx_proxy_network
+    #network_mode: host
+    ports:
+    #   # These ports are in format <host-port>:<container-port>
+      - '80:80' # Public HTTP Port
+      - '443:443' # Public HTTPS Port
+      - '81:81' # Admin Web Port
+    #   # Add any other Stream port you want to expose
+    #   # - '21:21' # FTP
+
+    # Uncomment the next line if you uncomment anything in the section
+    environment:
+      # Uncomment this if you want to change the location of 
+      # the SQLite DB file within the container
+      # DB_SQLITE_FILE: "/data/database.sqlite"
+
+      # Uncomment this if IPv6 is not enabled on your host
+      TZ: "Europe/Bucharest"
+      DISABLE_IPV6: "true"
+    healthcheck:
+      test: ["CMD", "/bin/check-health"]
+      interval: 10s
+      timeout: 3s
+    volumes:
+      # You could use directory mapping if you do not want to use named volumes
+      - nginx_data:/data
+      - nginx-letsencrypt:/etc/letsencrypt
+
+volumes:
+  nginx_data:
+  nginx-letsencrypt:
+
+networks:
+  nginx_proxy_network:
+    external: false
+    name: nginx_proxy_network
+    driver: bridge
 ```
 
-Then we have the following `docker-compoe.yml` file for the application:
+Then we have the following `docker-compose.yml` file for the application:
 
 ```yml
 version: "3.8"
@@ -67,57 +113,12 @@ networks:
     external: true
   firefly_internal:
     external: false
+    name: firefly_internal
+    driver: bridge
 
 volumes:
   firefly_upload:
   firefly_mariadb_data:
-```
-
-And the following `docker-compose.yml` file for the NGINX:
-
-```yml
-version: "3.8"
-
-services:
-  nginx-proxy-manager:
-    image: 'jc21/nginx-proxy-manager:latest'
-    restart: unless-stopped
-    container_name: nginx_proxy_manager
-    networks:
-      - nginx_proxy_network
-    #network_mode: host
-    ports:
-    #   # These ports are in format <host-port>:<container-port>
-      - '80:80' # Public HTTP Port
-      - '443:443' # Public HTTPS Port
-      - '81:81' # Admin Web Port
-    #   # Add any other Stream port you want to expose
-    #   # - '21:21' # FTP
-
-    # Uncomment the next line if you uncomment anything in the section
-    environment:
-      # Uncomment this if you want to change the location of 
-      # the SQLite DB file within the container
-      # DB_SQLITE_FILE: "/data/database.sqlite"
-
-      # Uncomment this if IPv6 is not enabled on your host
-      TZ: "Europe/Bucharest"
-      DISABLE_IPV6: "true"
-    healthcheck:
-      test: ["CMD", "/bin/check-health"]
-      interval: 10s
-      timeout: 3s
-    volumes:
-      - nginx_data:/data
-      - nginx-letsencrypt:/etc/letsencrypt
-
-volumes:
-  nginx_data:
-  nginx-letsencrypt:
-
-networks:
-  nginx_proxy_network:
-    external: true
 ```
 
 Firefly-iii will communicate with NGINX through the proxy network, which is external, and with the database through the internal network. Since we do not expose ports for MariaDB, we do not need to add it to the proxy network.
