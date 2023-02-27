@@ -40,7 +40,7 @@ When you open a file, by default it is opened in *normal mode*.
 * ```yy``` - yank or copy the current line
 * ```p``` - paste the copied text before the cursor
 * ```Vd``` + ```p``` - Select current line, cut, and paste somewehere else
-* `ddk` - Move line down
+* `ddjP` - Move line down
 * `ddkP` - Move line up
 * ```u``` - undo your last action
 * ```Ctrl-r``` - redo your last action
