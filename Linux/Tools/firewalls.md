@@ -50,7 +50,6 @@ Running a command such as ```iptables -A INPUT -p icmp -j ACCEPT``` will apply t
 
 This can be done in two ways:
 
-
 * Edit the ```iptables``` rules file by adding ```-A INPUT -p icmp -j ACCEPT``` to the file then run ```systemctl restart iptables``` or run `iptables-apply /etc/iptables/rules.v4`
   * Ubuntu: ```/etc/iptables/rules.v4```
   * RHEL based distributions: ```/etc/sysconfig/iptables```
@@ -74,6 +73,22 @@ iptables -L -n
 ```
 
 If you want to display or add rules from or to a specific table (such as NAT), pass the ```-t nat``` to the commands above.
+
+A NAT table looks like this:
+
+```bash
+*nat
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+
+# Your rules go here just as in the filter table
+
+COMMIT
+```
+
+**Filter and NAT tables are placed inside the same file. Just do not forget to add `COMMIT` for each table and do not mix up the rules.**
 
 ### Forwarding
 
