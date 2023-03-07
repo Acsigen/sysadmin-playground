@@ -9,6 +9,8 @@ This guide presents the basic setup for the most used Linux firewalls.
 Iptables minimum required rules:
 
 ```bash
+# The default table is set to filter
+*filter
 # Default policies
 # You can set the policies on the fly with -P
 :INPUT DROP [0:0]
