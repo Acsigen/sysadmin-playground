@@ -11,3 +11,9 @@ You installed a ```.deb``` package using ```dpkg`` but it has missing dependenci
 ```bash
 apt -f install
 ```
+
+## Check if system needs a reboot after the last update
+
+```bash
+sudo needrestart
+```
