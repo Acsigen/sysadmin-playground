@@ -15,6 +15,7 @@
 * [Less](Tools/less.md)
 * [Links](Tools/links.md)
 * [MySQL/MariaDB](Tools/mysql.md)
+* [OpenSSL](Tools/openssl.md)
 * [PostgreSQL](Tools/postgresql.md)
 * [Quotes](Tools/quotes.md)
 * [RegEx and Wildcards](Tools/regex-and-wildcards.md)
