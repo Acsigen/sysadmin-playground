@@ -385,9 +385,18 @@ services: # Mandatory
   ubuntu-server: # Mandatory - Application/Service name, must be unique
     image: ubuntu:latest # Mandatory - usually from Docker Hub, can also be a local one
     container_name: "ubuntu-machine" # Optional - Useful for finding the container in the list
-    command: ["sleep","infinity"] # Optional - Usually used as extra args for the main command running inside the container, also great for debugging or use the container as a VM with `bash sleep infinity` as in this case
+    pid: "host" # Optional - You can use this to share the namespace with the host or another container: pid: "container:apache-container"
+    deploy: # Optional - Configure deployment settings
+      resources:
+        limits: # Configure the upper limit
+          cpus: "0.50" # 50% of a single core
+          memory: "50M" # Memory upper limit
+        reservations: # Configure lower limits
+          cpus: "0.25" # Reserve 25% of a single core
+          memory: "20M" # Reserve a 20MB of RAM memory
+    command: ["sleep","infinity"] # Optional - Usually used as extra args for the main command running inside the container, also great for debugging or use the container as a VM with `bash sleep infinity` as in this case. Alternatively you can use command: ["tail","-f","/dev/null"]
     restart: unless-stopped # Optional - Restart policy (always, unless-stopped, never)
-    ports: # Optional - this wil expose ports host_port:container_port. Normally, Docker will open them automatically in firewall if specified. You do not need to open ports for the containers to connect to eachother on the same stack
+    ports: # Optional - this wil expose ports host_port:container_port. Also you can expose a port only to localhost or a specific IP by using 127.0.0.1:host_port:container_port Normally, Docker will open them automatically in firewall if specified. You do not need to open ports for the containers to connect to eachother on the same stack
       - 3000:3000
     volumes: # Optional - You can map files or directories inside the container for data persistency or configs. The destination will be overriden by the source.
       - ./:/app # bind volume short syntax
