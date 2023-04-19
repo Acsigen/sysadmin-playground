@@ -61,6 +61,17 @@ You can also activate `systemd` inside an instance with the following settings p
 systemd=true
 ```
 
+## Manage Storage
+
+```bash
+fstrim -a
+```
+
+```powershell
+wsl --shutdown
+Optimize-VHD "C:\Users\<my_user>\AppData\Local\Packages\CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc\LocalState\ext4.vhdx" -Mode full
+```
+
 **In order to apply the settings mentioned above you will need to restart the WSL instance.**
 ## Sources
 
