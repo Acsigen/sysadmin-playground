@@ -61,18 +61,24 @@ You can also activate `systemd` inside an instance with the following settings p
 systemd=true
 ```
 
+**In order to apply the settings mentioned above you will need to restart the WSL instance.**
+
 ## Manage Storage
 
+The storage of Ubuntu distribution (also any distribution) is using a `.vhd` file. It will dynamically grow acording to the distribution needs. The main issue is that it will not shrink automatically so we need to perform some maintenance from time to time.
+
+You need to run the following command from inisde the distribution, once you cleaned up your space from it.
+
 ```bash
-fstrim -a
+sudo fstrim -a
 ```
 
+Now you need to stop the WSL distribution and optimise the `vhd` file (**If you do not have `Optimize-VHD` command, you will need to install Hyper-V on your Windows host**).
 ```powershell
 wsl --shutdown
 Optimize-VHD "C:\Users\<my_user>\AppData\Local\Packages\CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc\LocalState\ext4.vhdx" -Mode full
 ```
 
-**In order to apply the settings mentioned above you will need to restart the WSL instance.**
 ## Sources
 
 - [Microsoft Docs - Install](https://learn.microsoft.com/en-us/windows/wsl/install)
