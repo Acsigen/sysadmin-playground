@@ -79,6 +79,17 @@ wsl --shutdown
 Optimize-VHD "C:\Users\<my_user>\AppData\Local\Packages\CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc\LocalState\ext4.vhdx" -Mode full
 ```
 
+## Manage permissions
+
+To enable Linux permissions for Windows mounted files and directories inside WSL, append the following content to `/etc/wsl.conf` file:
+
+```conf
+[automount]
+options = "metadata"
+```
+
+Use this with caution, it might block Windows users from accessing those specific files and directories if permissions are to tight.
+
 ## Sources
 
 - [Microsoft Docs - Install](https://learn.microsoft.com/en-us/windows/wsl/install)
