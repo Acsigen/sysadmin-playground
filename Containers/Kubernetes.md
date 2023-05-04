@@ -28,12 +28,12 @@ Anatomy of k8s:
 
 - Cluster
   - Node (baremetal or virutal server)
-    - Pod
+    - Pod (it acts as a container manager)
       - Container
 
 **Multiple nodes will not automatically form a cluster. You need to group them manually.**
 
-Usually there is a *master node* and multiple *worker nodes*.
+Usually there is a *master node* (also called Control Plane) and multiple *worker nodes*.
 
 The master node runs only system pods, the deployment takes place only in worker nodes.
 
@@ -60,6 +60,34 @@ To run k8s locally you need to to use **microk8s** which is a *powerful, lightwe
 
 **For this guide we use an alias `k="microk8s kubectl"` to make it easier to type.**
 
+To create a cluster with multiple nodes, install `microk8s` on each node and then run the following commands:
+
+```bash
+# Pick a node which will serve as a master node
+microk8s add-node
+
+# Join the cluster from a worker node
+microk8s join <master-node-ip>:<port>/<token>
+
+# Check cluster nodes status
+k get nodes
+```
+
+Now, you have a MicroK8s cluster with 3 nodes. If you want to use the host's `kubectl` command instead of microk8s kubectl, you can generate the required kubeconfig file by running:
+
+```bash
+cd $HOME
+mkdir .kube
+cd .kube
+microk8s config > config
+```
+
+Keep in mind that most MicroK8s commands require superuser access.
+
+```bash
+sudo usermod -aG microk8s $USER
+```
+
 ## Basic commands
 
 |Command|Action|
@@ -78,11 +106,31 @@ To run k8s locally you need to to use **microk8s** which is a *powerful, lightwe
 
 Just to clarify, ***namespaces** are a way to organize clusters into virtual sub-clusters, they can be helpful when different teams or projects share a Kubernetes cluster. Any number of namespaces are supported within a cluster, each logically separated from others but with the ability to communicate with each other.*
 
+## Workloads
+
+A workload is an application running in Kubernetes:
+
+- Pod
+- ReplicaSet
+- Deployment
+- StatefulSet
+- DaemonSet
+  - Provice node-local facilities, such as a storage driver or network plugin
+- Task that run to completion
+  - Job
+  - CronJob
+
 ## Pods
 
 **Pod** is the smallest unit in the k8s world. Containers are created inside the pod. A pod can run multiple containers withn a single namespace, exposed by a single IP address. Kubernetes doesn't manage containers directly, it manages containers through pods.
 
-Although the standard is one container in a pod, multiple containers in a pod are used in specific cases such as logging and monitoring.
+Although the standard is one container in a pod, multiple containers in a pod are used in specific cases such as logging and monitoring (main container and helper container).
+
+Common cases:
+
+- **Sidecar**: The main container writes log to files and the helper container transfers the log files to a persistent storage
+- **Adapter**: The main container outputs monitoring data and the helper container simplifies the data in order to be processed by the monitoring solution
+- **Ambassador**: The main container needs to write data to a database and the helper will receive the data and send it to the database (which is outside the pod).
 
 There is also the posibility to run *naked* pods, they are the pods that you can create directly through a definition file. Try to avoid these ones, they have many disadvantages (cannot be scaled, cannot be replaced automatically, etc.)
 
@@ -91,6 +139,22 @@ A pod contains:
 - Containers
 - Shared Volumes
 - Shared IP Address
+
+An example of a configuration file for a Pod looks like this:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypods
+  namespace: default
+spec:
+  containers:
+    - name: nginx
+      image: nginx:stable-alpine
+      ports:
+        - containerPort: 80
+```
 
 ### Pod Troubleshooting
 
@@ -110,41 +174,39 @@ You can use `k port-forwarding my-nginx-pod 8080:80 &` to test the accessibility
 
 A **SecurityContext** defines privilege and access control settings for a Pod or container. Use `k explain pod.spec.securityContext` or `k explain pod.spec.containers.securityContext` for further details.
 
-## Jobs
+## ReplicaSets
 
-Pods are normally created to run forever. If you want to create a pod that performs a task and then stops, use a *Job* instead (Tasks like: backup, calculation, batch processing, etc.). You can also use `spec.ttlSecondsAfterFinished` to clean up completed *Jobs* automatically ebcause you don't want to keep those *completed Jobs* and *completed pods* forever.
+They are the primary method of managing pod replicas and their lifecycle to provide self-healing capabilities.
 
-There are three different Job types:
+Their job is to always ensure the desired number of pods are running.
 
-|Name|Description|Configuration|
-|---|---|---|
-|Non-parallel Jobs (default)|One pod is started, unless the pod fails|- `completions=1` <br> - `parallelism=1`|
-|Parallel Jobs with a fixed completion count|The Job is complete after successfully running as many times as specified in `jobs.spec.completions`|- `completions=x` <br> - `parallelism=y`|
-|Parallel Jobs with a work queue|Multiple Jobs are started, when one completes successfully, the Jobs is complete. Frequently, the `parallelism` is set equal to the number of nodes on which you want this job to run|- `completions=1` <br> - `parallelism=x`|
+Although the ReplicaSets are the primary method, the recommended way is to create [Deployments](#deployments).
 
-You can also use a **CronJob* to schedule a Job. It works just like a `cron` job works in Linux. Check the syntax by running `k create cronjob -h`.
+An example of a ReplicaSet can be found here:
 
-## GUI/Web interface
-
-Kubernetes dashboard provides a web interface to manage kubernetes.
-
-In microk8s it is quite easy to deploy, just use `microk8s enable dashboard`.
-
-For other environments it might be more difficult because you need to secure access to the dashboard.
-
-**Do not use dashboard on the public internet!**
-
-## Resource limitations and quota
-
-By default, the pod wont't have any resource limitations in terms of CPU and memory to perform the tasks.
-
-This can be managed by using Memory/CPU requests and limits in `pod.spec.containers.resources`. A request is an initial request for resources, think of it as the minimum required amount of resources. A limit defines the upper treshold.
-
-CPU limits are expressed in milicore ore milicpu, 1/1000 of a CPU core: `500 milicore = 0.5 CPU`
-
-When using a deployment, use `k set resources` to change resource limitations on running applications with zero downtime. This doesn't work on pods, they don't provide an update mechanism.
-
-You can also use resource limitations in combination with quota on namespaces to restrict these applications in specific namespaces only.
+```yaml
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: rs-example
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+      type: front-end
+  template:
+    metadata:
+      labels:
+        app: nginx
+        type: frontend
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:stable-alpine
+          ports:
+            - containerPort: 80
+```
 
 ## Deployments
 
@@ -152,11 +214,44 @@ Deployments is the standard for running applications in K8s.
 
 In case of deployments, pods are managed entities, you cannot manage pods independently if they are inside a deployment.
 
-The deployment is helped by the replica set. The replica set takes care of the replication and if the desired number is not fulfilled it will start pods automatically to meet the requirements.
+A Deployment will create a ReplicaSet in the background. You do not interact with it directly. The Deployment manages the ReplicaSet
+
+The deployment is helped by the ReplicaSet. The ReplicaSet takes care of the replication and if the desired number is not fulfilled it will start pods automatically to meet the requirements.
 
 In K8s, Deployments are considered stateless applications because they don't need to store and keep track of data. Every interaction is considered new.
 
 Also check [Stateful Sets](#statefulsets) for stateful applications.
+
+A Deployment configuration file looks like this:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 3
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: nginx
+      env: prod
+  strategy:
+    type: RollingUpdate # RollingUpdate|Recreate
+      maxSurge: 1 # Maximum number of Pods that can be created over the desired number of Pods (default: 25%)
+      maxUnavailable: 1 # Maximum number of Pods that can be unavailable during the update (default: 25%)
+    template:
+      # The following section consists of a chunk of the Pod Definition file (see Pods chapter)
+      metadata:
+        name: mypods
+        namespace: default
+      spec:
+        containers:
+          - name: nginx
+            image: nginx:stable-alpine
+            ports:
+                - containerPort: 80
+```
 
 ### Create deployments
 
@@ -312,6 +407,48 @@ k delete deployment nginx-deployment
 k delete service nginx-deployment
 ```
 
+## DaemonSets
+
+A DaemonSet ensures that all nodes run an instance of a Pod.
+
+The pods are scheduled by tge scheduler controller and run by the daemon controller. As nodes are added to the cluster, Pods are added to them.
+
+Typical usecases:
+
+- Running a cluster storage daemon
+- Running a logs collection daemon on every node
+- Running a node monitoring daemon on every node
+
+A DaemonSet configuration file looks like this:
+
+```yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: daemonset-example
+  labels:
+    app: daemonset-example
+spec:
+  selector:
+    matchLabels:
+      app: daemonset-example
+  template:
+    metadata:
+      labels:
+        app: daemonset-example
+    spec:
+      # Don't schedule one on the master node
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+      container:
+        - name: busybox
+          image: busybox
+          args:
+            - sleep
+            - "10000"
+```
+
 ## StatefulSets
 
 In K8s, a StatefulSet is a component that is specific to stateful applications.
@@ -325,6 +462,138 @@ When compared to Deployment Pods, the Pods created by a StatefulSet are not inte
 The unique ID is required because, when using multiple database replicas, one Pod will act as the Master (rw) and the other ones as Slaves (ro). Also, each Pod will use a difrerent physical storage.
 
 Check the K8s Documentation for further details.
+
+To define a StatefulSet we need to configure a Headless Service first:
+
+```yaml
+apiVersion: apps/v1
+kind: Service
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+spec:
+  ports:
+    - name: mysql
+      port: 3306
+  clusterIP: None # None = Headless Service
+  selector:
+    app: mysql
+```
+
+Then define the StatefulSet like this:
+
+```yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+spec:
+  serviceName: mysql # Points to the Service created beforehand
+  replicas: 4
+  selector:
+    matchLabels:
+      run: nginx-sts-demo
+  template:
+    metadata:
+      labels:
+        run: nginx-sts-demo
+    spec:
+      containers:
+        - name: init-mysql
+        image: mysql:5.7
+        volumeMounts:
+          - name: conf
+            mountPath: /mnt/conf.d
+columeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      # Cloud Storage
+      storageClassName: default
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+```
+
+**WARNING! Containers are stateles by design. StatefulSets offers a solution for stateful scenarios. A better approacs could be to use Cloud provider database services. Deliting a StatefulSet will node delete the PersistentVolumeClaims, you have to do it manually.**
+
+## Jobs
+
+Pods are normally created to run forever. If you want to create a pod that performs a task and then stops, use a *Job* instead (Tasks like: backup, calculation, batch processing, etc.). You can also use `spec.ttlSecondsAfterFinished` to clean up completed *Jobs* automatically ebcause you don't want to keep those *completed Jobs* and *completed pods* forever.
+
+There are three different Job types:
+
+|Name|Description|Configuration|
+|---|---|---|
+|Non-parallel Jobs (default)|One pod is started, unless the pod fails|- `completions=1` <br> - `parallelism=1`|
+|Parallel Jobs with a fixed completion count|The Job is complete after successfully running as many times as specified in `jobs.spec.completions`|- `completions=x` <br> - `parallelism=y`|
+|Parallel Jobs with a work queue|Multiple Jobs are started, when one completes successfully, the Jobs is complete. Frequently, the `parallelism` is set equal to the number of nodes on which you want this job to run|- `completions=1` <br> - `parallelism=x`|
+
+A Job configuration file looks like this:
+
+```yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+spec:
+  activeDeadlineSeconds: 30 # Max seconds to run
+  parallelism: 3 # How many pods should run in parallel
+  completions: 3 # How many successful pod completions are needed to mark a job as completed
+  template:
+    spec:
+      containers:
+        - name: pi
+          image: perl
+          command: ["perl","-Mbignum=bpi","-wle","print bpi(2000)"]
+```
+
+You can also use a **CronJob* to schedule a Job. It works just like a `cron` job works in Linux. Check the syntax by running `k create cronjob -h`.
+
+A CronJob configuration file looks like this:
+
+```yaml
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: hello-cron
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: busybox
+              image: busybox
+              command: ["echo","Hello from the CronJob"]
+          restartPolicy: Never
+```
+
+## GUI/Web interface
+
+Kubernetes dashboard provides a web interface to manage kubernetes.
+
+In microk8s it is quite easy to deploy, just use `microk8s enable dashboard`.
+
+For other environments it might be more difficult because you need to secure access to the dashboard.
+
+**Do not use dashboard on the public internet!**
+
+## Resource limitations and quota
+
+By default, the pod wont't have any resource limitations in terms of CPU and memory to perform the tasks.
+
+This can be managed by using Memory/CPU requests and limits in `pod.spec.containers.resources`. A request is an initial request for resources, think of it as the minimum required amount of resources. A limit defines the upper treshold.
+
+CPU limits are expressed in milicore ore milicpu, 1/1000 of a CPU core: `500 milicore = 0.5 CPU`
+
+When using a deployment, use `k set resources` to change resource limitations on running applications with zero downtime. This doesn't work on pods, they don't provide an update mechanism.
+
+You can also use resource limitations in combination with quota on namespaces to restrict these applications in specific namespaces only.
 
 ## Create services, pods, and deployments using YAML
 
@@ -400,11 +669,82 @@ To delete deployments you can run `k delete -f mypods.yaml`.
 kubectl run mynginx --image=nginx --dry-run=client -o yaml > mynginx.yaml
 ```
 
+Also, you can get the definition file from an already running pod with the following command:
+
+```bash
+k get pod mynginx -o yaml > mynginx.yaml
+```
+
 ### INIT containers
 
 An init container is an additional container in a pod that completes a task before the main container is started. The main container will only be started once the init container has been started.
 
 You can use `initContainers` argument in the YAML configuration file to declare the init container, the rest of the arguments underneath it are standard arguments for one or more containers.
+
+### Selectors
+
+When defining Kubernetes resources, you can define *Labels*. These labels are key-value pairs (that you define by yourself) that are being used to identify, describe, and group related sets of objects or resources.
+
+**Selectors** use labels to filter or select objects.
+
+Let's assume we have two Kubernetes nodes. One of them has the label `storagespeed: fast` and the other one has the label `storagespeed: slow`.
+
+When creating a pod, we can specify on which node we prefer to deploy the resources based on the storage speed we need for that pod:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypods
+  namespace: default
+  labels:
+    app: mynginx
+    type: front-end
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+  nodeSelector:
+    storagespeed: fast
+```
+
+An analogy with SQL looks like this *Deploy my pod on node `SELECT * FROM nodes WHERE storagespeed = fast`*.
+
+Another scenario is when we want to connect a pod to a service.
+
+```yaml
+# Pod configuration file
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+  labels:
+    app: myapp
+    type: front-end
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx
+    ports:
+    - containerPort: 80
+```
+
+```yaml
+# Service configuration file
+apiVersion: v1
+kind: Service
+metadata:
+ name: myservice
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: myapp
+    type: front-end
+```
+
+In this scenario, the service will point to the pod only if both labels match.
 
 ## Namespaces
 
@@ -460,9 +800,62 @@ In Kubernetes a service has a different meaning when compared to Linux services:
 
 Service types:
 
-- **ClusterIP**: is the default Kubernetes service for internal communications. However, external traffic can access the default Kubernetes ClusterIP service through a proxy. This can be useful for debugging services or displaying internal dashboards. **Services are reachable by pods/services in the Cluster.**
-- **NodePort**: opens ports on the nodes or virtual machines, and traffic is forwarded from the ports to the service. It is most often used for services that don’t always have to be available, such as demo applications. **Services are reachable by clients on the same LAN/clients who can ping the K8s Host Nodes.**
+- **ClusterIP**: is the default Kubernetes service for internal communications. However, external traffic can access the default Kubernetes ClusterIP service through a proxy. This can be useful for debugging services or displaying internal dashboards.
+**Services are reachable by pods/services in the Cluster.**
+  
+  ```yaml
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: svc-example
+  spec:
+    ports:
+      - port: 80
+        targetPort: 8080
+    selector:
+      app: app-example
+      env: prod
+  ```
+
+  On the Deployment definition the container must have: `- containerPort: 8080`.
+- **NodePort**: opens ports on the nodes or virtual machines, and traffic is forwarded from the ports to the service. It is most often used for services that don't always have to be available, such as demo applications. **Services are reachable by clients on the same LAN/clients who can ping the K8s Host Nodes.**
+
+  ```yaml
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: svc-example
+  spec:
+    type: NodePort
+    selector:
+      app: nginx
+      env: prod
+    ports:
+      - nodePort: 32410 # Must be between 30000 - 32767
+      protocol: TCP
+      port: 8080 # As with ClusterIP
+      targetPort: 80 # As with ClusterIP
+  ```
+  
+  The external world will connect to `<node-IP>:32410` and then be redirected to `<ClusterIP>:8080` &rarr; `<pod-ip>:80`.
 - **LoadBalancer**: is the standard way to connect a service externally to the internet. In this scenario, a network load balancer forwards all external traffic to a service. Each service gets its own IP address. **Services are reachable by everyone connected to the internet.**
+
+  ```yaml
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: svc-example
+  spec:
+    type: LoadBalancer
+    selector:
+      app: nginx
+      env: prod
+    ports:
+      - protocol: TCP
+        port: 8080 # As with ClusterIP
+        targetPort: 80 # As with ClusterIP
+  ```
+
 - **Ingress**: acts as a router or controller to route traffic to services via a load balancer. It is useful if you want to use the same IP address to expose multiple services.
 
 ### Connect different deployments together
@@ -685,5 +1078,6 @@ To change the container runtime you need to change the microk8s configuration in
 
 ## Sources
 
+- [CNCF Landscape](https://landscape.cncf.io/)
 - [FreeCodeCamp YouTube Channel](https://youtu.be/d6WC5n9G_sM)
 - [VMWare Glossary](https://www.vmware.com/topics/glossary/content/kubernetes-networking.html#:~:text=Kubernetes%20networking%20allows%20Kubernetes%20components,host%20ports%20to%20container%20ports.)
