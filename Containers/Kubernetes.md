@@ -307,6 +307,30 @@ The command that handles autoscaling works like this `k autoscale deployment my-
 
 For more details run `k autoscale -h`.
 
+An AutoScaling configuration file looks like this:
+
+```yaml
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAudoscaler
+metadata:
+  name: php-apache
+  namespace: default
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: deploy-example
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targer:
+          type: Utilization
+          agerageUtilization: 50
+```
+
 ### Port mapping
 
 Pods get their IPs dinamically, and those IP addresses are accessible only from inside the node.
@@ -581,7 +605,12 @@ In microk8s it is quite easy to deploy, just use `microk8s enable dashboard`.
 
 For other environments it might be more difficult because you need to secure access to the dashboard.
 
-**Do not use dashboard on the public internet!**
+**Do not expose K8s dashboard to the public internet!**
+
+There are a few alternatives to the default K8s dashboard such as:
+
+- [Lens](https://k8slens.dev/) - Standalone Software
+- [K9s](https://k9scli.io/) - CLI Dashboard
 
 ## Resource limitations and quota
 
@@ -878,15 +907,17 @@ Ingress controllers are provided by the community (HAProxy, NGINX, Traefik, etc.
 
 In Kubernetes, the Pod storage maps the storage defined at the container level to any type of storage (local or cloud).
 
-You can use a Pod Volume or PVC (Persistent Volume Claim).
+### Persistent Volumes and Persistent Volume Claims (Static Storage)
 
-Pod Volumes are used to allocate storage that outlives a container and stays available during Pod lifetime and it can be directly bound to a specific storage type (e.g. storage on the node like you bind storage on the Docker host).
+Persistent Volumes represents a storage resource that is available at the cluster level and it is provisioned by the administrator.
+
+Persistent Volumes are used to allocate storage that outlives a container and stays available during Pod lifetime and it can be directly bound to a specific storage type (e.g. storage on the node like you bind storage on the Docker host).
+
+Persistent Volme Claim is a one-to-one mapping to a persistent volume. One or mroe pods can use a PVC and they can be consumed by any of the containers withn the pod.
 
 With PVC, you request a bind access to a persistent volume. If there is not an exact match of specifications, the PVC will request a Storage Class which will create the Persistent Volume on demand according to your needs.
 
-### Volume Types
-
-There are multiple types of Pod Volumes (`pod.spec.volumes`):
+There are multiple types of Persistent Volumes accesible though plugins provided by variuls cloud providers (`pod.spec.volumes`). For local deployments of K8S, we can use the following special types (these volume types will not work on multi-node clusters):
 
 - `emptyDir`: Temporary directory that will be created on the host
 - `hostPath`: Persistent directory that will be mapped to an existing directory on the host
@@ -895,21 +926,233 @@ To mount these volumes you need to configure `pod.spec.containers.volumeMounts`.
 
 For more volume types check `k explain pod.spec.volumes`.
 
+To use the PV and PVCs with a Pod, we need to define the elements in the following order:
+
+- Define the Persistent Volume (10GB)
+- Define a Persistent Volume Claim (1GB)
+- Instruct the Pod to use that PVC of 1GB
+
+**Pay attention to Reclaim Policies, these policies define what happends with the storage when the PVC is released.**
+
+Reclaim Policies:
+
+- Delete: Deletes the data upon pod deletion (default)
+- Retain: Keep the data opn pod deletion
+
+Access Modes:
+
+- ReadWriteMany: The volume can be mountd as read-write by many pods
+- ReadOnlyMany: The volume can be mounted read-only by many pods
+- ReadWriteOnce: The volume can be mounted as read-write by a single pod. The other pods are in read-only mode. The one that has mounted the volume first will be able to write data.
+
+A Persistent Volume configuration file looks like this:
+
+```yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv001
+  labels:
+    type: local
+spec:
+  storageClassName: ssd
+  capacity:
+    storage: 10Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce # This must match with PVC
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: "/data/"
+```
+
+A Persistent Volume Claim configuration file looks like this:
+
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: myclaim
+spec:
+  accessModes:
+    - ReadWriteOnce # This must match with PV
+  resources:
+    requests:
+      storage: 8Gi # The remaining 2Gi cannot be claimed until the claim is released
+selector:
+  matchLabels:
+    type: local
+```
+
+To use the PVC within a Pod configure it like this:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  containers:
+    - name: myfrontend
+      image: nginx
+      volumeMounts:
+        - mountPath: "/var/www/html"
+          name: mypd
+  volumes:
+    - name: mypd
+      persistentVolumeClaim:
+        claimName: myclaim
+```
+
+PV states:
+
+- Available: A free resource that is not yet bound to a claim
+- Bound: The volume is bound to a claim
+- Released: THe claim has been deleted, the resource is not yet relaimed by the cluster
+- Failed: The volume has failed its automatic reclamation
+
+### Storage Class (Dynamic Storage)
+
+Storage Class describes the *classes* of storage offered by the admin. They are an abstraction on top of an external storage resource. There is no need to set a capacity. It also eliminates the need for the admin ro pre-provision a persistent volume.
+
+Storage Class supports many claims so the issues introduced by PVCs are no longer present.
+
+To use the Storage Class and PVCs with a Pod, we need to define the elements in the following order:
+
+- Define the Storage Class (no size required)
+- Define a Persistent Volume Claim (1GB)
+- Instruct the Pod to use that PVC of 1GB which is mapped on a directory inside the pod
+
+**The Reclaim Policies are the same as with PVCs. The default value is Delete.**
+
+**Access modes are the same as with PVCs.**
+
+A Storage Class configuration file looks like this:
+
+```yaml
+Kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: standard
+provisioner: kubernetes.io/azure-disk # External plugin
+parameters:
+  storageaccounttype: Standard_LRS # Provisioner's parameters
+  kind: Managed
+```
+
+A Persistent Volume Claim configuration file looks like this:
+
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: azure-disk-pvc
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce # This must match with StorageClass
+  resources:
+    requests:
+      storage: 8Gi
+```
+
+To use the Storage Class within a Pod configure it like this:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  containers:
+    - name: myfrontend
+      image: nginx
+      volumeMounts:
+        - mountPath: "/usr/share/nginx/html"
+          name: storage
+  volumes:
+    - name: storage
+      persistentVolumeClaim:
+        claimName: azure-disk-pvc
+```
+
 ## ConfigMaps
 
-### Create ConfigMaps
-
-It's best practice to separate site-specific information from code.
-
-Kubernetes provides *ConfigMaps* to deal with this issue.
-
 A ConfigMap is being used to define the variables and the Deployment will point to the ConfigMap.
+
+The configuration values are passed as environment variables to the pod.
 
 You can use ConfigMaps for the following purposes:
 
 - Pass variables
 - Provide configuration files
 - Pass command line arguments
+
+They are created from:
+
+- Manifests
+- Files
+- Directories (containing one or more files)
+
+ConfigMaps are static, meaning that if you change values, the containers will have to be restarted to get them.
+
+A ConfigMap configuration file looks like this:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm-example
+data:
+  state: Michigan
+  city: Ann Arbor
+  content: |
+    Hello,
+    World!
+```
+
+To pass the variables into the pod, the configuration file look like this:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-example
+spec:
+  containers:
+    - name: test-container
+      image: busybox
+      env:
+        - name: STATE
+          valueFrom:
+            configMapKeyRef:
+              name: cm-example
+              key: state
+```
+
+To get around the static issue of ConfigMaps you can map a Volume in a ConfigMap. Updates are reflected in the containers. Each key-value pair is seen as a file in the mounted directory (the name of the file will be the key and the value will be the content of the file).
+
+This implies a restructure of your code since instead of reading environment variables, you will be reading files.
+
+A Pod configuration file which maps a ConfigMap as a volume looks like this:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-example
+spec:
+  volumes:
+    - name: volmap
+      configMap:
+        name: cm-example
+containers:
+  - name: test-container
+    image: nginx
+    volumeMounts:
+      - name: volmap
+        mountPath: /etc/config
+```
 
 **The ConfigMap should exist in the cluster before running the application.**
 
@@ -927,15 +1170,15 @@ To use the ConfigMap in your Deployment run `k set env --from=configmap/myConfig
 
 You can also use the `--dru-run=client` and the redirect operator on `k create deploy` and `k set env` commands to generate the ConfigMap YAML configuration file.
 
-### Secrets
+## Secrets
+
+Secrets are similar to ConfigMaps with the exception that it stores data encoded with `base64`. **Secrets are not encrypted, they are only encoded in `base64`.**
 
 There are three types of secrets that you can use:
 
 - `docker-registry`: Used for authenticating in a private registry
 - `TLS`: Used to store TLS keys
 - `generic`: Creates a secret from a local file, firectory, or literal value
-
-Secrets are not encrypted they are only `base64` encoded.
 
 All Kubernetes resources need to access TLS keys. These keys are provided by Secrets and used through ServiceAccounts.
 
@@ -944,6 +1187,59 @@ A ServiceAccount acts like a user that comes with credentials that allows a Pod 
 Every single pod has its own ServiceAccount.
 
 RBAC is used to connect a ServiceAccount to a specific Role.
+
+A Secret configuration file looks like this:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  - name: my-secrets
+type: Opaque
+data:
+  username: fdsakjsdlkjf==
+  password: dfsjlkhfddsdslda==
+```
+
+To use the Secret in a Pod, the configuration looks like this:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  - name: pod-example
+spec:
+  containers:
+    - name: test-container
+      image: nginx
+      env:
+        - name: USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: my-secrets
+              key: username
+```
+
+Similar to ConfigMaps, you can mount a volume ontop of Secrets:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-example
+spec:
+  volumes:
+    - name: volmap
+      secret:
+        name: my-secrets
+containers:
+  - name: test-container
+    image: nginx
+    volumeMounts:
+      - name: volmap
+        mountPath: /etc/secrets
+        readOnly: true
+```
 
 Example of `coredns` secrets:
 
@@ -1071,6 +1367,48 @@ The probe is actually a simple command. The following probe types are defined in
 - `exec`: a command is executed and returns a zero exit value
 - `httpGet`: an HTTP request returns a response code between 200 and 399
 - `tcpSocket`: connectivity to a TCP socket (available port) is successful
+
+The definition file for probes looks like this:
+
+```yaml
+apiVersion: v1
+kind: Pod
+...
+spec:
+  containers:
+    - name: goproxy
+      ...
+      # If it fails, K8S will stop sending traffic to this pod
+      readinessProbe:
+        tcpSocker:
+          port: 8080
+        initialDelaySeconds: 5
+        periodSeconds: 10
+      # If it fails, K8S will restart the pod
+      livenessProbe:
+        tcpSocket:
+          port: 8080
+        initialDelaySeconds: 15
+        periodSeconds: 20
+      startupProbe:
+        httpGet:
+          path: /healtz
+          port: 80
+        failureThreshold: 3
+        periodSeconds: 10
+```
+
+You can also run a command inside a probe to change what to check:
+
+```yaml
+livenessProbe:
+  exec:
+    command:
+      - cat
+      - /tmp/healthy
+    initialDelaySeconds: 5
+    periodSeconds: 5
+```
 
 ## Change container runtime from Docker to CRI-O
 
