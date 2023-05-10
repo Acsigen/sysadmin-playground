@@ -147,6 +147,12 @@ Launch an instance and assign the ```bridged-network``` profile to it:
 lxc launch ubuntu:16.04 --profile bridged-network
 ```
 
+List the available containers:
+
+```bash
+lxc list
+```
+
 ### Delete an instance
 
 Make sure that the instance is stopped before deleting it:
