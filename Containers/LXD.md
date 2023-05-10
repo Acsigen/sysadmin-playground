@@ -346,6 +346,33 @@ You can also view the help for a specific option:
 lxc profile help
 ```
 
+## Uninstall LXD/LXC
+
+- Run `lxc profile edit default` and remove the devices and storage sections
+- Run the following script:
+
+  ```bash
+  #!/bin/bash
+
+  # Set the values for the variables below according to your needs
+  NETWORK_NAME="lxdbr0"
+  STORAGE_POOL_NAME="default"
+  PROFILE_NAME="default"
+
+  # Remove the root device from the profile
+  lxc profile device remove $PROFILE_NAME root
+
+  # Delete the network
+  lxc network delete $NETWORK_NAME
+  
+  # Delete the storage pool
+  lxc storage delete $STORAGE_POOL_NAME
+  ```
+
+- Run: `snap remove lxd --purge && apt remove lxc`
+- Run: `userdel lxd ; groupdel lxd; userdel lxc ; groupdel lxc`
+- Check other users and groups related to LXD/LXC by checking `/etc/shadow` and `/etc/group` files.
+
 ## Sources
 
 * [Linux Containers Website](https://linuxcontainers.org/)
