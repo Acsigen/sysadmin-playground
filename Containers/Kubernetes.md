@@ -892,7 +892,7 @@ Service types:
   kind: Secret
   metadata:
     name: jenkins-tls-secret
-    namespace: ingress
+    namespace: devops-tools
   type: kubernetes.io/tls
   data:
     tls.crt: <base-64-cert-contents>
