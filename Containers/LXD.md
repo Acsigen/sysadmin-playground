@@ -369,7 +369,7 @@ lxc profile help
   lxc storage delete $STORAGE_POOL_NAME
   ```
 
-- Run: `snap remove lxd --purge && apt remove lxc`
+- Run: `snap remove lxd --purge && apt remove lxc*`
 - Run: `userdel lxd ; groupdel lxd; userdel lxc ; groupdel lxc`
 - Check other users and groups related to LXD/LXC by checking `/etc/shadow` and `/etc/group` files.
 
