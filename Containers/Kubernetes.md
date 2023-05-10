@@ -886,6 +886,44 @@ Service types:
   ```
 
 - **Ingress**: acts as a router or controller to route traffic to services via a load balancer. It is useful if you want to use the same IP address to expose multiple services.
+  
+  ```yaml
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: jenkins-tls-secret
+    namespace: ingress
+  type: kubernetes.io/tls
+  data:
+    tls.crt: <base-64-cert-contents>
+    tls.key: <base-64-cert-contents>
+  ---
+  apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    name: http-ingress
+    namespace: devops-tools # The Ingress must be in the same namespace with the Service and Secret
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      kubernetes.io/ingress.class: nginx
+      nginx.ingress.kubernetes.io/ingress.class: nginx
+  spec:
+    tls:
+    - hosts:
+      - jenkins.example.com
+      secretName: jenkins-tls-secret
+    rules:
+    - host: jenkins.example.com
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: jenkins-service # Cluster IP Service
+              port:
+                number: 8080 # Cluster IP Port
+  ```
 
 ### Connect different deployments together
 
