@@ -4,6 +4,7 @@
 
 * [alias](Tools/alias.md)
 * [APT](Tools/apt.md)
+* [awk](Tools/awk.md)
 * [DD](Tools/dd.md)
 * [DNF](Tools/dnf.md)
 * [Dump](Tools/dump.md)
