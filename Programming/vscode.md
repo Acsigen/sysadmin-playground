@@ -3,7 +3,6 @@
 ## Prerequisites
 
 This guide is for basic shortcuts and commands related to Visual Studio Code.
-I also use Cascadia Code font with a size of 14.
 
 ## Extensions
 
