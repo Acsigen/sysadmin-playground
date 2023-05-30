@@ -75,6 +75,7 @@ The easiest and safest way to authenticate to remote git servers is to use key p
 
 |Command|Description|
 |---|---|
+|`git remote -v`|Show the remotes list|
 |`git remote add <alias> <url>`|Add a git URL as an alias|
 |`git fetch <alias>`|Fetch down all the branches from that Git remote|
 |`git merge <alias>/<branch>`|Merge a remote branch into your current branch to bring it up to date|
