@@ -142,6 +142,20 @@ Host 10.5.5.*
 
 With the configurtion above in place, the user only needs to execute ```ssh 10.5.5.10```.
 
+**If the basion is not configured with the private key to access the destination host, or it uses a different key, you will need to apend the `IdentityFile` and `User` to the destination host configuration. You also need to create a configuration for the bastion server.**
+
+```conf
+Host bastion.example.com
+    Hostname bastion.example.com
+    User bastion-user
+    Identityfile /path/to/bastion-key.key
+Host remote-host
+    Hostname destination.remote.host
+    User host-username
+    ProxyJump bastion.example.com
+    Identityfile /path/to/remote-host-key.key
+```
+
 ### Use the bastion as a SOCKS5 Proxy
 
 With the following configuration set run `ssh my-bastion`:
