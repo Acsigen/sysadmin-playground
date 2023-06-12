@@ -38,3 +38,5 @@ To open a session run: `screen -S session_name -dm <command>`.
 To detach from a session press **CTRL + A D**.
 
 To list all user sessions run `screen -ls`. For all users run `ls -laR /var/run/screen`.
+
+To reattach to a background session run `screen -r <session_name>`.
