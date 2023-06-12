@@ -1,4 +1,4 @@
-# TMux terminal sessions
+# Tmux terminal sessions
 
 Create session
 
@@ -28,3 +28,13 @@ Access a running session:
 tmux attach -t session-name
 # Short version: tmux a -t session-name
 ```
+
+## Screen alternative
+
+An alternative to `tmux` is `screen`.
+
+To open a session run: `screen -S session_name -dm <command>`.
+
+To detach from a session press **CTRL + A D**.
+
+To list all user sessions run `screen -ls`. For all users run `ls -laR /var/run/screen`.
