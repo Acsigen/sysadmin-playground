@@ -40,3 +40,7 @@ To detach from a session press **CTRL + A D**.
 To list all user sessions run `screen -ls`. For all users run `ls -laR /var/run/screen`.
 
 To reattach to a background session run `screen -r <session_name>`.
+
+## Nohup
+
+If neither of them are available on the system you can run a program in a backround using `nohup <command> &`. The log of the command can be found in current directory in `nohup.out` file.
