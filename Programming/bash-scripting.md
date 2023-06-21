@@ -1303,13 +1303,16 @@ An example of the best practices can be seen below:
 ```bash
 #!/usr/bin/env bash
 
-set -o errexit
-set -o nounset
-set -o pipefail
+set -o errexit # Exit the script if any command returns a non-zero exit status
+set -o nounset # Exit the script if an undefined variable is used
+set -o pipefail # Return the value of the last (rightmost) command to exit with a non-zero status in a pipeline, or zero if all commands exit successfully
+# In one line: 'set -euo pipefail'
+
 if [[ "${TRACE-0}" == "1" ]]; then
-    set -o xtrace
+    set -o xtrace # Debug mode. Run with 'TRACE=1 ./script.sh'
 fi
 
+# If no arguments are passed, print help menu
 if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
     echo 'Usage: ./script.sh arg-one arg-two
 
@@ -1322,10 +1325,10 @@ fi
 cd "$(dirname "$0")"
 
 main() {
-    echo do awesome stuff
+    echo "do awesome stuff"
 }
 
-main "$@"
+main "$@" # The @ passes the script arguments to the function
 ```
 
 Thank you [Shrikant Sharat Kandula](sharats.me) for your post regarding the best practices. I took the liberty to reproduce your advices because I agree with you and also I dont usually follow my own advice sometimes.
