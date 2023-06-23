@@ -94,6 +94,7 @@ sudo usermod -aG microk8s $USER
 |---|---|
 |`k run nginx-abc-xyz --image=nginx`|Run an Nginx pod named *nginx-abc-xyz*|
 |`k exec nginx-deployment-abc-xyz -- nslookup google.com`|Execute `nslookup google.com` command inside container. You can also pass `-it` argument to make it interactive just like in Docker|
+|`k exec -it nginx-deployment-abc-xyz -- /bin/bash`|Open a `bash` session inside container.|
 |`k describe pod nginx-abc-xyz`|Get more info about *nginx-abc-xyz* pod created earlier|
 |`k get pods`|List the pods. Append `-o wide` to get more info or `-o yaml` to get the yaml data. **Please specify the name of the pod and pipe it through `less` if you use `-o`, otherwise it will print a lot of data.**|
 |`k get pods --namespace=kube-system`|List pods that are running in *kube-system* namespace|
