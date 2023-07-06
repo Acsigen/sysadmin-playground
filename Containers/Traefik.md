@@ -85,5 +85,7 @@ An alternative to Traefik Mesh is [Istio](https://istio.io/).
 
 ## Sources
 
+- [Traefik Docker Environment Variables](https://doc.traefik.io/traefik/reference/static-configuration/env/)
+- [Traefik Docker Labels](https://doc.traefik.io/traefik/routing/providers/docker/)
 - [Traefik Proxy Documentation](https://doc.traefik.io/traefik/)
 - [Traefik Mesh](https://doc.traefik.io/traefik-mesh/)
