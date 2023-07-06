@@ -385,7 +385,7 @@ services: # Mandatory
   ubuntu-server: # Mandatory - Application/Service name, must be unique
     image: ubuntu:latest # Mandatory - usually from Docker Hub, can also be a local one
     container_name: "ubuntu-machine" # Optional - Useful for finding the container in the list
-    pid: "host" # Optional - You can use this to share the namespace with the host or another container: pid: "container:apache-container"
+    pid: "host" # Optional - You can use this to share the namespace with the host or another container: pid: "container:apache-container". Also you can set it to null
     deploy: # Optional - Configure deployment settings
       resources:
         limits: # Configure the upper limit
