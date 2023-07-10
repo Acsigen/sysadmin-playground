@@ -30,11 +30,25 @@ When you open a file, by default it is opened in *normal mode*.
 * `G` - Go to the last line of the file
 * `$` -	Move the cursor to the end of the line.
 * `^` -	Move the cursor to the first non-empty character of the line.
-* `:bn` - move to the next file
-* `:bp` - move to the previous file
-* `:buffers` - list the name of the opened files
-* `:buffer 2` - switch to the file with number 2 on the list
 * `:e filename.txt` - add file to current editing session
+* `:terminal` - Open a terminal window (Close it with `exit`).
+  * `CTRL + w` twice - Next window (Also works with `CTRL + w.` and then `w`)
+  * `CTRL + w` and `W` - Previous window
+  * `CTRL + w` and one of the arrows or `hjkl` - Navigate between windows when using a complex layout
+ 
+### Working with multiple files
+
+- `vim file1 file2` - Open two files, the first one is in foreground.
+- `:bn` - move to the next file (Also works with `:n`)
+- `:bp` - move to the previous file (Also works with `:prev`)
+- `:buffers` - list the name of the opened files (also works with `:args`)
+- `:buffer 2` - switch to the file with number 2 on the list
+- `:n file3` - Add a new file
+- `:sp file2` - Split the screen between the current file and `file2` (switch between them like for the `:terminal`)
+  - `:sp file2` will automatically split the window horizontally. To split it vertically use `:vertical :split`
+- `:tabe file4` - Open a new file in a new tab
+- `:tabn` - move to the next tab
+- `:tabp` - move to the previous tab
 
 ### Editing
 
@@ -52,7 +66,6 @@ When you open a file, by default it is opened in *normal mode*.
 * `:set autoindent`- turn on auto indent
 * `:set hlsearch` - turn on highlight search results
 * `:set number` - turn on line number (use `nonumber` to turn it off)
-* `:term` - Open a terminal window (Close it with `exit`).
 * `v` - Enter visual mode per character
 * `V` - Enter visual mode per line
 * `CTRL + v` - Enter visual mode per block (might not work on Windows terminals)
