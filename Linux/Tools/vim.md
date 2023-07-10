@@ -6,11 +6,11 @@ I removed the __vi__ file from this repository because this one is more comprehe
 
 ## Insert mode
 
-* ```i``` - insert text before the cursor
-* ```O``` - insert text on the previous line
-* ```o``` - insert text on the next line
-* ```a``` - append text after the cursor
-* ```A``` - append text at the end of the line
+- `i` - insert text before the cursor
+- `O` - insert text on the previous line
+- `o` - insert text on the next line
+- `a` - append text after the cursor
+- `A` - append text at the end of the line
 
 Notice how when you type any of these insertion modes, you'll see that vim has entered insert mode at the bottom of the shell. To exit insert mode and go back to command mode, just hit the __Esc__ key.
 
@@ -22,10 +22,14 @@ When you open a file, by default it is opened in *normal mode*.
 
 ### Navigation
 
-* ```h``` or the __left arrow__ - move you left one character
-* ```k``` or the __up arrow__ - move you up one line
-* ```j``` or the __down arrow__ - move you down one line
-* ```l``` or the __right arrow__ - move you right one character
+* `h` or the __left arrow__ - move you left one character
+* `k` or the __up arrow__ - move you up one line
+* `j` or the __down arrow__ - move you down one line
+* `l` or the __right arrow__ - move you right one character
+* `gg` - Go to the first line of the file
+* `G` - Go to the last line of the file
+* `$` -	Move the cursor to the end of the line.
+* `^` -	Move the cursor to the first non-empty character of the line.
 * `:bn` - move to the next file
 * `:bp` - move to the previous file
 * `:buffers` - list the name of the opened files
@@ -35,13 +39,11 @@ When you open a file, by default it is opened in *normal mode*.
 ### Editing
 
 * ```x``` - used to cut the selected text also used for deleting characters
-* ```dd``` - used to delete the current line
+* ```dd``` - used to delete or cut the current line (This also moves the next line up by one. To avoid this, you can use `D`)
 * ```y``` - yank or copy whatever is selected
 * ```yy``` - yank or copy the current line
-* ```p``` - paste the copied text before the cursor
-* ```Vd``` + ```p``` - Select current line, cut, and paste somewehere else
-* `ddjP` - Move line down
-* `ddkP` - Move line up
+* ```p``` - paste the copied text after the cursor
+* ```P``` - paste the copied text before the cursor
 * ```u``` - undo your last action
 * ```Ctrl-r``` - redo your last action
 * `:r filename.txt` - read the content of the `filename.txt` and copies the content into current file
@@ -50,6 +52,16 @@ When you open a file, by default it is opened in *normal mode*.
 * `:set autoindent`- turn on auto indent
 * `:set hlsearch` - turn on highlight search results
 * `:set number` - turn on line number (use `nonumber` to turn it off)
+* `:term` - Open a terminal window (Close it with `exit`).
+* `v` - Enter visual mode per character
+* `V` - Enter visual mode per line
+* `CTRL + v` - Enter visual mode per block (might not work on Windows terminals)
+
+To edit multiple lines at once you must follow the following steps (this is useful when commenting multiple lines at once):
+
+- Enter visual mode per block with `CTRL + v` and select the desired text
+- Enter insert mode with `SHIFT + i` and write what you need (it will only appear on the first selected line, do not worry)
+- Exit block insert mode with `ESC` and your changes will be applied to all lines
 
 ### Search & Replace
 
@@ -67,7 +79,7 @@ Replacing text works like `sed`:
   * ```s``` - Means substitute
   * ```/foo``` - is regex to find things to replace
   * ```/bar/``` - is regex to replace things with
-  * ```/g``` - means global, otherwise it would only execute once per line
+  * ```/g``` - means global, otherwise it would only execute once per line (Use `/gc` if you want to confirm every change)
 
 
 ### Save & Exit
