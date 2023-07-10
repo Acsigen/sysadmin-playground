@@ -498,11 +498,14 @@ Now when you run `docker compose build` then `docker compose up -d` (or `docker 
 ## Tips & Tricks
 
 You can name a container with `--name=name` option.  
-You need to link containers to make a system work:
+
+~~You need to link containers to make a system work:~~ (Deprecated)  
+You need to place containers in the same network to make a system work.
 
 ```bash
-# --link <name of current redis container>:<name of redis from voting-app config file>
-docker run -d --name=vote -p 5000:80 --link redis:redis voting-app
+docker network create "voting-app-network"
+docker run -d --name=redis --network="voting-app-network" redis:latest
+docker run -d --name=vote -p 5000:80 --network="voting-app-network" voting-app:latest
 ```
 
 You can use `docker commit` command to build a custom image after you made some changes to a running container. You can also use `docker save` to export the image to a `.tar` file and `docker import` to import it on another system.
