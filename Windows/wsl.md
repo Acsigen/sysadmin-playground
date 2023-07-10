@@ -90,6 +90,8 @@ cd C:\Users\<Your_Username>\AppData\Local\Microsoft\WindowsApps
 ubuntu config --default-user <username>
 ```
 
+**Currently there is no built-in way to change the default installation location for new WSL2 distributions. This is the only method.**
+
 ## Manage permissions
 
 To enable Linux permissions for Windows mounted files and directories inside WSL, append the following content to `/etc/wsl.conf` file:
