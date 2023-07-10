@@ -16,7 +16,7 @@ sudo vim /etc/environment
 
 The file is not a script, so when adding variables, you do not need to use `export` command.
 
-```Dotnev
+```bash
 # Configure terminal contrast
 COLORFGBG=";0"
 
