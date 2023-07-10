@@ -41,7 +41,7 @@ Put this in `~/.bashrc`. What it does: The first time when you open a terminal i
 
 You can set global parameters by creating `.wslconfig` file inside `%UserProfile%` directory on the Windows host (Your user's home folder):
 
-```conf
+```Dotenv
 [wsl2]
 # kernel= # An absolute Windows path to a custom Linux kernel.
 memory=6GB # How much memory to assign to the WSL2 VM.
@@ -77,6 +77,17 @@ Now you need to stop the WSL distribution and optimise the `vhd` file (**If you 
 ```powershell
 wsl --shutdown
 Optimize-VHD "C:\Users\<my_user>\AppData\Local\Packages\CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc\LocalState\ext4.vhdx" -Mode full
+```
+
+You can also change where the disk is stored following these steps:
+
+```powershell
+wsl --export Ubuntu  D:\backup\ubuntu.tar
+wsl --unregister Ubuntu
+wsl --import Ubuntu D:\wsl\ D:\backup\ubuntu.tar
+cd C:\Users\<Your_Username>\AppData\Local\Microsoft\WindowsApps
+# The 'ubuntu' command will be different if you use another distribution, it can be 'ubuntu2004.exe'
+ubuntu config --default-user <username>
 ```
 
 ## Manage permissions
