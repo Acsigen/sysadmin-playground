@@ -53,6 +53,7 @@
   * [Process control](Procedures/process-control.md)
   * [Recover ROOT password](Procedures/recover-root-password.md)
   * [Terminal session recording](Procedures/terminal-session-recording.md)
+  * [Improve terminal contrast](Procedures/terminal-contrast.md)
 * Security
   * [Permissions](Procedures/permissions.md)
   * [SSH secure management](Procedures/ssh-management.md)
