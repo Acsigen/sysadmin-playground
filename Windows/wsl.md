@@ -25,7 +25,7 @@ wsl --set-default <Distribution Name>
 
 Docker Desktop is famous for being slow. so it is better to run Docker inside WSL directly (or even with Portainer).
 
-A script that will help you is:
+If you do not want to run WSL with SystemD a script that will help you is:
 
 ```bash
 if grep -q "microsoft" /proc/version &>/dev/null; then
