@@ -32,9 +32,21 @@ When you open a file, by default it is opened in *normal mode*.
 * `^` -	Move the cursor to the first non-empty character of the line.
 * `:e filename.txt` - add file to current editing session
 * `:terminal` - Open a terminal window (Close it with `exit`).
-  * `CTRL + w` twice - Next window (Also works with `CTRL + w.` and then `w`)
-  * `CTRL + w` and `W` - Previous window
-  * `CTRL + w` and one of the arrows or `hjkl` - Navigate between windows when using a complex layout
+
+### Window constrol:
+
+* `CTRL + w` twice - Next window (Also works with `CTRL + w.` and then `w`)
+* `CTRL + w` and `W` - Previous window
+* `CTRL + w` and one of the arrows or `hjkl` - Navigate between windows when using a complex layout
+* `CTRL + w` and `|` - Set current window width to N (default: widest possible).
+* `CTRL + w` and `_` - Set current window height to N (default: highest possible).
+* `CTRL + w` and `=` - Make all windows (almost) equally high and wide.
+* `CTRL + w` and `+` - Increase the current window height size by 1.
+* `CTRL + w` and `-` - Decrease the current window height size by 1.
+* `CTRL + w` and `>` - Increase the current window width size by 1.
+* `CTRL + w` and `<` - Decrease the current window width size by 1.
+* `:resize -N` - Decrease current window height by N (default 1). If used after `:vertical` will change width.
+* `:resize +N` - increase current window height by N (default 1). If used after `:vertical` will change width.
  
 ### Working with multiple files
 
@@ -49,6 +61,8 @@ When you open a file, by default it is opened in *normal mode*.
 - `:tabe file4` - Open a new file in a new tab
 - `:tabn` - move to the next tab
 - `:tabp` - move to the previous tab
+
+You can also compare two files with highlighting enabled using `vimdiff file1 file2`
 
 ### Editing
 
@@ -98,8 +112,11 @@ Replacing text works like `sed`:
 ### Save & Exit
 
 * ```:w``` - writes or saves the file
+* ```:wall``` - writes or saves all opened files
 * ```:q``` - quit out of vim
+* `:qall` - quit out of vim and close all opened files
 * ```:wq``` - write and then quit
 * ```:q!``` - quit out of vim without saving the file
+* ```:qall!``` - quit out of vim without saving neither of the opened files
 * ```ZZ``` - equivalent of :wq, but one character faster
 
