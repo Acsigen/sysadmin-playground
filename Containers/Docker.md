@@ -448,8 +448,42 @@ volumes:
 
 If you want to use `host` network with docker compose file, set `network_mode: "host"` and remove port mappings.
 
-You can use a `.env` file alongside docker-compose.yml to automatically import environment variables. The `environment` section will override the values inside `.env`. Also, you can expand values from the `.env` to other sections of the file with `${VARIABLE}`.  
-You can also include other environment files by using `env_files` option in `docker-compose.yml`. **Beware though, you cannot expand the values inside those files, it only works with `.env`!**
+### Compose Environment Variables
+
+There are multiple ways to configure environment variables in docker compose.
+
+You can use the `environment` section inside the `docker-compose.yml` file. The `environment` can be one of the two types: map or list.
+
+```yaml
+# Configured as a map
+environment:
+  VARIABLE_1: "VALUE_1"
+  VARIABLE_2: "VALUE_2"
+```
+
+```yaml
+# Configured as a list
+environment:
+  - VARIABLE_1=VALUE_1
+  - VARIABLE_2=VALUE_2
+```
+
+You can use a `.env` file alongside docker-compose.yml to configure environment variables. You can import those variables inside the `environment` section:
+
+```yaml
+# Expanded variables from .env
+environment:
+  - DOT_ENV_VARIABLE
+  - MY_VARIABLE=${DOT_ENV_VARIABLE}
+```
+
+`.env` files are great for sharing environment variables between containers. **The values are passed inside the container only if expanded.**
+
+You can also include other environment files by using `env_files` option in `docker-compose.yml`. **You cannot expand the values from those files, it only works with `.env`!**
+
+While you can use `.env` file inside `env_files` it is not recommended because you will no longer be able to expand the variables if necessary and you will make all environment variables available across all containers of the stack which might create security concerns.
+
+**WARNING: The `environment` section from the `docker-compose.yml` file has the highest prority. The values from `.env` or other imported environment variables files will be overriden if a variable with the same name is placed inside the section.**
 
 ## Image Building Best Practices
 
