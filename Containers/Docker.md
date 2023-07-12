@@ -471,10 +471,17 @@ environment:
 You can use a `.env` file alongside docker-compose.yml to configure environment variables. You can import those variables inside the `environment` section:
 
 ```yaml
-# Expanded variables from .env
+# Expanded variables from .env as a list
 environment:
   - DOT_ENV_VARIABLE
   - MY_VARIABLE=${DOT_ENV_VARIABLE}
+```
+
+```yaml
+# Expanded variables from .env as a map
+environment:
+  DOT_ENV_VARIABLE:
+  MY_VARIABLE: "${DOT_ENV_VARIABLE}"
 ```
 
 `.env` files are great for sharing environment variables between containers. **The values are passed inside the container only if expanded.**
