@@ -14,7 +14,7 @@ __Be careful when doing this. Depending on what task that specific background se
 tmux kill-session -t session-name
 ```
 
-Move active session to background: __CTRL+B D__.
+Move active session to background: **CTRL+b d**.
 
 List running sessions:
 
@@ -33,9 +33,11 @@ tmux attach -t session-name
 
 An alternative to `tmux` is `screen`.
 
-To open a session run: `screen -S session_name -dm <command>`.
+To open a session and run a command: `screen -S session_name -dm <command>`.
 
-To detach from a session press **CTRL + A D**.
+To open a session and enter it: `screen -S session_name`.
+
+To detach from a session press **CTRL + a d**.
 
 To list all user sessions run `screen -ls`. For all users run `ls -laR /var/run/screen`.
 
