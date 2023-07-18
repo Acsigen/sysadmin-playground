@@ -61,5 +61,6 @@
   * [Web Server Hardening](Procedures/server-hardening.md)
 * Storage
   * [Check storage space](Procedures/check-storage.md)
+  * [Delete extra large files](Procedures/delete-extra-large-files.md) 
   * [Devices and filesystems](Procedures/devices-and-filesystems.md)
   * [Extend storage space](Procedures/extend-storage.md)
