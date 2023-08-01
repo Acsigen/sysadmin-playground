@@ -103,6 +103,36 @@ options = "metadata"
 
 Use this with caution, it might block Windows users from accessing those specific files and directories if permissions are to tight.
 
+## Expose WSL ports to outside world
+
+**THIS IS NOT RECOMMENDED. USE WITH CAUTION.**
+
+Let's assume that we have a webserver running inside WSL listening on port 8080 and we wish to access it from a laptop on the same network or the outside world.
+
+What we need to do is to create a new incoming rule in Windows Firewall which allows port 8080/TCP.
+
+Now we need to create a port forwarding rule in PowerShell (as administrator) which will forward 8080/TCP to 8080/TCP and WSL IP.
+
+```powershell
+netsh interface portproxy add v4tov4 listenport=8080 listenaddress=0.0.0.0 connectport=8080 connectaddress=172.23.46.x
+```
+
+After we finished testing our webserver, we can perform a cleanup with the following stepts
+
+Delete the forwarding with the following command:
+
+```powershell
+netsh interface portproxy delete v4tov4 listenport=8080 listenaddress=0.0.0.0
+```
+
+List the forwarding rules:
+
+```powershell
+netsh interface portproxy show v4tov4
+```
+
+**Remember to delete the rule from Windows Firewall when you're done testing this.**
+
 ## Sources
 
 - [Microsoft Docs - Install](https://learn.microsoft.com/en-us/windows/wsl/install)
