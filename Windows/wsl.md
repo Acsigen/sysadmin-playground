@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-Install and configure WSL2.
+Install and configure WSL2 to run Docker containers. You will also learn how to activate SystemD inside WSL in order to use it more like a regular VM.
 
 ## Install
 
@@ -25,7 +25,13 @@ wsl --set-default <Distribution Name>
 
 Docker Desktop is famous for being slow. so it is better to run Docker inside WSL directly (or even with Portainer).
 
-If you do not want to run WSL with SystemD a script that will help you is:
+Follow [this guide](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository) to install Docker inside WSL and follow the next steps to run it.
+
+Do not forget to add your user to the `docker` group with `sudo usermod -aG docker <my_user>` to run Docker commands without `sudo`.
+
+### Docker inside WSL without SystemD
+
+Put this in `~/.bashrc`. What it does: The first time when you open a terminal it will pause for 5 seconds while the Docker daemon is started and it will stay started for the duration of Windows uptime.
 
 ```bash
 if grep -q "microsoft" /proc/version &>/dev/null; then
@@ -35,7 +41,18 @@ if grep -q "microsoft" /proc/version &>/dev/null; then
 fi
 ```
 
-Put this in `~/.bashrc`. What it does: The first time when you open a terminal it will pause for 5 seconds while the Docker daemon is started and it will stay started for the duration of Windows uptime.
+### Docker inside WSL with SystemD 
+
+You can activate `systemd` inside an instance with the following settings placed inside `/etc/wsl.conf`.
+
+```conf
+[boot]
+systemd=true
+```
+
+Restart the WSL instance and then run `sudo systemctl start docker && sudo systemctl enable docker`.
+
+If it doesn't work, make sure you have the latest `wsl` version installed by running `wsl --update` in a Powershell window.
 
 ## Limits and configurations
 
@@ -52,13 +69,6 @@ localhostForwarding=true # Boolean specifying if ports bound to wildcard or loca
 
 #  entries must be absolute Windows paths with escaped backslashes, for example C:\\Users\\Ben\\kernel
 #  entries must be size followed by unit, for example 8GB or 512MB
-```
-
-You can also activate `systemd` inside an instance with the following settings placed inside `/etc/wsl.conf`
-
-```conf
-[boot]
-systemd=true
 ```
 
 **In order to apply the settings mentioned above you will need to restart the WSL instance.**
@@ -102,6 +112,8 @@ options = "metadata"
 ```
 
 Use this with caution, it might block Windows users from accessing those specific files and directories if permissions are to tight.
+
+**In order to apply the settings mentioned above you will need to restart the WSL instance.**
 
 ## Expose WSL ports to outside world
 
