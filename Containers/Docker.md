@@ -10,6 +10,10 @@ Run all as ROOT or with sudo rights.
 
 ### Install Docker
 
+You can follow [this guide](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository) to install docker.
+
+If you want a more direct method, you can use the installation script method:
+
 ```bash
 # Download Docker
 curl -fsSL https://get.docker.com -o get-docker.sh
@@ -17,6 +21,12 @@ curl -fsSL https://get.docker.com -o get-docker.sh
 # Run the installation script
 bash get-docker.sh
 ```
+
+After installing Docker, add your user to the `docker` group by running `sudo usermod -aG docker <my-user>`. This allows you to run Docker commands without `sudo`.
+
+Also, if you use the repository method, the Compose plugin will be installed. You will find various guides on the internet that use the `docker-compose` command which is the old version of compose. The new version uses `docker compose` command.  
+To avoid issues, create an alias that points `docker-compose` to the new one to avoid compatibility issues `alias docker-compose="docker compose"`.  
+If you want to add the alias for all users, create a script inside `/etc/profile.d` with the command.
 
 If you want to change the storage location for Docker, let's say a drive mounted at `/media/Seagate500` create a file named `daemon.json` in `/etc/docker` directory with the following content:
 
@@ -26,7 +36,7 @@ If you want to change the storage location for Docker, let's say a drive mounted
 }
 ```
 
-**Don't forget to create the folder `docker-storage` and give it proper permissions. (I set it with `chown ubuntu:docker`).**
+**Don't forget to create the folder `docker-storage` and give it proper permissions. (I set it with `chown <my-user>:docker`).**
 
 ### Run Docker
 
