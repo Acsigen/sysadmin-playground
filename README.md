@@ -1,7 +1,5 @@
 # SysAdmin Playground
 
-Test stash
-
 This repository intends to be a collection of useful commands and scripts to perform the most mundane tasks of a system administrator daily life.
 
 Most of the commands are distribution agnostic, but some of them are written for Debian based distributions (mostly Ubuntu) or RHEL based distributions (CentOS/Alma/Rocky).
