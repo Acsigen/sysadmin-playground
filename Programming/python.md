@@ -438,6 +438,7 @@ print(my_dictionary.get("Ages","Key not found"))
 
 # Add a new item to the dictionary
 my_dictionary["Height"] = 170
+my_dictionary.update({"Weight": 60})
 ```
 
 ## WHILE loop
