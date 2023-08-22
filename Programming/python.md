@@ -472,8 +472,12 @@ for x in range(len(name_list)):
 You can also use `range` function to generate the lists to iterate through:
 
 ```python
-for number in range(1, 10): # create a list of numbers from 1 to 10.
-    print(number)
+for number in range(1, 10): # create a list of numbers from 1 to 9.
+    print(number) # Will print 1 2 3 4 5 6 7 8 9
+
+# You can also change the step of the range function by adding a 3rd element:
+for number in range(1, 10, 2):
+    print(number) # Will print 1 3 5 7 9
 ```
 
 ## Nested lists
