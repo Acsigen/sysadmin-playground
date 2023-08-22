@@ -430,9 +430,14 @@ my_dictionary = {
     "Age": 25
 }
 
-# Ways to access dictionary data
+# Access dictionary data
 print(my_dictionary["Name"])
-print(my_dictionary.get("Age","Key not found"))
+
+# Print 'Key not found' if key does not exists
+print(my_dictionary.get("Ages","Key not found"))
+
+# Add a new item to the dictionary
+my_dictionary["Height"] = 170
 ```
 
 ## WHILE loop
