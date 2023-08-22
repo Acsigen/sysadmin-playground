@@ -469,6 +469,13 @@ for x in range(len(name_list)):
     print(name_list[x])
 ```
 
+You can also use `range` function to generate the lists to iterate through:
+
+```python
+for number in range(1, 10): # create a list of numbers from 1 to 10.
+    print(number)
+```
+
 ## Nested lists
 
 You can see nested lists as a way to store data as kind of a table or matrix.
