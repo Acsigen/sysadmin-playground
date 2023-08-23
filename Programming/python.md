@@ -325,6 +325,8 @@ Pass parameters to a function:
 
 ```python
 def custom_function2(user):
+    """This is a docstring. This acts as an explainer/documentation for this function when you use VSCode or another text editor.
+    You can also use singlequotes."""
     print("Hello there, " + user)
 
 ## Method 1
