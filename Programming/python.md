@@ -584,10 +584,10 @@ except ZeroDivisionError as err2:
 
 Files can be opened using multiple modes:
 
-* read-only: `r`
-* write (override or new file): `w`
-* append: `a`
-* read-write: `r+`
+- read-only: `r`
+- write (override or new file): `w`
+- append: `a`
+- read-write: `r+`
 
 ### Reading files
 
@@ -599,9 +599,10 @@ employee_file = open("read-from-file.txt","r")
 if employee_file.readable() == True:
     print("File is readable and it has the following content")
     print(employee_file.read())
+    
     # To read a specific line
-    # print(employee_file.readlines()[1])
     # the function readlines() reads the content of the files as a list so you can access a line with an index
+    print(employee_file.readlines()[1])
 else:
     print("Action failed, file is not readable.")
 
@@ -634,6 +635,25 @@ if os.path.exists("demofile.txt"):
 else:
   print("The file does not exist") 
 ```
+
+### Skip closing files
+
+As you've seen above, for each file that we open to perform actions (read, append,write) we need to close the file.
+
+There is a way to open a file without calling the `close()` function, this way python handles closing the file automatically. Here is an example:
+
+```python
+# Open the file in read mode, use relative or absolute path
+with open("read-from-file.txt","r") as employee_file:
+    # Check if file is readable and print the contents
+    if employee_file.readable() == True:
+        print("File is readable and it has the following content")
+        print(employee_file.read())
+    else:
+        print("Action failed, file is not readable.")
+```
+
+**This is actually the most common method of working with files.**
 
 ## Modules
 
