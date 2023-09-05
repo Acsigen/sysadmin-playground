@@ -16,6 +16,8 @@
 - [Grab user input](#grab-user-input)
 - [Functions](#functions)
 - [Return statements](#return-statements)
+- [Pass Statements](#pass-statements)
+- [Match Statements](#match-statements)
 - [IF statements](#if-statements)
 - [Dictionaries](#dictionaries)
 - [WHILE loop](#while-loop)
@@ -420,6 +422,41 @@ result  = cube_number(input_number)
 print(result)
 ```
 
+## Pass Statements
+
+The `pass` statement does nothing. It can be used when a statement is required syntactically but the program requires no action. For example:
+
+```python
+while True:
+    pass  # Busy-wait for keyboard interrupt (Ctrl+C)
+```
+
+Another place `pass` can be used is as a place-holder for a function or conditional body when you are working on new code, allowing you to keep thinking at a more abstract level. The `pass` is silently ignored:
+
+```python
+def initlog(*args):
+    pass   # Remember to implement this!
+```
+
+## Match Statements
+
+A `match` statement takes an expression and compares its value to successive patterns given as one or more case blocks.
+
+```python
+def http_error(status):
+    match status:
+        case 400:
+            return "Bad request"
+        case 404:
+            return "Not found"
+        case 418:
+            return "I'm a teapot"
+        case _:
+            return "Something's wrong with the internet"
+```
+
+Note the last block: the “variable name” `_` acts as a wildcard and never fails to match. If no case matches, none of the branches is executed.
+
 ## IF statements
 
 The IF statement executes the code inside the statement if specified conditions are met.
@@ -666,6 +703,19 @@ import custom_module
 # Call a function and print the cube of 5
 print(custom_module.cube_number(5))
 ```
+
+## CLI Arguments
+
+Common utility scripts often need to process command line arguments. These arguments are stored in the `sys` module’s `argv` attribute as a list. For instance the following output results from running `python demo.py one two three` at the command line:
+
+```python
+import sys
+print(sys.argv)
+
+# Outputs: ['demo.py', 'one', 'two', 'three']
+```
+
+As an alternative, the `argparse` module provides a more sophisticated mechanism to process command line arguments.
 
 ## Objects and Classes
 
