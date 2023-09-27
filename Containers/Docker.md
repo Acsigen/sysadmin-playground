@@ -1,5 +1,27 @@
 # Docker
 
+## ToC
+
+  - [Prerequisites](#prerequisites)
+  - [Getting Started](#getting-started)
+    - [Install Docker](#install-docker)
+    - [Run Docker](#run-docker)
+    - [Interacting with containers](#interacting-with-containers)
+  - [Environment Variables](#environment-variables)
+  - [Custom Docker Images](#custom-docker-images)
+  - [Networking](#networking)
+    - [Port mapping](#port-mapping)
+    - [Network interfaces](#network-interfaces)
+    - [Network aliases](#network-aliases)
+    - [MACVlan interfaces](#macvlan-interfaces)
+  - [Storage](#storage)
+  - [Compose](#compose)
+    - [Compose Environment Variables](#compose-environment-variables)
+  - [Image Building Best Practices](#image-building-best-practices)
+  - [Tips & Tricks](#tips--tricks)
+  - [Orchestration](#orchestration)
+  - [Sources](#sources)
+
 ## Prerequisites
 
 Docker is a set of platform as a service products that use OS-level virtualization to deliver software in packages called containers.
@@ -245,31 +267,6 @@ CMD ["start"]
 
 You can find more details [here](https://docs.docker.com/engine/reference/builder/).
 
-## Terminal vs. Entry point
-
-### Terminal
-
-When a container starts, it executes the command alongside `CMD` such as:
-
-```bash
-docker run ubuntu-sleeper sleep 5
-```
-
-### Entry point
-
-When a container starts, it executes the command alongside `ENTRYPOINT` to which we can add options such as:
-
-```bash
-docker run ubuntu-sleeper 10
-```
-
-These can be combined to set a default value for the entrypoint.
-
-To modify an entrypointat startup:
-
-```bash
-docker run --entrypoint sleep2.0 ubuntu-sleeper 10
-```
 
 ## Networking
 
@@ -534,6 +531,7 @@ services:
     image: custom-mysql-image
     build:
       context: custom-image-directory
+      dockerfile: name-of-dockerfile
     volumes:
       - todo-mysql-data:/var/lib/mysql # named volume short syntax
     environment: 
@@ -575,7 +573,7 @@ To manage multiple instances in a production environment, use the following orch
 - Kubernetes (Most popular, Made by Google)
 - Mesos (More complicated)
 
-## Source
+## Sources
 
 - [Docker Docs](https://docs.docker.com/)
 - [Multi-stage build](https://mahmutcanga.com/2021/12/22/running-nextjs-ssr-apps-on-aws/)
