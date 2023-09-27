@@ -33,12 +33,30 @@ The project folder structure should look like this:
   - conf/
     - certs.yaml
   - .env
+  - traefik-env
   - docker-compose.yml
 
-The `.env` file holds the Traefik static configuration and it must have the following contents:
+To make easier understanding of environment files and in order to make `.env` file easier to read, the Traefik container loads an additional environment variable file named `traefik-env` in order to load the static configuration. I tried it with a YAML file but it didn't work.
+
+The `.env` file has only the timezone setting in this case:
+
+```conf
+TZ=Europe/Berlin
+```
+
+The `traefik-env` file holds the Traefik static configuration and it must have the following contents:
 
 ```conf
 ## Traefik
+
+# Access log settings. (Default: false)
+TRAEFIK_ACCESSLOG=true
+
+# Traefik log settings. (Default: false)
+TRAEFIK_LOG=true
+
+# Log level set to traefik logs. (Default: ERROR)
+TRAEFIK_LOG_LEVEL=ERROR
 
 # Enable api/dashboard. (Default: false)
 TRAEFIK_API=true
@@ -65,7 +83,7 @@ TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT=false
 # HTTP Entry point address.
 TRAEFIK_ENTRYPOINTS_WEB_ADDRESS=:80
 
-# Targeted entry point of the redirection. This activates the HTTP to HTTPS redirection.
+# Targeted entry point of the redirection.
 TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_TO=websecure
 
 # Scheme used for the redirection. (Default: https)
@@ -80,7 +98,7 @@ TRAEFIK_ENTRYPOINTS_WEBSECURE_HTTP_TLS=true
 # Load dynamic configuration from one or more .yml or .toml files in a directory.
 TRAEFIK_PROVIDERS_FILE_DIRECTORY=/configuration
 
-# Load dynamic configuration from a file.
+# Load dynamic configuration from a specific file.
 # TRAEFIK_PROVIDERS_FILE_FILENAME=
 
 # Watch provider. (Default: true)
@@ -111,6 +129,8 @@ services:
     # Enables the web UI and tells Traefik to listen to docker
     networks:
       - traefik_network
+    environment:
+      - TZ # This will be automatically expanded from .env
     ports:
       # The HTTP port
       - "80:80"
@@ -126,7 +146,7 @@ services:
       # Mount certificates
       - ./certs:/certs:ro
     env_file:
-      - "./.env"
+      - "./traefik-env"
     labels:
       # Traefik Dashboard secure configuration.
       - "traefik.enable=true"
@@ -137,6 +157,8 @@ services:
   whoami:
     # A container that exposes an API to show its IP address
     image: traefik/whoami
+    environment:
+      - TZ
     networks:
       - traefik_network
       - whoami_network
