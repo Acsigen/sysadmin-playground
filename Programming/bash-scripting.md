@@ -1333,6 +1333,17 @@ main "$@" # The @ passes the script arguments to the function
 
 Thank you [Shrikant Sharat Kandula](sharats.me) for your post regarding the best practices. I took the liberty to reproduce your advices because I agree with you and also I dont usually follow my own advice sometimes.
 
+Force the user to run the script with `sudo`:
+
+```bash
+if [ "$EUID" -ne 0 ]; then
+    echo "This script must be run with sudo. Exiting..."
+    exit 1
+else
+    echo "Ran with sudo"
+fi
+```
+
 ## Sources
 
 - The Linux Command Line 2nd Edition
