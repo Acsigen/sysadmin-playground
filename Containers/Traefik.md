@@ -151,7 +151,7 @@ services:
       # Traefik Dashboard secure configuration.
       - "traefik.enable=true"
       - "traefik.http.routers.dashboard.service=api@internal"
-      - "traefik.http.routers.dashboard.rule=(Host(`traefik.home.arpa`) && PathPrefix(`/api`, `/dashboard`))"
+      - "traefik.http.routers.dashboard.rule=(Host(`traefik.home.arpa`) && PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
       - "traefik.http.middlewares.dashboard-ipwhitelist.ipwhitelist.sourcerange=127.0.0.1/32, 192.168.1.0/24"
       - "traefik.http.routers.dashboard.middlewares=dashboard-ipwhitelist@docker"
   whoami:
