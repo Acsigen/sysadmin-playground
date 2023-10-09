@@ -56,10 +56,10 @@ If you want to route all client traffic through the VPN server please add the fo
 I have separated the ```PostUp``` and ```PostDown``` commands with ```\``` for an easier readability in this guide, please write the commands on a single line after removing the `\`. ```%i``` can be replaced by ```wg0```.
 
 ```conf
-PostUp = sysctl -w net.ipv4.ip_forward=1;\
+PostUp = sysctl net.ipv4.ip_forward=1;\
          iptables -A FORWARD -i %i -j ACCEPT;\
          iptables -t nat -A POSTROUTING -o ens2 -j MASQUERADE;\
-         sysctl -w net.ipv6.conf.all.forwarding=1;\
+         sysctl net.ipv6.conf.all.forwarding=1;\
          ip6tables -A FORWARD -i %i -j ACCEPT;\
          ip6tables -t nat -A POSTROUTING -o ens2 -j MASQUERADE
 PostDown = iptables -D FORWARD -i %i -j ACCEPT;\
