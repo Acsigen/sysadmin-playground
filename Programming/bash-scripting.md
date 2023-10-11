@@ -1313,7 +1313,7 @@ if [[ "${TRACE-0}" == "1" ]]; then
 fi
 
 # If no arguments are passed, print help menu
-if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
+if [[ "$#" -eq 0 ]]; then
     echo 'Usage: ./script.sh arg-one arg-two
 
 This is an awesome bash script to make your life better.
