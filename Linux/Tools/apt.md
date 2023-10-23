@@ -2,11 +2,11 @@
 
 ## Prerequisites
 
-You installed a ```.deb``` package using ```dpkg`` but it has missing dependencies.
+You installed a `.deb` package using `dpkg` but it has missing dependencies.
 
 **You can fix that automatically**
 
-## Fix mixxing dependencies
+## Fix missing dependencies
 
 ```bash
 apt -f install
@@ -17,3 +17,5 @@ apt -f install
 ```bash
 sudo needrestart
 ```
+
+If the command is not available, install `needrestart` and `needrestart-session` packages.
