@@ -7,7 +7,7 @@ Kubernetes is a container orchestration system.
 Kubernetes supports the following container runtimes:
 
 - Docker
-- CRI-OI
+- CRI-O
 - containerd
 
 Kubernetes are also known as K8S, or k8s (there are 8 characters between k and s in kubernetes)
