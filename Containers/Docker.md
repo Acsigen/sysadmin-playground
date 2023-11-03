@@ -565,6 +565,14 @@ If you want to use the docker-compose file to just run a command use `docker com
 
 Also, if you want to use Docker containers to act as a VM, in docker-compose file use a basic image such as `ubuntu:latest` and add `command: ["sleep","infinity"]` to the file so it won't exit after `docker compose up -d` then run `docker exec -it ubuntu-container /bin/bash` to access it.
 
+If you need to add extra hostnames to the container (like adding extra hosts to `/etc/hosts` file) you can use `--add-host new_hostname:IP` to the `docker run` command or add the following entry to the `docker-compose.yml`:
+
+```yaml
+extra_hosts:
+  - "somehost:162.242.195.82"
+  - "otherhost:50.31.209.229"
+```
+
 ## Orchestration
 
 To manage multiple instances in a production environment, use the following orchestrating solutions:
