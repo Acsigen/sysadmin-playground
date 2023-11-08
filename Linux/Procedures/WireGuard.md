@@ -70,8 +70,6 @@ PostDown = iptables -D FORWARD -i %i -j ACCEPT;\
 
 Don't forget to open the port 51820 on your firewall.
 
-**It won't forward traffic if the the server runs inside an LXC container due to kernel restrictions.**
-
 ### Launch the server
 
 To start the VPN server run the following commands:
