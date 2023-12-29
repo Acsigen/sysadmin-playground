@@ -183,6 +183,18 @@ networks:
     driver: bridge
 ```
 
+### Working with Apache
+
+When deploying applications with Apache, such as Wordpress, it is important to configure `.htaccess` file properly in order to work correctly while behind a proxy.
+
+The `.htaccess` file should contain the following lines:
+
+```apache2
+<IfModule mod_setenvif.c>
+  SetEnvIf X-Forwarded-Proto "^https$" HTTPS
+</IfModule>
+```
+
 ### Alternatives
 
 An alternative to Traefik Proxy is [Envoy Proxy](https://www.envoyproxy.io/).
