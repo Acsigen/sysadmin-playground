@@ -1,5 +1,15 @@
 # Basics of NGINX
 
+## ToC
+
+- [Terminology](#terminology)
+- [Serving Static Content](#serving-static-content)
+- [MIME Types](#mime-types)
+- [Location Context](#location-context)
+- [Rewrites and Redirect](#rewrites-and-redirect)
+- [NGINX Load Balancer](#nginx-load-balancer)
+- [Sources](#sources)
+
 ## Terminology
 
 - Directives: Key-value pairs from NGINX configuration file (`keepalive_timeout 25;`).
@@ -20,7 +30,7 @@ http {
 events {}
 ```
 
-## Mime Types
+## MIME Types
 
 MIME Types represent file extensions mapping to content type served by the server.
 
@@ -98,9 +108,54 @@ location /user {
 
 ## Rewrites and Redirect
 
+As the subtitle says, we want to perform a redirect. Redirects are not aliases. The alias keeps the path inside the URL (e.g. `http://example.com/administrator`). The redirect will change the URL to the destination path.
+
+Let's say that we want to redirect `http://example.com/poweruser` to `http://example.com/admin`. We do this with another `location` context:
+
+```conf
+location /poweruser {
+    return 307 /admin; # 307 is the code for redirect
+}
+```
+
+There is also the possibility to keep the initial URL path. For this we can use a `rewrite` directive.
+
+Let's say that when we want to access `http://example.com/number/2` we want to show the contents of `http://example.com/user/2`.
+
+The configuration would look like this:
+
+```conf
+rewrite ^/number/(\w+) /user/$1;
+```
+
 ## NGINX Load Balancer
+
+Let's say that we have three backend servers and we use NGINX as a Load Balancer to reach them. The configuration file looks a little bit different for this purpose:
+
+```conf
+http {
+    include mime.types;
+
+    upstream backendserver {
+        server node1.example.com:8080;
+        server node2.example.com:8080;
+        server node3.example.com:8080;
+    }
+
+    server {
+        listen 8080;
+
+        location / {
+            proxy_pass http://backendserver/;
+        }
+    }
+}
+
+events {}
+```
+
+**The default method is Round Robin.**
 
 ## Sources
 
 - [FreeCodeCamp Video](https://www.youtube.com/watch?v=9t9Mp0BGnyI)
-- [Progress](https://youtu.be/9t9Mp0BGnyI?t=1997)
