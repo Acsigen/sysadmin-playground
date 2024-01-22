@@ -43,6 +43,7 @@
   * [Setup WireGuard VPN](Procedures/WireGuard.md)
 * OS procedures
   * [Add directory to PATH](Procedures/update-path.md)
+  * [Basics of NGINX](Procedures/basic-nginx.md)
   * [Calculate hash](Procedures/hash-calc.md)
   * [Compile code from source](Procedures/compile-from-source.md)
   * [Configure global settings for all users](Procedures/global-configurations.md)
