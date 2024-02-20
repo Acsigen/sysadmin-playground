@@ -164,13 +164,13 @@ services:
       - whoami_network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.whoami.entrypoints=web" # Useless if redirection is done from Traefik configuration
-      - "traefik.http.routers.whoami.rule=Host(`whoami.home.arpa`)" # Useless if redirection is done from Traefik configuration
+      # - "traefik.http.routers.whoami.entrypoints=web" # Useless if redirection is done from Traefik configuration
+      # - "traefik.http.routers.whoami.rule=Host(`whoami.home.arpa`)" # Useless if redirection is done from Traefik configuration
       - "traefik.http.routers.whoami-secure.entrypoints=websecure"
       - "traefik.http.routers.whoami-secure.rule=Host(`whoami.home.arpa`)"
       - "traefik.http.routers.whoami-secure.tls=true"
-      - "traefik.http.services.whoami.loadbalancer.server.port=80" # The port that the target container listents on, change accordingly
-      - 'traefik.http.services.whoami.loadbalancer.server.scheme=http' # If target service listents to an https connection, change accordingly
+      - "traefik.http.services.whoami-secure.loadbalancer.server.port=80" # The port that the target container listents on, change accordingly
+      - 'traefik.http.services.whoami-secure.loadbalancer.server.scheme=http' # If target service listents to an https connection, change accordingly
 
 networks:
   traefik_network:
