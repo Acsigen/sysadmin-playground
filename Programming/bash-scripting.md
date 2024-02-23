@@ -935,6 +935,21 @@ In addition to `=` notation, the shell provides notation that perform some assig
 |`\|\|`|Logical OR.|
 |`expr1?expr2:expr3`|Comparison (ternary) operator. If expression expr1 evaluates to be nonzero (arithmetic true), then expr2; else expr3.|
 
+### Arithmetic expressions
+
+Since bash is not very good with math operators, we can perform some arithmethic expressions this way:
+
+```bash
+a=1
+b=3
+
+if [[ $b -gt $((a + 2)) ]]; then
+  echo "true"
+else
+  echo "false"
+fi
+```
+
 ## Arrays
 
 **Bash only supports single dimensional arrays.**
