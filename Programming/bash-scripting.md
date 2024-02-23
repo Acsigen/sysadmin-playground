@@ -229,6 +229,12 @@ echo "Global foo = $foo" #Will output 0
 fnct_1 #Will output 1
 ```
 
+If you want to pass the cli script arguments to a function (`$1` of the script to be `$1` of the function) you need to call the function this way:
+
+```bash
+step2 "$@"
+```
+
 Shell functions make excellent replacements for aliases and are actually the preferred method of creating small commands for personal use. Aliases are limited in the kind of commands and shell features they support, whereas shell functions allow anything that can be scripted.
 
 ## IF
