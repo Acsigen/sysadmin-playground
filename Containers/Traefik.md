@@ -171,7 +171,7 @@ services:
       - "traefik.http.routers.whoami-secure.tls=true"
       - "traefik.http.services.whoami-secure.loadbalancer.server.port=80" # The port that the target container listents on, change accordingly
       - 'traefik.http.services.whoami-secure.loadbalancer.server.scheme=http' # If target service listents to an https connection, change accordingly
-      - 'traefik.http.services.whoami-secure.service=whoami-secure' # If target service listents to an https connection, change accordingly
+      - 'traefik.http.routers.whoami-secure.service=whoami-secure' # If target service listents to an https connection, change accordingly
 
 networks:
   traefik_network:
