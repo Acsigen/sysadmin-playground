@@ -102,8 +102,8 @@ pip install git-remote-codecommit
 Configure the default profile by running: `aws configure` and provide the following data:
 
 ```conf
-AWS Access Key ID [None]: Your-IAM-User-Access-Key
-AWS Secret Access Key ID [None]: Your-IAM-User-Secret-Access-Key
+AWS Access Key ID [None]: AKIAQGXLDEZZHWCBCBWN
+AWS Secret Access Key ID [None]: 3NPZWaJYYAtNYXGIJGFYwDJnlMXd2AhJ2kdAvKZ2
 Default region name ID [None]: eu-central-1
 Default output format [None]: json
 ```
