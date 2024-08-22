@@ -32,8 +32,9 @@ The project folder structure should look like this:
     - key.pem
   - conf/
     - certs.yaml
+  - static-conf
+    - traefik.yml
   - .env
-  - traefik-env
   - docker-compose.yml
 
 To make easier understanding of environment files and in order to make `.env` file easier to read, the Traefik container loads an additional environment variable file named `traefik-env` in order to load the static configuration. I tried it with a YAML file but it didn't work.
@@ -44,65 +45,47 @@ The `.env` file has only the timezone setting in this case:
 TZ=Europe/Berlin
 ```
 
-The `traefik-env` file holds the Traefik static configuration and it must have the following contents:
+The `static-conf/traefik.yml` file holds the Traefik static configuration and it must have the following contents:
 
-```conf
-## Traefik
+```yaml
+# Disable version checking and anonymous usage
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
 
-# Access log settings. (Default: false)
-TRAEFIK_ACCESSLOG=true
+entryPoints:
+  # Configure port 80 to redirect to 443 by default
+  web:
+    address: :80
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+  # Configure the https entrypoint
+  websecure:
+    address: :443
+    http:
+      tls: {}
+providers:
+  providersThrottleDuration: 10s
+  docker:
+    exposedByDefault: false
+    network: traefik_network   
+    watch: true
+  file:
+    directory: /configuration
+    watch: true
+api:
+  insecure: false
+  dashboard: true
+  debug: false
+  # disableDashboardAd: true
 
-# Traefik log settings. (Default: false)
-TRAEFIK_LOG=true
+log:
+  level: INFO
 
-# Log level set to traefik logs. (Default: ERROR)
-TRAEFIK_LOG_LEVEL=ERROR
-
-# Enable api/dashboard. (Default: false)
-TRAEFIK_API=true
-
-# Activate dashboard. (Default: true)
-TRAEFIK_API_DASHBOARD=true
-
-# Activate API directly on the entryPoint named traefik. (Default: false)
-# Useless if you configure the Dashboard to be secured
-# TRAEFIK_API_INSECURE=true
-
-# Enable Docker backend with default settings. (Default: false)
-TRAEFIK_PROVIDERS_DOCKER=true
-
-# Default Docker network used.
-TRAEFIK_PROVIDERS_DOCKER_NETWORK=traefik_network
-
-# Backends throttle duration: minimum duration between 2 events from providers before applying a new configuration. It avoids unnecessary reloads if multiples events are sent in a short amount of time. (Default: 2)
-TRAEFIK_PROVIDERS_PROVIDERSTHROTTLEDURATION=2
-
-# Expose containers by default. (Default: true)
-TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT=false
-
-# HTTP Entry point address.
-TRAEFIK_ENTRYPOINTS_WEB_ADDRESS=:80
-
-# Targeted entry point of the redirection.
-TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_TO=websecure
-
-# Scheme used for the redirection. (Default: https)
-TRAEFIK_ENTRYPOINTS_WEB_HTTP_REDIRECTIONS_ENTRYPOINT_SCHEME=https
-
-# HTTPS Entry point address.
-TRAEFIK_ENTRYPOINTS_WEBSECURE_ADDRESS=:443
-
-# Default TLS configuration for the routers linked to the entry point. (Default: false)
-TRAEFIK_ENTRYPOINTS_WEBSECURE_HTTP_TLS=true
-
-# Load dynamic configuration from one or more .yml or .toml files in a directory.
-TRAEFIK_PROVIDERS_FILE_DIRECTORY=/configuration
-
-# Load dynamic configuration from a specific file.
-# TRAEFIK_PROVIDERS_FILE_FILENAME=
-
-# Watch provider. (Default: true)
-TRAEFIK_PROVIDERS_FILE_WATCH=true
+accessLog: {}
 ```
 
 The `conf/certs.yaml` file contains Traefik dynamic configuration. In this case we only configure the TLS certificate path. It should have the following contents:
@@ -119,12 +102,12 @@ tls:
 The `docker-compose.yml file should have the following contents:
 
 ```yaml
-version: "3.8"
+version: "3.8" # Newer versions of docker does not require version
 
 services:
   traefik:
-    # The official v2 Traefik docker image
-    image: traefik:v2.10
+    # The official v3 Traefik docker image
+    image: traefik:v3.1.2
     container_name: traefik
     # Enables the web UI and tells Traefik to listen to docker
     networks:
@@ -143,10 +126,10 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # Mount dynamic config file
       - ./conf:/configuration:ro
+      # Mount static config file
+      - ./static-conf/traefik.yml:/etc/traefik/traefik.yml:ro
       # Mount certificates
       - ./certs:/certs:ro
-    env_file:
-      - "./traefik-env"
     labels:
       # Traefik Dashboard secure configuration.
       - "traefik.enable=true"
