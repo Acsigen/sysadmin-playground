@@ -1,6 +1,6 @@
 # Less
 
-Quick commands for ```less```:
+Quick commands for `less`:
 
 |Command|Action|
 |---|---|
@@ -15,3 +15,5 @@ Quick commands for ```less```:
 |N|Previous item of the search result|
 |h|Display help screen|
 |q|Quit|
+
+To activate follow mode (like `tail -f`) run `less +F ./myfile.log`.
