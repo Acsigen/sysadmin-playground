@@ -43,6 +43,20 @@ Add swap file information at the end of ```/etc/fstab```
 echo "/swapfile none swap sw 0 0" | sudo tee -a /etc/fstab
 ```
 
+## Create a temporary partition in RAM
+
+This command will create a temporary partition of 1GB which will be located into RAM memory:
+
+```bash
+mkdir /mnt/temp-part && mount -t tmpfs tmpfs /mnt/temp-part -o size=1024m
+```
+
+To remove the partition run:
+
+```bash
+sudo umount /mnt/temp-part && sudo rm -r /mnt/temp-part
+```
+
 ## Improve swap memory performance
 
 ### Raspberry Pi
