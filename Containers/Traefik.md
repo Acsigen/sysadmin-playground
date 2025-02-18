@@ -30,7 +30,7 @@ The project folder structure should look like this:
   - certs/
     - cert.pem
     - key.pem
-  - conf/
+  - dynamic-conf/
     - certs.yaml
   - static-conf
     - traefik.yml
@@ -88,7 +88,7 @@ log:
 accessLog: {}
 ```
 
-The `conf/certs.yaml` file contains Traefik dynamic configuration. In this case we only configure the TLS certificate path. It should have the following contents:
+The `dynamic-conf/certs.yaml` file contains Traefik dynamic configuration. In this case we only configure the TLS certificate path. It should have the following contents:
 
 ```yaml
 ---
@@ -125,11 +125,11 @@ services:
       # So that Traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # Mount dynamic config file
-      - ./conf:/configuration:ro
+      - ./dynamic-conf:/configuration:ro
       # Mount static config file
       - ./static-conf/traefik.yml:/etc/traefik/traefik.yml:ro
       # Mount certificates
-      - ./certs:/certs:ro
+      - ./certs:/certs
     labels:
       # Traefik Dashboard secure configuration.
       - "traefik.enable=true"
