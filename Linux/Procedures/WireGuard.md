@@ -87,7 +87,7 @@ For the client, install the wireguard application according to your OS requireme
 
 ```conf
 [Interface]
-# Location of the private key file or type the key directly
+# Type the key directly
 PrivateKey = <client-private-key>
 
 # Client VPN address
