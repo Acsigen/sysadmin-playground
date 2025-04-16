@@ -225,6 +225,29 @@ You can also chain filters by adding more on the same line.
 
 More filters are presented [here](https://documentation.bloomreach.com/engagement/docs/filters)
 
+## Python code
+
+Below you can find a code sample on how a basic usage of a Jinja template with Python:
+
+```python
+from jinja2 import Template
+
+response_json ={
+        "POLICY_NUMBER": 12345,
+        "REGISTRATION_NUMBER": "B 100 ABC"
+    }
+
+with open("./templates/template.txt.j2", "r") as f:
+    template_file = f.read()
+
+template = Template(template_file)
+
+rendered_content = template.render(response_json=response_json)
+
+with open(f"./rendered-files/output.txt", "w") as f:
+    f.write(rendered_content)
+```
+
 ## Blocks
 
 <https://documentation.bloomreach.com/engagement/docs/jinjablocks>
