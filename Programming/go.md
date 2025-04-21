@@ -587,7 +587,6 @@ func main() {
 
 When you are working with multiple parameters, the function call must have the same number of arguments as there are parameters, and the arguments must be passed in the same order.
 
-
 ### Return Statement
 
 If you want the function to return a value, you need to define the data type of the return value (such as int, string, etc), and also use the return keyword inside the function.
