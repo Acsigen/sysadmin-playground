@@ -1,552 +1,69 @@
 # Terraform
 
-## ToC
+## IaC Concepts
 
-* [Authentication](#authentication)
-* [Variables](#variables)
-* [Looping with dynamic blocks](#looping-with-dynamic-blocks)
-* [Destroy](#destroy)
-* [Modules](#modules)
-* [IAM](#iam)
-* [Dependencies](#dependencies)
-* [Import existing resources](#import-existing-resources)
-* [Query for data](#query-for-data)
-* [Reference resources](#reference-resources)
-* [Build basic AWS infrastructure](#build-basic-aws-infrastructure)
+With IaC (infrastructure as code) you write a configuration script to automate creating, updating or destroying cloud infrastructure.
 
-## Authentication
+- IaC is a blueprint of your infrastructure
+- IaC allows you to easily share, version or inventory your cloud infrastructure.
 
-**The authentication method used below is not recommended.**
+There are multiple types of IaC tools:
 
-1. Install the AWS CLI Console.
-2. In VSCode create a configuration file with the following contents:
+- Declarative
+  - What you see is what you get. Explicit
+  - More verbose, but zero chance of misconfiguration
+  - Uses scripting languages such as JSON, YAML, XML
+  - Examples:
+    - ARM Templates (Azure)
+    - Azure Blueprints (Manages relationship between services)
+    - CloudFormation (AWS)
+    - Cloud Deployment Manager (Google Cloud Platform)
+    - Terraform (Supports multiple cloud providers)
+- Imperative
+  - You say what you want, and the rest is filled in. Implicit
+  - Less verbose, you could end up with misconfigurations
+  - Does more than Declarative
+  - Uses programming languages such as Python, Ruby, JavaScript
+  - Examples:
+    - AWS Cloud Development Kit (CDK)
+    - Pulumi (AWS, Azure, GCP, K8S)
 
-    ```terraform
-    provider "aws" {
-        region = "us-east-1"
-        access_key = <access-key>
-        secret_key = <secret-key>
-    }
-    resource "aws_vpc" "my_vpc" {
-        cidr_block = "10.0.0.0/16"
-    }
-    ```
+Terraform, even though it is declarative, it also has some imperative functionality due to the HCL language (loops, dynamic blocks, locals, complex data structures, etc.).
 
-3. Open the terminal (```Terminal -> New Terminal```) and run:
+An infastructure lifecycle is a number of clearly defined and distinct work phases which are used bby DevOps Engineers to plan, design, build, test, deliver, maintain and retire cloud infrastructure.
 
-    ```bash
-    # Prepare environment
-    terraform init
-    
-    # Test configuraiton (Dry run)
-    terraform plan
-    
-    # This will take a while
-    terraform apply
-    ```
+- Day 0 - Plan and Design
+- Day 1 - Develop and Iterate
+- Day 2 - Go live and maintain
 
-**By default these commands will apply all the ```.tf``` files in that folder and for each resource in those files.**
+IaC brings reliability into infrastructure lifecycle, no matter how many times you run IaC, you will always end up with the same state that is expected.
 
-There are other ways to pass the credentials to terraform:
+There are 3 concepts that need not to be confused:
 
-1. Using *AWS CLI*. Remove the `access_key` and `secret_key` from the terraform file and run `aws configure` where you will be prompted to insert your keys. Then, when you apply the terraform configurations, it will use the credentials from the CLI automatically.
-3. Use environment variables: `export AWS_ACCESS_KEY_ID=<key>` and `export AWS_SECRET_KEY_ID=<key>` (on Windows is `setx`).
-4. Use a shared credentials file and import it in Terraform configuration (Do not forget to add it to `.gitignore` if you are working with a Git Repository.
-5. Use a vault provider.
+- Provisioning: When you launch a cloud service and configure it, you are provisioning
+- Deployment: The act of delivering a version of your application to run on a provisioned server
+- Orchestration: The act of coordinating multiple systems or services (microservices, containers, kubernetes)
 
-**If you have multiple AWS CLI Profiles configured, you can use `profile= "NameOfProfile"` to specify which AWS CLI Profile should be used with Terraform.** You can find more details [here](#placeholder) on how to configure cross account access with profiles.
+Configuration drift is when provisioned infrastructure has an unexpected configuration change due to:
 
-## Variables
+- Team members manually adjusting configuration options
+- Malicious actors
+- Side effects from APIs, SDKs, or CLIs
 
-### Define variables
+Configuration drift is usually detected through a compliance tool such as: AWS Config, Azure Policies, GCP Security Health Analytics, CloudFormation Drift Detection. Terraform does this with state files.
 
-Terraform supports variables. A good practice is to create a folder named *variables* and inside it put a *main.tf* file.
+Compliance tools can remediate misconfigurations.
 
-Variables have three parameters, they are all optional:
+To prevent configuration drift:
 
-* description - A simple description
-* default - Default value
-* type - Value type (string, boolean, list, etc.)
+- Use immutable infrastructure, always create and destroy, never reuse, Blue-Green deployment strategy
+- Use GitOps to versioun control your IaC and peer review every single change.
 
-The main variable types are presented here:
+Mutable vs. Immutable infrastructure:
 
-```terraform
-# Define a string variable
-variable "vpc_name" {
-  type = string
-  default = "myvpc"
-}
+- Mutable: A VM is deployed and then Configuration Management tool like Ansible, Puppet, Chef, Salt or Cloud-Init is used to configure the state of the server
+- Immutable: A VM is launched and provisioned, and then it is turned into a Virtual Image, stored in image repository, that image is used to deploy VM instances.
 
-# Define an integer variable
-variable "ssh_port" {
-  type = number
-  default = 22
-}
+GitOps is when you take IaC and you use a git repository to introduce a formal process to review and accept changes to infrastructure code, once that code is accepted, it automatically triggers a deploy.
 
-# Define a boolean variable
-variable "enabled" {
-  default = true
-}
-
-# Define a list variable
-variable "my_list" {
-  type = list(string) # The data type inside the list goes between ()
-  default = ["value1","value2"] # The index starts at 0
-}
-
-# Define map variable (key:value pair)
-variable "my_map" {
-  type = map
-  default = {
-      key1 = "value1"
-      key2 = "value2"
-  }
-}
-
-# Define tuple variable
-# A tuple is like a list that can hold multiple types of data
-variable "my_tuple" {
-  type = tuple([string, number, string])
-  default = ["value1", 1, "value2"]
-}
-
-# Define object variable
-# An object is like a map that can hold multiple types of data
-variable "my_object" {
-  type = object({name = string, port = list(number)})
-  default = {
-    name = "value1"
-    port = [22, 80, 443]
-  }
-}
-```
-
-### Call variables
-
-In this example we will set the VPC name by calling a variable we defined:
-
-```terraform
-# Variable callback
-resource "aws_vpc" "my_vpc" {
-  cidr_block = "10.0.0.0/24"
-  
-  tags = {
-    Name = var.vpc_name # or you can use "${var.vpc_name}" for versions <= 0.11
-  }
-}
-
-# List variable callback
-resource "aws_vpc" "my_vpc" {
-  cidr_block = "10.0.0.0/24"
-  
-  tags = {
-    Name = var.my_list[0] # or you can use "${var.my_list[0]}" for versions <= 0.11
-  }
-}
-
-# Map variable callback
-resource "aws_vpc" "my_vpc" {
-  cidr_block = "10.0.0.0/24"
-  
-  tags = {
-    Name = var.my_map["key1"] # or you can use "${var.my_map["key2"]}" for versions <= 0.11
-  }
-}
-```
-
-There is another type of variable called *input variable*, this will prompt the user to input the value of the variable when you run `terraform plan`:
-
-```terraform
-variable "input_name" {
-  type = string
-  description = "Enter VPC name"
-}
-
-resource "aws_vpc" "my_vpc" {
-  cidr_block = "10.0.0.0/24"
-  
-  tags = {
-    Name = var.input_name # or you can use "${var.input_name}" for versions <= 0.11
-  }
-}
-```
-
-Sometimes it is useful to print some data on the screen. For this, we use the *output* variable to display the VPC id that we just created:
-
-```terraform
-output "vpc_id" {
-  value = aws_vpc.my_vpc.id
-}
-```
-
-These values are called *Attribures References* and they can be found in [Terraform documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc#attributes-reference).
-
-**The output variable will be prompted only for `terraform apply` because is a computed value.**
-
-For any variable that does not have a default value, terraform will prompt the user to enter the value.  
-This also happens when you want to destroy the resource, in that case just press ```Enter```.
-
-Variables values can be passed as a command line argument:
-
-```bash
-terraform apply -var "subnet_prefix=10.0.1.0/24"
-```
-
-Variables values can also be stored inside a `.tfvar` file like this:
-
-```terraform
-subnet_prefix = "10.0.1.0/24"
-```
-
-## Looping with dynamic blocks
-
-Use a FOR loop to iterate through a list and assign those values to a resource. In this case, define a list of ports and assign them dynamically to a security group by using a dynamic block.
-
-```terraform
-# Declare a variable containing the ports
-variable "ingress_ports" {
-  type = list(number)
-  default = [80, 443]
-}
-
-# Create a dynamic block to add a security group that allows the ports specified in the variable
-resource "aws_security_group" "allow_web" {
-  name = "Allow Web traffic"
-  dynamic "ingress" {
-    # Declare an iterator operator
-    iterator = port
-
-    # The for loop
-    for_each = var.ingress_ports
-    
-    # The contents of the block
-    content {
-      # Refference the current value
-      from_port = port.value
-      to_port = port.value
-      protocol = "TCP"
-      cidr_blocks = ["0.0.0.0/0"]
-    }
-  }
-}
-```
-
-## Destroy
-
-Run the following command to terminate the resources created with terraform's current configuration:
-
-```bash
-terraform destroy
-```
-
-## Modules
-
-A module is a folder inside our project that contains code.
-
-In this example we have a module namedm *ec2* in which we placed a file named `ec2.tf`. It contains the variables and the EC2 instance declaration.
-
-The contents of `main.tf`:
-
-```terraform
-# Declare the module
-module "ec2_module" {
-  
-  # Set the source to <current-folder/ec2>
-  source = "./ec2"
-  
-  # Set the value for ec2_name variable wich will be passed to the ec2 resource
-  ec2_name = "Ubuntu 20.04 Apache"
-}
-```
-
-The contents of `ec2/ec2.tf`:
-
-```terraform
-variable "ec2_name" {
-  # Do not set a default value
-  type = stirng
-}
-
-resource "aws_instance" "my_ec2" {
-  ami = "ami-032598fcc7e9d1c7a"
-  instance_type = "t2.micro"
-
-  tags = {
-    # Set the name of the instance 
-    Name = var.ec2_name
-  }
-}
-```
-
-Terraform Registry also provides pre-built modules which you can use.
-
-## IAM
-
-This is an example on how to assign a policy with Terraform. Please do note that to generate the JSON, it's wise to use the AWS Console and copy the resulted JSON into Terraform:
-
-```terraform
-resource "aws_iam_user" "my_user" {
-  name = "John"
-}
-
-resource "aws_iam_policy" "my_policy" {
-  name = "PolicyName"
-
-  policy = <<EOF
-  # Go to console and generate the policy but don't save it, copy the JSON format here.
-  # The JSON { must be placed at the most left side inside this EOF, do not indent it otherwise it won't work.
-  EOF
-}
-
-resource "aws_iam_policy_attachment" "policyBind" {
-  name = "attachment"
-  users = [aws_iam_user.my_user.name]
-  policy_arn = aws_iam_policy.my_policy.arn
-}
-```
-
-## Dependencies
-
-We can create dependencies to start a resource before another, such as the dB before the Web.
-
-```terraform
-resource "aws_instance" "db" {
-  ami = <ami_id>
-  instance_type = "t2.micro"
-}
-
-resource "aws_instance" "web" {
-  ami = <ami_id>
-  instance_type = "t2.micro"
-
-# This resource depends on dB to start
-  depends_on = [aws_instance.db]
-}
-```
-
-## Import existing resources
-
-If you already have some resources already running and you want to manage them with Terraform, you can create the resources in terraform then run the following command (e.g. for a VPC) `terraform import aws_vpc.my_vpc2 <vpc_id>`.
-
-## Query for data
-
-Terraform can perform queries to AWS API to retreive information about instances. For this, we use data sources.
-
-The following code will query the AWS API to retreieve the AMI ID for the database servers which have the tag `"Name" = "DB Server"`
-
-```terraform
-data "aws_instance" "db_search" {
-  filter {
-    # This is the key
-    name = "tag:Name"
-    
-    # This is the value
-    values = ["DB Server"]
-  }
-}
-
-output "db_servers" {
-  value = data.aws_instance.db_search.ami
-}
-```
-
-## Reference resources
-
-In this example we will create a VPC and assign a subnet.
-
-In order to assign a subnet to a VPC, we need the ID of the VPC, but since it is not created yet, we will reference it.
-
-```terraform
-resource "aws_vpc" "main-vpc" {
-    cidr_block = "10.0.0.0/16"
-    
-    tags = {
-      "Name" = "Production-VPC"
-    }
-}
-
-resource "aws_subnet" "subnet1" {
-    # Reference aws_vpc id from main-vpc
-    vpc_id = aws_vpc.main-vpc.id
-    cidr_block = "10.0.0.0/24"
-    
-    tags = {
-      "Name" = "production-subnet"
-    }
-}
-```
-
-## Build basic AWS infrastructure
-
-### Create a VPC
-
-```terraform
-resource "aws_vpc" "main-vpc" {
-    cidr_block = "10.0.0.0/16"
-    
-    tags = {
-      "Name" = "Production-VPC"
-    }
-}
-```
-
-### Create Internet Gateway
-
-```terraform
-resource "aws_internet_gateway" "main-internet-gateway" {
-    vpc_id = aws_vpc.main-vpc.id
-    
-    tags = {
-      "Name" = "Main Internet Gateway"
-    }
-}
-```
-
-### Create Custom Route Table
-
-```terraform
-resource "aws_route_table" "routing-table" {
-    vpc_id = aws_vpc.main-vpc.id
-
-    route = {
-        cidr_block = "0.0.0.0/0"
-        gateway_id = aws_internet_gateway.main-internet-gateway.id
-    }
-
-    route = {
-        ipv6_cidr_block = "::/0"
-        gateway_id = aws_internet_gateway.main-internet-gateway.id
-    }
-
-    tags = {
-      "Name" = "Main routing table"
-    }
-}
-```
-
-### Create a subnet
-
-```terraform
-resource "aws_subnet" "main-subnet" {
-    vpc_id = aws_vpc.main-vpc.id
-    cidr_block = "10.0.1.0/24"
-    availability_zone = "us-east-1a"
-
-    tags = {
-      "Name" = "Main subnet"
-    }
-}
-```
-
-### Associate subnet with routing table
-
-```terraform
-resource "aws_route_table_association" "main-subnet-rt" {
-    subnet_id = aws_subnet.main-subnet.id
-    route_route_table_id = aws_route_table.routing-table.id 
-}
-```
-
-### Create and configure security group
-
-```terraform
-resource "aws_security_group" "web" {
-  name = "allow_tls"
-  description = "Allow inbound traffic"
-  vpc_id = aws_vpc.main-vpc.id
-
-  ingress {
-    description = "TLS from anywhere"
-    from_port = 443
-    to_port = 443
-    protocol = "tcp"
-    cidr_block  = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
-  ingress {
-    description = "SSH"
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    cidr_block  = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
-  egress {
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
-  tags = {
-    Name = "Web"
-  }
-}
-```
-
-### Create a network interface
-
-```terraform
-resource "aws_network_interface" "main-nic" {
-  subnet_id = aws_subnet.main-subnet.id
-  private_ips = ["10.0.1.50"]
-  security_groups = [aws_security_group.web.id]
-  }
-}
-```
-
-### Assign an elastic IP
-
-You can assign an Elastic IP only if an internet gateway is already defined.
-
-```terraform
-# Create basic EC2 instance
-resource "aws_instance" "my_ec2" {
-  ami = "ami-032598fcc7e9d1c7a"
-  instance_type = "t2.micro"
-}
-
-# Assign the IP
-resource "aws_eip" "elastic_ip" {
-  instance = aws_instance.web.id
-  vpc = true
-  network_interface = aws_network_interface.main-nic.id
-  associate_with_private_ip = "10.0.1.50"
-  depends_on = [aws_internet_gateway.main-internet-gateway]
-}
-```
-
-### Create AWS Ubuntu Linux server and install Apache2
-
-```terraform
-resource "aws_instance" "ubuntu-server" {
-  ami = ami-0a49b025fffbbdac6
-  instance_type = "t2.micro"
-  availability_zone = "us-east-1a" # EC2 instance and subnet must be in the same Availability Zone
-  key_name = "main-key" # SSH Key
-  network_interface {
-    device_index = 0
-    network_interface_id = aws_network_interface.main-nic.id
-  }
-  
-  user_data = <<-EOF
-              #!/bin/bash
-              sudo apt update && sudo apt -y upgrade
-              sudo apt install apache2 -y
-              sudo systemctl start apache2
-              sudo systemctl enable apache2
-              EOF
-  
-  tags = {
-    Name = "Ubuntu Server"
-  }
-}
-```
-
-## Sources
-
-* [Free Code Camp YouTube Channel](https://www.youtube.com/watch?v=SLB_c_ayRMo)
-* [Terraform Language Documentation](https://www.terraform.io/language)
+## HashiCorp Introduction
