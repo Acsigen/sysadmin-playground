@@ -378,6 +378,8 @@ We talked before how to use variables. But we can also make use of environment v
 
 Variable starting with `TF_VAR_` such as `TF_VAR_AWS_SECRET_KEY` will be read and loaded as `AWS_SECRET_KEY`.
 
+### Variables Priority
+
 The definition precedence is the order in which Terraform will read variables and as it goes down the list it will override variables.
 
 - Environment Variables
@@ -386,6 +388,14 @@ The definition precedence is the order in which Terraform will read variables an
 - `-var` and `-var-file`
 
 You can create additional variables files eg. `dev.tfvars`, `prod.tfvars`. They will not be autoloaded (you’ll need to specific them in via command line).
+
+### Data Sources
+
+Data sources allow Terraform to use information defined outside of Terraform, defined by another separate Terraform configuration, or modified by functions.
+
+- You specify what kind of external resource you want to select
+- You use filters to narrow down the selection
+- You use `data.` to reference data sources
 
 ## Resource Meta-Arguments
 
