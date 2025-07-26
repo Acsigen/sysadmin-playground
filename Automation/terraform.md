@@ -225,6 +225,12 @@ output "instance_ip" {
 
 Modules are the main way to package and reuse resource configurations with Terraform.
 
+A module is a group of configuration files that provide common configuration functionality.
+
+- Enforces best practices
+- Reduce the amount of code
+- Reduce time to develop scripts
+
 An example is the AWS VPC module in which we configure much less resources than we would do if we would deploy a VPC from scratch.
 
 We can also create or own modules.
@@ -323,6 +329,67 @@ Terraform Data is similar to `null_resources` but does not require or the config
 Most of the time you will use Terraform Data instead of Null Resource since is easier to setup and you do not need a provider for it.
 
 ## Providers
+
+Providers are Terraform Plugins that allow you to interact with:
+
+- Cloud Service Providers (CSPs) eg. AWS, Azure, GCP
+- Software as a Service (SaaS) Providers eg. Github, Angolia, Stripe
+- Other APIs eg. Kubernetes, Postgres
+
+Providers come in three tiers:
+
+- Official — Published by the company that owns the provider technology or service
+- Verified — actively maintained, up-to-date, and compatible with both Terraform and Provider
+- Community — published by a community member but no guarantee of maintenance, up-to-date, or compatibility
+
+### Terraform Registry
+
+[Terraform Registry](https://registry.terraform.io/) is a website portal to browse, download or publish available Providers or Modules.
+
+Terraform Cloud allows you to publish private modules for your Organization within the Terraform Cloud Private Registry.
+
+To get a list of current providers that you are using run `terraform providers`.
+
+## Terraform Language
+
+Terraform files end in the extension of `.tf` or either `.tf.json`.
+
+Terraform files are written in the Terraform Language and is the extension of HCL.
+
+Terraform language consists of only a few basic elements:
+
+- Blocks — containers for other content, represent an object
+  - block type — can have zero or more labels and a body
+  - block label — name of a block
+- Arguments — assign a value to a name
+  - They appear within blocks
+- Expressions — represent a value, either literally or by referencing and combining other values
+  - They appear as values for arguments, or within other expressions.​
+
+Terraform also supports an alternative syntax that is JSON-compatible.
+
+Terraform expects JSON syntax files to be named with `.tf.json`.
+
+This syntax is useful when generating portions of a configuration programmatically, since existing JSON libraries can be used to prepare the generated configuration files.
+
+### Environment Variables
+
+We talked before how to use variables. But we can also make use of environment variables.
+
+Variable starting with `TF_VAR_` such as `TF_VAR_AWS_SECRET_KEY` will be read and loaded as `AWS_SECRET_KEY`.
+
+The definition precedence is the order in which Terraform will read variables and as it goes down the list it will override variables.
+
+- Environment Variables
+- `terraform.tfvars` or `terraform.tfvars.json` - Default Autoloaded Variables file
+- `*.auto.tfvars` or `*.auto.tfvars.json` - Additional Variables Files (autoloaded)
+- `-var` and `-var-file`
+
+You can create additional variables files eg. `dev.tfvars`, `prod.tfvars`. They will not be autoloaded (you’ll need to specific them in via command line).
+
+## Resource Meta-Arguments
+
+
 
 ## Sources
 
