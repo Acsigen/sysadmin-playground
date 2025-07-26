@@ -262,7 +262,67 @@ When using Terraform Cloud, the runtime is in the cloud so variables values migh
 
 ## Provisioners
 
+Terraform Provisioners install software, edit files, and provision machines created with Terraform.
 
+Terraform uses two provisioners:
+
+- CloudInit
+- Packer
+
+**Provisioners should only be used as a last resort. For most common situations there are better alternatives.**
+
+### Local-Exec
+
+Local-exec allows you to execute local commands after a resource is provisioned.
+
+The machine that is executing Terraform eg. terraform apply is where the command will execute.
+
+An example is after you provision a VM you need to supply the Public IP to a third-party security service to add the VM IP address and you accomplish this by using locally installed third-party CLI on your build server.​
+
+### Remote-Exec
+
+Remote-exec allows you to execute commands on a target resource after a resource is provisioned.
+
+For more complex tasks its recommended to use Cloud-Init, and strongly recommended in all cases to bake Golden Images via Packer or EC2 Image Builder.
+
+Remote Command has three different modes:
+
+- Inline - list of command strings
+- Script - relative or absolute local script that will be copied to the remote resource and then executed
+- Scripts - relative or absolute local scripts that will be copied to the remote resource and then executed and executed in order.
+
+### File
+
+File provisioner is used to copy files or directories from our local machine to the newly created resource
+
+- Source – the local file we want to upload to the remote machine​
+- Content – a file or a folder
+- Destination – where you want to upload the file on the remote machine
+
+You may require a connection block within the provisioner for authentication
+
+The connection has two protocols available:
+
+- SSH
+- WINRM
+
+### Null Resources
+
+`null_resource` is a placeholder for resources that have no specific association with a provider's resources.
+
+You can provide a connection and triggers to a resource.
+
+Triggers is a map of values that should cause this set of provisioners to re-run.
+
+​Values are meant to be interpolated references to variables or attributes of other resources.
+
+### Terraform Data
+
+Terraform Data is similar to `null_resources` but does not require or the configuration of a provider.
+
+Most of the time you will use Terraform Data instead of Null Resource since is easier to setup and you do not need a provider for it.
+
+## Providers
 
 ## Sources
 
