@@ -399,7 +399,52 @@ Data sources allow Terraform to use information defined outside of Terraform, de
 
 ## Resource Meta-Arguments
 
+erraform language defines several meta-arguments, which can be used with any resource type to change the behavior of resources.
 
+- `depends_on`, for specifying explicit dependencies
+- `count`, for creating multiple resource instances according to a count
+- `for_each`, to create multiple instances according to a map, or set of strings
+- `provider`, for selecting a non-default provider configuration
+- `lifecycle`, for lifecycle customizations
+- `provisioner` and connection, for taking extra actions after resource creation
+
+When you execute an execution order via Terraform Apply it will perform one of the following to a resource:
+
+- Create - resources that exist in the configuration but are not associated with a real infrastructure object in the state.
+- Destroy - resources that exist in the state but no longer exist in the configuration.
+- Update in-place - resources whose arguments have changed.
+- Destroy and re-create - resources whose arguments have changed but which cannot be updated in-place due to remote API limitations.
+
+Lifecycle block allows you to change what happens to resources e.g. create, update, destroy.
+
+Lifecycle blocks are nested within resources
+
+- `create_before_destroy` (bool) - When replacing a resource first create the new resource before deleting it (the default is destroy old first)
+- `prevent_destroy` (bool) - Ensures a resource is not destroyed
+- `ignore_changes` (list of attributes) - Don’t change the resource (create, update, destroy) if a change occurs for the listed attributes.
+
+If you need to override the default provider for a resource you can create an alternative provider with alias.
+
+You reference the alias under the attribute `provider` for a resource.
+
+```terraform
+provider "google" {
+    region = "us-central1"
+}
+
+provider "google" {
+    alias = "europe"
+    region = "europe-west1"
+}
+
+resource "google_compute_instance" "example" {
+    provider = google.europe
+
+    ...
+}
+```
+
+## Expressions
 
 ## Sources
 
