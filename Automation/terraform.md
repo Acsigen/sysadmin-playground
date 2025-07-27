@@ -446,6 +446,255 @@ resource "google_compute_instance" "example" {
 
 ## Expressions
 
+### Types and Values
+
+Terraform has the following types of values:
+
+- Primitives
+  - string
+  - number (float or int)
+  - bool
+- No Type
+  - null (represents absence or omission, when you want to use the underlying default of a provider’s resource configuration option)
+- Complex Types:
+  - list (tuples, strings)
+  - map (object)
+
+### Strings and Strings Templates
+
+When quoting strings it is mandatory to use doublequotes. Single quotes are no longer supported.
+
+Double quoted strings can interpret escape sequences (`\n`, `\t`, `\\`, etc.).
+
+Terraform also supports "heredoc" stype (`EOL`, `EOF` style from UNIX).
+
+Terraform also supports string interpolation (like Python's f strings): `${ ... }`
+
+There is also the possibility for string directive that allows you to evaluate a conditional logic between the markers: `%{ ... }`.
+
+You can stripe whitespacing that would normally be left by directive blocks by providing a trailing tilde (`~`)
+
+### Operators
+
+- Multiplication `a * b`
+- Division `a / b`
+- Modulus `a % b`
+- Addition `a + b`
+- Subtraction `a – b`
+- Flip to Negative (* -1) `-a`
+- Equals `a == b`
+- Does not Equal `a != b`
+- Less Than `a < b`
+- Less Than or Equal `a <= b`
+- Greater Than `a > b`
+- Greater Than or Equal `a >= b`
+- Or `a || b`
+- And `a && b`
+- Flip Boolean `!a`
+
+### Conditionals
+
+Terraform support ternary if else conditions. This is the only way: `condition ? true_val : false_val`
+
+```terraform
+var.a != "" ? var.a : "default-a"
+```
+
+The return type must be the same type: `var.example ? tostring(12) : "hello"`.
+
+### FOR Loops
+
+For expressins allows you to iterate over a complex type and apply transformations.
+
+A FOR expression can accept as input:
+
+- list
+- set
+- tuple
+- map
+- object
+
+FOR expression is different from `for_each`. For each can interate over a collection of resources while the FOR expression iterates over the data types that we presented above.
+
+```terraform
+# For a list
+[ for s in var.list : upper(s)]
+
+# For a map
+[for k, v in var.map : length(k) + length(v)]
+
+# For a list where you get the index
+[for i,v in var.list : "${i} is ${v}"]
+```
+
+Return types:
+
+- If we use `[ ... ]`, it will return a tuple
+- If we use `{ ... }`, it will return an object
+
+### Splat Expressions
+
+A splat operator is represented by an asterisk (`*`), it originates from the ruby language.
+
+Splats in Terraform are used to rollup or soak up a bunch of iterations in a for expression.
+
+```terraform
+# A FOR loop
+[for o in var.list : o.id]
+[for o in var.list : o.interfaces[0].name]
+
+# A splat
+var.list[*].id
+var.list[*].interfaces[0].name
+```
+
+### Dynamic Blocks
+
+Dynamic blocks allows you dynamically construct repeatable nested blocks.
+
+This is quite common in Terraform configurations but can make the code a little bit harder to read.
+
+An example is when you need to create a bunch of ingress rules for an EC2 Security Group.
+
+```terraform
+locals {
+  ingress_rules = [{
+    port = 443
+  },
+  {
+    port = 80
+  }]
+}
+
+resource "aws_security_group" "main" {
+  name = "sg"
+  vpc_id = data.aws_vpc.main.id
+
+  dynamic "ingress" {
+    for_each = local.ingress_rules
+
+    content {
+      from_port = ingress.value.port
+      to_port = ingress.value.port
+      protocol = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
+}
+```
+
+### Version Constraints
+
+Terraform utilizes Semantic Versioning for specifying Terraform, Providers, and Modules versions.
+
+Semantic Versioning is open-standard on how to define versioning for software management e.g. MAJOR.MINOR.PATCH.
+
+1. MAJOR version when you make incompatible API changes,
+2. MINOR version when you add functionality in a backwards-compatible manner, and
+3. PATCH version when you make backwards-compatible bug fixes. Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
+
+A version constraint is a string containing one or more conditions, separated by commas.
+
+- `=` or no operator. Match exact version number e.g. “1.0.0”, “=1.0.0”
+- `!=` Excludes an exact version number e.g. “!=1.0.0”
+- `>`, `>=`, `<`, `<=` Compare against a specific version e.g. “>= 1.0.0”
+- `~>` Allow only the rightmost version (last number) to increment e.g. ~> 1.0.0”
+
+Progressive Versioning is the practice of using the latest version to keep a proactive stance of security, modernity, and development agility.
+
+## Terraform State
+
+The state is a particular condition of cloud resources at a specific time.
+
+When you provision infrastructure via Terraform it will create a state file named `terraform.tfstate`.
+
+This state file is a JSON data structure with a one-to-one mapping from resource instances to remote objects.
+
+Terraform state CLI commands:
+
+- `terraform state list` List resources in the state
+- `terraform state mv` Move an item in the state
+- `terraform state pull` Pull current remote state and output to stdout
+- `terraform state push` Update remote state from a local state
+- `terraform state replace-provider` Replace provider in the state
+- `terraform state rm` Remove instances from the state
+- `terraform state show` Show a resource in the state
+
+The `terraform state mv` allows you to:
+
+- rename existing resources
+- move a resource into a module
+- move a module into a module
+
+If you were to just rename a resource or move it to another module and run terraform apply Terraform will destroy and create the resource. State mv allows you to just change the reference so you can avoid a create and destroy action.
+
+All terraform state subcommands that modify state will write a backup file.
+
+Terraform will take the current state and store it in a file called `terraform.tfstate.backup`.
+
+Backups cannot be disabled.
+
+## Initialising Working Directories
+
+We talked about `terraform init` befote. Here we will look at some useful arguments for the init command:
+
+- `terraform init -upgrade` Upgrade all plugins to the latest version that complies with the configuration's version constraint
+- `terraform init -get-plugins-false` Skip plugin installation
+- `terraform init -plugin-dir=PATH` Force plugin installation to read plugins only from the target directory
+- `terraform init -lockfile=MODE` Set a dependency lock file mode
+
+Dependencies are tracked with a lock file `.terraform.lock.hcl`.
+
+**If you modify or change dependencies, run `terraform init` again to have it apply the changes.**
+
+Make sure you do not mix `.terraform.lock.hcl` with `.terraform.tfstate.lock.hcl` which is the lock file for terraform state.
+
+There is also `terraform get` command is used to download and update modules in the root module.
+
+You may need to frequently pull updated modules but you do not want to initialize your state or pull new provider binaries.
+
+In most cases, you want to use terraform init, with the exception of local module development.
+
+## Writing and Modifying Terraform Code
+
+Terraform has three CLI commands that improve debugging configuration scripts:
+
+- `terraform fmt` rewrites Terraform configuration files to a standard format and style
+- `terraform validate` validates the syntax and arguments of the Terraform configuration files in a directory
+- `terraform console` an interactive shell for evaluating Terraform expressions
+
+## Plan and Apply
+
+## Drift
+
+## Troubleshooting
+
+## Terraform Modules
+
+## Terraform Workflows
+
+## Backends
+
+## Resources and Complex Types
+
+## Built-In Functions
+
+## Terraform Cloud 2
+
+## Terraform Enterprise
+
+## Workspaces
+
+## Sentinel with Terraform
+
+## HashiCorp Packer
+
+## Consul
+
+## Vault
+
+## Misc
+
 ## Sources
 
 - [ExamPro Certification Course](https://app.exampro.co/student/journey/terraform)
