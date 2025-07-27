@@ -665,15 +665,183 @@ Terraform has three CLI commands that improve debugging configuration scripts:
 
 ## Plan and Apply
 
+A plan consists of:
+
+- Reading the current state of any already-existing remote objects to make sure that the Terraform state is up-to-date.
+- Comparing the current configuration to the prior state and noting any differences.
+- Proposing a set of change actions that should, if applied, make the remote objects match the configuration.
+
+A Terraform Plan file is a binary file.
+
+When using save planed it will not prompt you to confirm and will act like `auto-approve`.
+
+Terraform apply command executes the actions proposed in an execution plan.
+
+Requires users to manually approve the plan by writing “yes”. `terraform apply –auto-approve` flag will automatically approve the plan.
+
+When you provide a filename to terraform to saved plan file `terraform apply FILE`.
+
 ## Drift
+
+Drift (Configuration or Infrastructure) is when your expected resources are in a different state than your expected state.
+
+We can resolve Drift in three ways in Terraform:
+
+- Replacing Resources - When a resource has become damaged or degraded that cannot be detected by Terraform we can use the `–replace` flag
+- Importing Resources - When an approved manual addition of resource needs to be added to our state file. We use the `import` command.
+- Refresh State - When an approved manual configuration of a resource has changed or removed. We use the `–refresh-only` flag to reflect the changes in our state file.
+
+### Replacing Resources
+
+Terraform used taint to mark a resource for replacement, the next time you run apply.
+
+A cloud resource can become degraded or damaged and you want to return the expected resource to a healthy state.
+
+It is recommended in 0.15.2+ to use the -replace flag and providing a resource address.
+
+```terraform
+terraform apply -replace="aws_instanec.example[0]"
+```
+
+### Resource Addressing
+
+A resource address is a string that identifies zero or more resource instances in your configuration.
+
+An address is composed of two parts: `[module path][resoource spec]`.
+
+- `module.module_name[module index]`:
+  - `module` A namespace for modules
+  - `module_name` User-defined name of the module
+  - `[module index]` When multiple specific an index
+- `resource_type.resource _name[instance index]`
+  - `resource_type` Type of the resource being addressed
+  - `resource_name` User-defined name of the resource
+  - `[instance index]` when multiple specific an index
+
+### Terraform Import
+
+The terraform import command is used to import existing resources into Terraform.
+
+Define a placeholder for your imported resource in the configuration file.
+
+```terraform
+resource "aws_instance" "example" {
+  # You can leave the body blank and fill it in after importing. It will not be autofilled.
+}
+```
+
+To import the resource run `terraform import aws_instance.example i-abcd1234`.
+
+Not all resources are importable.
+
+### Terraform Refresh
+
+The `terraform refresh` is basically an alias to `terraform apply -refresh-only -auto-approve`.
 
 ## Troubleshooting
 
+There are 4 sources of possible errors:
+
+- Language errors - Terraform encounters a syntax error in your configuration for the Terraform or HCL Language
+  - `terraform fmt`
+  - `terraform validate`
+  - `terraform version`
+- State errors - Your resources state has changed from the expected state in your configuration file
+  - `terraform refresh`
+  - `terraform apply`
+  - `terraform –replace flag`
+- Core errors - A bug has occurred with the core library
+  - TF_LOG
+  - Open GitHub Issue
+- Provider errors - The provider’s API has changed or does not work as expected due to emerging edge cases
+  - TF_LOG
+  - Open GitHub Issue
+
+### Terraform Logs
+
+Terraform has detailed logs which can be enabled by setting the `TF_LOG` environment variable to:
+
+- TRACE
+- DEBUG
+- INFO
+- WARN
+- ERROR
+- JSON — outputs logs at the TRACE level or higher, and uses a parseable JSON encoding as the formatting.
+
+Logging can be enabled separately:
+
+- `TF_LOG_CORE`
+- `TF_LOG_PROVIDER`
+
+### Crash Logs
+
+If Terraform ever crashes (a "panic" in the Go runtime), it saves a log file with the debug logs from the session as well as the panic message and backtrace to `crash.log`.
+
 ## Terraform Modules
+
+The Standard Module Structure is a file and directory layout recommend for module development.
+
+The primary entry point is the Root Module.
+
+These are required files in the root directory:
+
+- `main.tf` - the entry point file of your module
+- `variables.tf` – variable that can be passed in
+- `outputs.tf` – Outputed values
+- `README` – Describes how the module works
+- `LICENSE` – The license under which this module is available
+
+Nested modules that are optional must be contained in the `modules/` directory:
+
+- A submodule that contains a README is considered usable by external users
+- A submodule that does not contain a README is considered internal use only
+- Avoid using relative paths when sourcing module blocks.
 
 ## Terraform Workflows
 
+The core Terraform workflow has three steps:
+
+- Write
+- Plan
+- Apply
+
+In most cases, you will work within a team. For teams the steps are the same, how they are performed varies. A common way looks like this:
+
+- Write: The code is kept in a git repository. When you want to change something you create a branch from main, write your code, create a pull/merge request, it gets approved and merged into main.
+- Plan: When a btanch is ready to be integrated on Pull Request, an execution plan can be generated and displayed within the pull request for review
+- Apply: This is usually done through tools such as GitHub Actions which will run the steps to apply the configuration from the main branch.
+
+It is very similar on Terraform Cloud. Since Terraform Cloud will integrate with git. The only change is who applies the configuration. In this case the Terraform Cloud Runtime.
+
 ## Backends
+
+We talked about backends before. We will focus on protecting sensitive data here.
+
+Terraform State file can contain sensitive data eg. long-lived AWS Credentials and is a possible attack vector for malicious actors.
+
+- Local State
+  - When using local backend, state is stored in plain-text JSON files.
+  - You need to be careful you don’t share this state file with anyone
+  - You need to be careful you don’t commit this file to your git repository
+- Remote State with Terraform Cloud
+  - That state file is held in memory and is not persisted to disk
+  - The state file is encrypted-at-rest
+  - The state file is encrypted-in-transit
+  - With Terraform Enterprise you have detailed audit logging for tamper evidence
+Remote State with Third-Party Storage
+  - You can store state with various third-party backends.
+  - You need to carefully review your backends capabilities to determine if will meet your security and compliance requirements.
+
+When executing a remote plan or apply in a CLI-driven run, an archive of your configuration directory is uploaded to Terraform Cloud.
+
+You can define paths to ignore from upload via a `.terraformignore` file at the root of your configuration directory.
+
+If this file is not present, the archive will exclude the following by default:
+
+- `.git`/ directories
+- `.terraform`/ directories (exclusive of .terraform/modules)
+
+`.terraformignore` works just like a .gitignore with the only difference is that you cannot have multiple .terraformignore files in subdirectories.
 
 ## Resources and Complex Types
 
