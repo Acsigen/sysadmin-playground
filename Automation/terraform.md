@@ -891,21 +891,388 @@ The two kinds of structural type: object and tuple
 
 ## Built-In Functions
 
+Terraform language includes a number of built-in functions that you can call from within expressions to transform and combine values:
+
+- Numeric Functions
+- String Functions
+- Collection Functions
+- Encoding Functions
+- Filesystem Functions
+- Date and Time Functions
+- Hash and Crypto Functions
+- IP Network Functions
+- Type Conversion Functions
+
+### Numeric Functions
+
+- `abs` returns the absolute value of the given number
+- `floor` returns the closest whole number that is less than or equal to the given value, which may be a fraction
+- `Log` returns the logarithm of a given number in a given base
+- `ceil` returns the closest whole number that is greater than or equal to the given value
+- `min` takes one or more numbers and returns the smallest number from the set
+- `max` takes one or more numbers and returns the greatest number from the set
+- `parseint` parses the given string as a representation of an integer in the specified base and returns the resulting number
+- `pow` calculates an exponent, by raising its first argument to the power of the second argument.
+- `signum` determines the sign of a number, returning a number between -1 and 1 to represent the sign
+
+### String Functions
+
+- `chomp` removes newline characters at the end of a string.
+- `format` produces a string by formatting a number of other values according to a specification string
+- `formatlist` produces a list of strings by formatting a number of other values according to a specification string
+- `indent` adds a given number of spaces to the beginnings of all but the first line in a given multi-line string
+- `join` produces a string by concatenating together all elements of a given list of strings with the given delimiter
+- `lower` converts all cased letters in the given string to lowercase.
+- `regex` applies a regular expression to a string and returns the matching substrings
+- `regexall` applies a regular expression to a string and returns a list of all matches
+- `replace` searches a given string for another given substring, and replaces each occurrence with a given replacement string
+- `split` produces a list by dividing a given string at all occurrences of a given separator.
+- `strrev` reverses the characters in a string
+- `substr` extracts a substring from a given string by offset and length
+- `title` converts the first letter of each word in the given string to uppercase
+- `trim` removes the specified characters from the start and end of the given string
+- `trimprefix` removes the specified prefix from the start of the given string. If the string does not start with the prefix, the string is returned unchanged
+- `trimsuffix` removes the specified suffix from the end of the given string
+- `trimspace` removes all types of whitespace from both the start and the end of a string
+- `upper` converts all cased letters in the given string to uppercase
+
+### Collection Functions
+
+- `alltrue` returns true if all elements in a given collection are true or "true". It also returns true if the collection is empty.
+- `anytrue` returns true if any element in a given collection is true or "true". It also returns false if the collection is empty
+- `chunklist` splits a single list into fixed-size chunks, returning a list of lists
+- `coalesce` takes any number of arguments and returns the first one that isn't null or an empty string
+- `coalescelist` takes any number of list arguments and returns the first one that isn't empty
+- `compact` takes a list of strings and returns a new list with any empty string elements removed
+- `concat` takes two or more lists and combines them into a single list
+- `contains` determines whether a given list or set contains a given single value as one of its elements
+- `distinct` takes a list and returns a new list with any duplicate elements removed
+- `element` retrieves a single element from a list
+- `index` finds the element index for a given value in a list
+- `flatten` takes a list and replaces any elements that are lists with a flattened sequence of the list contents
+- `keys` takes a map and returns a list containing the keys from that map
+- `length` determines the length of a given list, map, or string
+- `lookup` retrieves the value of a single element from a map, given its key. If the given key does not exist, the given default value is returned instead.
+- `matchkeys` constructs a new list by taking a subset of elements from one list whose indexes match the corresponding indexes of values in another list
+- `merge` takes an arbitrary number of maps or objects, and returns a single map or object that contains a merged set of elements from all arguments
+- `one` takes a list, set, or tuple value with either zero or one elements. If the collection is empty, one returns null. Otherwise, one returns the first element. If there are two or more elements then one will return an error
+- `range` generates a list of numbers using a start value, a limit value, and a step value
+- `reserve` takes a sequence and produces a new sequence of the same length with all of the same elements as the given sequence but in reverse order
+- `setintersection` function takes multiple sets and produces a single set containing only the elements that all of the given sets have in common. In other words, it computes the intersection of the sets
+- `setproduct` function finds all of the possible combinations of elements from all of the given sets by computing the Cartesian product.
+- `Setsubtract` function returns a new set containing the elements from the first set that are not present in the second set. In other words, it computes the relative complement of the first set in the second set
+- `setunion` function takes multiple sets and produces a single set containing the elements from all of the given sets. In other words, it computes the union of the sets
+- `slice` extracts some consecutive elements from within a list
+- `sort` takes a list of strings and returns a new list with those strings sorted lexicographically
+- `sum` takes a list or set of numbers and returns the sum of those numbers
+- `transpose` takes a map of lists of strings and swaps the keys and values to produce a new map of lists of strings
+- `values` takes a map and returns a list containing the values of the elements in that map
+- `zipmap` constructs a map from a list of keys and a corresponding list of values
+
+### Encoding and Decoding Functions
+
+- encode
+  - base64encode
+  - jsonencode
+  - textencodebase64
+  - Yamlencode
+  - base64gzip
+  - urlencode
+- decode
+  - base64decode
+  - csvdecode
+  - jsondecode
+  - textdecodebase64
+  - yamldecode
+
+### Filesystem Functions
+
+- `abspath` takes a string containing a filesystem path and converts it to an absolute path. That is, if the path is not absolute, it will be joined with the current working directory
+- `dirname` takes a string containing a filesystem path and removes the last portion from it.
+- `pathexpand` takes a filesystem path that might begin with a ~ segment, and if so it replaces that segment with the current user's home directory path
+- `basename` takes a string containing a filesystem path and removes all except the last portion from it
+- `file` reads the contents of a file at the given path and returns them as a string
+- `fileexists` determines whether a file exists at a given path
+- `fileset` enumerates a set of regular file names given a path and pattern
+- `filebase64` reads the contents of a file at the given path and returns them as a base64-encoded string
+- `templatefile` reads the file at the given path and renders its content as a template using a supplied set of template variables
+
+### Date and Time Functions
+
+- `formatdate` converts a timestamp into a different time format
+- `timeadd` adds a duration to a timestamp, returning a new timestamp
+- `timestamp` returns a UTC timestamp string in RFC 3339 format
+
+### Hash and Crypto Functions
+
+- `base64sha256`
+- `base64sha512`
+- `bcrypt`
+- `filebase64sha256`
+- `filebase64sha512`
+- `filemd5`
+- `filesha1`
+- `filesha256`
+- `filesha512`
+- `md5`
+- `rsadecrypt`
+- `sha1`
+- `sha256`
+- `sha512`
+- `uuid`
+- `uuidv5`
+
+### IP Network Functions
+
+- `cidrhost` calculates a full host IP address for a given host number within a given IP network address prefix
+- `cidrnetmask` converts an IPv4 address prefix given in CIDR notation into a subnet mask address
+- `cidrsubnet` calculates a subnet address within given IP network address prefix
+- `cidrsubnets` calculates a sequence of consecutive IP address ranges within a particular CIDR prefix.
+
+### Type Conversion Functions
+
+- `can` evaluates the given expression and returns a boolean value indicating whether the expression produced a result without any errors
+- `defaults` a specialized function intended for use with input variables whose type constraints are object types or collections of object types that include optional attributes
+- `nonsensitive` takes a sensitive value and returns a copy of that value with the sensitive marking removed, thereby exposing the sensitive value
+- `sensitive` takes any value and returns a copy of it marked so that Terraform will treat it as sensitive, with the same meaning and behavior as for sensitive input variables.
+- `tobool` converts its argument to a boolean value
+- `tomap` converts its argument to a map value
+- `toset` converts its argument to a set value.
+- `tolist` converts its argument to a list value
+- `tonumber` converts its argument to a number value
+- `tostring` converts its argument to a set value
+- `try` evaluates all of its argument expressions in turn and returns the result of the first one that does not produce any errors
+
 ## Terraform Cloud 2
+
+- Organizations
+  - An organization is a collection of workspaces
+- Workspaces
+  - A workspace belongs to an organization
+  - A workspace represents a unique environment or stack.
+- Teams
+  - A team is composed of multiple members (users).
+  - A team can be assigned to workspaces
+- Runs
+  - A run represents a single run of the terraform run environment that is operating on an execution plan.
+  - Runs can be UI/VCS driven API driven or CLI driven
+
+### Workflows
+
+Terraform Cloud offers 3 types of Cloud Run Workflows:
+
+- UI/VCS Driven (User Interface and Version Control System)
+  - Terraform Cloud is integrated with a specific branch in your VCS eg. Github via webhooks.
+  - Whenever pull requests are submitted for the branch speculative plans are generated
+  - Whenever a merge occurs to that branch, than a run is triggered on Terraform Cloud
+- API-Driven (Application Programming Interface)
+  - Workspaces are not directly associated with a VCS repo, and runs are not driven by webhooks on your VCS provider
+  - A third-party tool or system will trigger runs via upload a configuration file via the Terraform Cloud API
+  - The configuration file is a bash script that is packaged in an archive (.tar.gz). You are pushing a Configuration Version
+- CLI-Driven (Command Line Interface)
+  - Runs are triggered by the user running terraform CLI commands e.g. terraform apply and plan locally on their own machine.
+
+### Permissions
+
+- Organization-Level Permissions manage certain resources or settings across an organization
+  - Manage Policies - create, edit, and delete the organization's Sentinel policies
+  - Manage Policy Overrides - override soft-mandatory policy checks.
+  - Manage Workspaces - create and administrate all workspaces within the organization
+  - Manage VCS Settings - set of VCS providers and SSH keys available within the organization
+- Workspace-Level Permissions manage resources and settings for a specific workspace
+  - Granular permissions you can apply to a user via custom workspace permissions
+    - Read runs
+    - Queue plans
+    - Apply runs
+    - Lock and unlock workspaces
+    - Download sentinel mocks
+    - Read variable
+    - Read and write variables
+    - Read state outputs
+    - Read state versions
+    - Read and write state versions
+  - Fixed Permission Sets
+    - Read
+      - Read runs
+      - Read variables
+      - Read state versions
+    - Plan
+      - Queue Plans
+      - Read variables
+      - Read state versions
+    - Write
+      - Apply runs
+      - Lock and unlock workspaces
+      - Download Sentinel mocks
+      - Read and write variables
+      - Read and write state versions
+
+### API Tokens
+
+Terraform Cloud supports three types of API Tokens. User, Team, and Organization Tokens.
+
+- Organization API Tokens
+  - Have permissions across the entire organization
+  - Each organization can have one valid API token at a time
+  - Only organization owners can generate or revoke an organization's token.
+  - Organization API tokens are designed for creating and configuring workspaces and teams. 
+    - Not recommended as an all-purpose interface to Terraform Cloud
+- Team API Tokens
+  - allow access to the workspaces that the team has access to, without being tied to any specific user
+  - Each team can have one valid API token at a time
+  - any member of a team can generate or revoke that team's token
+  - When a token is regenerated, the previous token immediately becomes invalid
+  - designed for performing API operations on workspaces.
+  - same access level to the workspaces the team has access to
+- User API Tokens
+  - Most flexible token type because they inherit permissions from the user they are associated with
+  - Could be for a real user or a machine user.
+
+### Cost Estimation
+
+- Cost Estimation is a feature to get a monthly cost of resources to display alongside your runs.
+- Cost Estimation is available with Teams and Governance plan and above
+- Cost Estimation is only for specific cloud resources for AWS, Azure, and GCP.
+- You can use a Sentinel Policy to assert the expectation that resources are under a particular cost.
+
+### Terraform Cloud Agents
+
+- Terraform Cloud Agents is a paid feature of the Business plan to allow Terraform Cloud to communicate with isolated, private, or on-premise infrastructure.
+- This is useful for on-premise infrastructure types such as vSphere, Nutanix, or OpenStack
+- The agent architecture is pull-based, so no inbound connectivity is required
+- Any agent you provision will poll Terraform Cloud for work and carry out the execution of that work locally.
 
 ## Terraform Enterprise
 
+Terraform Enterprise is the self-hosted distribution of Terraform Platform
+
+Terraform Enterprise offers a private instance of the Terraform Platform application with benefits such as:
+
+- no resource limits
+- with additional enterprise-grade architectural features
+- Audit logging
+- SAML single sign-on (SSO)
+
 ## Workspaces
+
+Workplaces allow you to manage multiple environments or alternate state files. eg. Development, Production
+
+There are two variants of workspaces:
+
+- CLI Workspaces – A way of managing alternate state files (locally or via remote backends)
+- Terraform Cloud Workspaces – acts like completely separate working directories
+
+By default, you already have a single workspace in your local backend called default
+
+Depending on if a local or remote backend changes how the state file is stored
+
+- Local State
+  - Terraform stores the workspace states in a folder called terraform.tfstate.d
+  - In practice, individuals or very small teams will have been known to commit these files to their repositories.
+  - Using a remote backend instead is recommended when there are multiple collaborators
+- Remote State
+  - The workspace files are stored directly in the configured backend.
+
+You can reference the current workspace name via `terraform.workspace`.
 
 ## Sentinel with Terraform
 
+Sentinel is an embedded policy-as-code framework integrated with the Terraform Platform.
+
+- Benefits of Policy as Code
+  - Sandboxing – The ability to create guardrails to avoid dangerous actions or remove the need for manual verification
+  - Codification – The policies are well documented and exactly represent what is enforced
+  - Version Control – Easy to modify or iterate on policies, with a chain of history of changes over time
+  - Testing - syntax and behavior can be easily validated with Sentinel, ensuring policies are configured as expected
+  - Automation – policies existing as code allow you direct integrate policies in various systems to auto-remediate, notify.
+- Sentinel and Policy as Code
+  - Language - All Sentinel policies are written using the Sentinel language
+  - Designed to be non-programmer and programmer-friendly, embeddable and safe.
+  - Development - Sentinel provides a CLI for development and testing.
+  - Testing - Sentinel provides a test framework designed specifically for automation.
+
+A Sentinel with Terraform workflow looks like this: SCM (GitHub) &rarr; Terraform Cloud &rarr; `plan` &rarr; Sentinel Policies &rarr; `apply` &rarr; New Infrastructure
+
+Within Terraform Cloud you can create a Policy Set and apply these to a Terraform Cloud Workspace
+
 ## HashiCorp Packer
+
+Packer is a developer tool to provision a build image that will be stored in a repository.
+
+Using a build image before you deploy provides:
+
+- immutable infrastructure
+- your VMs in your fleet are all one-to-one in configuration
+- Faster deploys for multiple servers after each build
+- Earlier detection and intervention of package changes or deprecation of old technology
+
+A workflow looks like this:
+
+- Commit changes to a git repo which triggers a CI/CD process
+- The CI/CD runs on a worker with Packer installed which builds the image
+- Packer uses a provisioner (usually Ansible) to provision the image
+- The image is then stored in a cloud storage solution (e.g. AWS S3)
+- We then use Terraform to reference that image in our code and deploy the infrastructure
+
+Packer is not a service but a development tool so you need to manually run packer or automate the building of images with a build server running packer.
 
 ## Consul
 
+Consul is a service networking platform that provides:
+
+- service discovery – central registry for services in the network
+  - Allows for direct communication, no single point of failure via load balancers
+- service mesh – managing network traffic between services
+  - A communication layer on top of your container application, think middleware
+- application configuration capabilities
+
+Consul is useful when you have a micro-service or service-oriented architecture with hundred or thousands of services (containerized apps or workloads).
+
+Consul integrates with Terraform in the following ways:
+
+- Remote backend
+  - Consul has a Key Value (KV) Store to store configurations
+- Consul Provider
+
 ## Vault
 
+Vault is a tool for securely accessing secrets from multiple secrets data stores.
+
+Vault is deployed to a server where:
+
+- Vault Admins can directly manage secrets
+- Operators (developers) can access secrets via an API
+
+Vault provides a unified interface:
+
+- to any secret
+  - AWS Secrets, Consul Key Value, Google Cloud KMS, Azure Service principles.
+- providing tight access control
+  - Just-in-Time (JIT) - reducing surface attack based on range of time
+  - Just Enough Privilege (JeP) - reducing service attack by providing least-permissive permissions
+- recording a detailed audit log – tamper evidence
+
 ## Misc
+
+### Atlantis
+
+[Atlantis](https://www.runatlantis.io) is an open-source developer tool to automate Terraform Pull Requests. Atlantis was built as an alternative to Terraform Cloud automation.
+
+### Terragrunt
+
+Terragrunt is a thin wrapper for Terraform that provides extra tools for:
+
+- keeping your configurations DRY
+- working with multiple Terraform modules
+- managing remote state.
+
+Don’t-Repeat-Yourself (DRY) is a programming methodology to abstract repeated code into functions, modules, or libraries and often isolate files to reduce code complexity effort and errors.
+
+Terragrunt can work around the limitations of Terraform in a variety of ways.
+
+- One example is providing dynamic values to a provider on the definition which cannot be done with Terraform.
+- Terragrunt supports better granularity for modules by reducing lots of boilerplate.
+- This is important when you need to start writing UnitTests for your infrastructure
 
 ## Sources
 
