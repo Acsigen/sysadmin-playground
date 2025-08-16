@@ -84,9 +84,158 @@ What is a GO module? A GO module can be associated with a project. It is compose
 
 Now we can run `go build` and the compilation process will output a file with the name of our applicattion. In our case `myhelloworld`. We then execute that file to run our code.
 
+If we configured the module, we can also run `go run .` to run the application for development purposes as explained before.
+
 In Windows, the output file has the `.exe` extension. On MacOS and Linux it has no extension.
 
 ### Values and Types
+
+GO has three main data types:
+
+- bool
+- numeric
+- string
+
+GO supports multiple types of variables. Below are the main ones:
+
+- int - stores integers (whole numbers), such as 123 or -123 (based on your CPU arhchitecture it can be int32 or int64)
+- float32 - stores floating point numbers, with decimals, such as 19.99 or -19.99
+- string  - stores text, such as "Hello World". String values are surrounded by double quotes
+- bool - stores values with two states: true or false
+
+**Unless you need to perform optimisations on your code, stick to the main variable types.**
+
+To create (meaning initialise) a variable in GO we use the `var` keyword followed by the name of the variable (common way is camelCase).
+
+```go
+// Strong type casting
+var myVar int = 5
+
+// Type is inferred
+var myVar = 10
+```
+
+There is also another way without the `var` keyword but by using the `:=` operator. This method will initialise the variable, assign a value to it and infer the type of the variable:
+
+```go
+my_var := 5
+```
+
+**`var` method can be used inside and outside of functions while `:=` method can only be used inside functions.**
+
+To showcase values and types, here is an investment calculator written in GO:
+
+```go
+package main
+
+import (
+    "fmt"
+    "math"
+)
+
+func main() {
+    var investmentAmount = 1000
+    var expectedReturnRate = 5.5
+    var years = 10
+
+    var futureValue = float64(investmentAmount) * math.Pow(1+expectedReturnRate/100, float64(years))
+    fmt.Println(futureValue)
+}
+```
+
+Let's go through the program:
+
+- We can see that to import multiple packages, we wrap them between paranthesis
+- We initialised 3 variables, two integers and one float
+- We notice that when calculating the future value, we converted integers to float. We did this because in GO, we cannot mix types
+
+To make the program more readable, we already know that we will work moslty with float values, we can set the type of variables manually so we can avoid data type conversion in the formula:
+
+```go
+package main
+
+import (
+    "fmt"
+    "math"
+)
+
+func main() {
+    var investmentAmount float64 = 1000
+    expectedReturnRate := 5.5
+    var years float64 = 10
+
+    var futureValue float64 = investmentAmount * math.Pow(1+expectedReturnRate/100, years)
+    fmt.Println(futureValue)
+}
+```
+
+**The common convention is that if we want GO to infer a type, we use the `:=` operator. Otherwise, we use the `var` method. This makes it easier to understand the intention of the developer**
+
+There is another trick in GO. We can initialise multiple variables of the same type in a single line by separating the variable names and their values by a comma:
+
+```go
+package main
+
+import (
+    "fmt"
+    "math"
+)
+
+func main() {
+    var investmentAmount,years float64 = 1000,10
+    expectedReturnRate := 5.5
+
+    futureValue := investmentAmount * math.Pow(1+expectedReturnRate/100, years)
+    fmt.Println(futureValue)
+}
+```
+
+We could do this with different variable types by ommiting the type before the `=` sign: `var investmentAmount,years = 1000,"10"`. Now the years variable is inferred to be of type string. And, of course, we can use the `:=` operator for this scenario too.
+
+**While we can use a compressed synthax by using `:=` operator and single line assignment for variables, don't overuse it because it might make your code harder to understand.**
+
+Until now we talked about variables and types. GO also has constants (read-only variables). **The value of a constant must be assigned when you declare it.**
+
+There are some rules for constants too:
+
+- Constant names follow the same naming rules as variables
+- Constant names are usually written in uppercase letters (for easy identification and differentiation from variables)
+- Constants can be declared both inside and outside of a function
+
+Until now, our program is pretty boring, the user cannot interact with it. Let's see how we can ask the user to input some values so he or she can find out their investment return.
+
+To get the user input, the `fmt` package has a function named `Scan`. It scans for the input inside the terminal.
+
+```go
+package main
+
+import (
+    "fmt"
+    "math"
+)
+
+func main() {
+    const inflationRate float64 = 2.5
+    var investmentAmount, expectedReturnRate, years float64
+
+    fmt.Print("Insert the amount: ")
+    fmt.Scan(&investmentAmount)
+    fmt.Print("Insert the interest rate: ")
+    fmt.Scan(&expectedReturnRate)
+    fmt.Print("Insert the period in years: ")
+    fmt.Scan(&years)
+
+    futureValue := investmentAmount * math.Pow(1+expectedReturnRate/100, years)
+    futureRealValue := futureValue / math.Pow(1+inflationRate/100, years)
+    fmt.Println(futureRealValue)
+}
+```
+
+We notice that the variables where we want to put the values into are already initialised. They can also have values, the value inserted by the user will override the "default" value. **If we do not assign a value to a variable, it will be considered a default `null` value. In case of float64 is 0.0.**
+
+We also notice that inside the scan function, the variable name is prefixed with `&`. That is a pointer to the actual variable. More about pointers later.
+
+The `fmt.Scan()` has an important limitation: You can't (easily) fetch multi-word input values. Fetching text that consists of more than a single word is tricky with this function. We will see later an alternative.
 
 ### Functions
 
