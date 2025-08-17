@@ -237,6 +237,54 @@ We also notice that inside the scan function, the variable name is prefixed with
 
 The `fmt.Scan()` has an important limitation: You can't (easily) fetch multi-word input values. Fetching text that consists of more than a single word is tricky with this function. We will see later an alternative.
 
+For printing multiple values to stdout, the `fmt.Println()` function allows multiple parameters separated by comma. It will add spaces automatically between elements.
+
+There are also multiple ways to format outputs. One of them is the classic `Printf` which is quite popular in other programming languages such as C or C++.
+
+In our code, the print code would look like this:
+
+```go
+...
+    // fmt.Println("Fruture Value:", futureRealValue)
+    fmt.Printf("Future Value: %v\n", futureRealValue)
+```
+
+Note that we used `%v` which is a special element that tells `Printf` that there should be a variable. In our case, `futureRealValue`. The `\n` is just for new line, nothing special about it.
+
+We also noticed that we commented the previous line. In GO, single line comments start with `//` and multiline comments are between `/*` and `*/`.
+
+Sadly, there isn't an equivalent to `fstrings` from Python to format output.
+
+But floats has too many decimals, how do we format that to have only two decimals? Well, `fmt` package comes to help with `%f`.
+
+```go
+...
+    fmt.Printf("Future Value: %.2f\n", futureRealValue)
+```
+
+The `.2` part indicates the number of decimals. More details about formatting output is presented in the `fmt` package documentation.
+
+`Printf` and the rest of the functions that start with `Print` will send the text directly to stdout. But what if we want to format a value or a string and store it in a variable? Well we have `fmt.Sprintf` which works the same as `Printf` but it returns a value.
+
+*There are equivalents for `Print`, and `Println`, those are `Sprint` and `Sprintln`.*
+
+```go
+    formattedRealValue := fmt.Sprintf("Fruture Value: €%.2f", futureRealValue)
+    fmt.Println(formattedRealValue)
+```
+
+There is also the possibility to use multi-line strings. In Python, we would use `"""` quotes to indicate that the following string is multiline. In GO we use tickmark:
+
+```go
+myString := `This is
+    a multiline
+
+string`
+fmt.Println(myString)
+```
+
+When using this method, special characters such as `\n` won't work because they are useless.
+
 ### Functions
 
 ### Control Structures
