@@ -287,4 +287,147 @@ When using this method, special characters such as `\n` won't work because they 
 
 ### Functions
 
+In GO, functions are usually declared below the `main` function. Nothing stops you to place them above main, but this is the common practice. This way, we can easily identify the main part of the code first, and then go into more details for each function.
+
+As you saw with `main`, functions in GO start with `func` followed by the name of the function with paranthesis (which can contain parameters) and then followed by curly braces. The parameters that we configure when we create a function must have a type.
+
+If you want the function to return a value, you need to define the data type of the return value (such as `int`, `string`, etc). Also the `return` statement is quite simple.
+
+```go
+func myFunc(var1 int, var2 int) int {
+    var result int = var1 + var2
+    return result
+}
+```
+
+In Go, you can name the return values of a function in advance:
+
+```go
+func myFunc(var1 int, var2 int) (result int) {
+    result = var1 + var2
+    return
+}
+```
+
+We can also return multiple values.
+
+```go
+func myFunc(var1 int, var2 int) (int,int) {
+    var result1 int = var1 + var2 // or result1 := ...
+    var result2 int = var1 * var2 // or result2 := ...
+    return result1, result2
+}
+```
+
+To call a function, we just type the name of the function followed by paranthesis (and the parameters if required).
+
+**Variables defined inside the `main` functions are not directly available into the functions that we call unless we pass them as parameters. If you want to define global variables or constants, declare them before the `main` function.**
+
 ### Control Structures
+
+#### IF ELSE Statements
+
+An example of a control structure is the IF/ELSE statement. A basic example looks loke this:
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    var initial_ballance float32 = 20
+
+    fmt.Println("Welcome to the ATM!")
+    fmt.Println(`Here are your options:
+    1. Check balance
+    2. Deposit money
+    3. Withdraw money
+    4. Exit`)
+
+    var user_choice int
+    fmt.Print("Your response: ")
+    fmt.Scan(&user_choice)
+
+    if user_choice == 1 {
+        fmt.Printf("Your current balance is %v$\n", initial_ballance)
+    } else {
+        fmt.Println("You picked another option, other than 1.")
+    }
+}
+```
+
+Notice that the `else` statement is on the same line as `}`. It should not be on a new line.
+
+There is also a "short" version for an if statement, usually used when the statement is a little bit more complicated:
+
+```go
+...
+wants_check_balance := user_choice == 1
+
+if wants_check_balance {
+    ...
+}
+```
+
+We can also use the conditional operators such as `&&` for AND `||` for OR, etc.
+
+An example of `else if` statements is below:
+
+```go
+package main
+
+import (
+    "fmt"
+)
+
+func main() {
+    var initial_balance float32 = 20
+
+    fmt.Println("Welcome to the ATM!")
+    fmt.Println(`Here are your options:
+    1. Check balance
+    2. Deposit money
+    3. Withdraw money
+    4. Exit`)
+
+    var user_choice int
+    fmt.Print("Your response: ")
+    fmt.Scan(&user_choice)
+
+    wants_check_balance := user_choice == 1
+    wants_deposit_money := user_choice == 2
+    wants_withdraw_money := user_choice == 3
+
+    if wants_check_balance {
+        fmt.Printf("Your current balance is %v$\n", initial_balance)
+    } else if wants_deposit_money {
+        var amount float32
+        fmt.Println("Please enter the amount: ")
+        fmt.Scan(&amount)
+        var new_balance = amount + initial_balance
+        fmt.Printf("%v$ has been added to your account.\n", amount)
+        fmt.Printf("Your new balance is %v$.\n", new_balance)
+    } else if wants_withdraw_money {
+        var amount float32
+        fmt.Println("Please enter the amount: ")
+        fmt.Scan(&amount)
+        var new_balance = initial_balance - amount
+        fmt.Printf("%v$ has been retrieved from your account.\n", amount)
+        fmt.Printf("Your new balance is %v$.\n", new_balance)
+    } else {
+        fmt.Println("You chose to exit.")
+    }
+}
+```
+
+There is one little quirk or feature in GO. If we want the main function to stop executing at some specific line of code, we have two options. We can use the `os` package to call `os.Exit(0)` or we can just use a blank `return` statement. This will stop the execution of the function where it is being used. And since the `main` function doesn't return any value, it will skip the rest of the code. This is available for any function that doesn't return any value.
+
+#### FOR Loops
+
+#### SWITCH Statements
+
+#### Writing to files
+
+#### Reading from files
+
+#### Handling errors
