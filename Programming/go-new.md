@@ -424,10 +424,191 @@ There is one little quirk or feature in GO. If we want the main function to stop
 
 #### FOR Loops
 
+In GO, a `for` loop is the only type of loop we can create. There is no `while`.
+
+The `for` loop declaration is quite classical and similar to C/C++: we have the initialisation of a variable that we use as an iterator followed by `;` a condition of that iterator followed again by `;` and then an operation that we use on the iterator (e.g. `i++`).
+
+There is a little trick that I use in order to get an infinite loop (similar to `While True` in Python):
+
+```go
+for i := 0; i < 1; i = 0 {
+    // This code will run forever because i never gets to be equal to 1.
+}
+```
+
+Of course, there is another simpler version:
+
+```go
+for {
+    // This will run forever.
+}
+```
+
+There are multiple ways to get out of an infinite loop (or a very long one). We can either use the `return` statement as we learned before or we can use `break`. This will break you out of the loop without exiting the main function as `return` does.
+
+There is also the option to `continue` which skips the current iteration and starts a new one (if there are any iterations to run)
+
+```go
+for i := 0; i < 5; i++ {
+    if i == 3 {
+        fmt.Println("Skipping iteration no. 3")
+        continue
+    }
+    fmt.Println("This is iteration no.", i)
+}
+```
+
+This is the classical `for` loop in GO. There are some more modern forms of `for` loops that use the `range` keyword:
+
+```go
+for i := range 5 {
+    fmt.Println(i) // will print 0 to 4
+}
+```
+
 #### SWITCH Statements
+
+Multiple IF statements can be messy. For these scenarios we can use `switch` statement.
+
+Now, our code would look like this:
+
+```go
+package main
+
+import (
+    "fmt"
+)
+
+func main() {
+    var initial_balance float32 = 20
+    fmt.Println("Welcome to the ATM!")
+    for {
+        fmt.Println(`Here are your options:
+        1. Check balance
+        2. Deposit money
+        3. Withdraw money
+        4. Exit`)
+
+        var user_choice int
+        fmt.Print("Your response: ")
+        fmt.Scan(&user_choice)
+
+        switch user_choice {
+        case 1:
+            fmt.Printf("Your current balance is %v$\n", initial_balance)
+        case 2:
+            var amount float32
+            fmt.Println("Please enter the amount: ")
+            fmt.Scan(&amount)
+            var new_balance = amount + initial_balance
+            fmt.Printf("%v$ has been added to your account.\n", amount)
+            fmt.Printf("Your new balance is %v$.\n", new_balance)
+        case 3:
+            var amount float32
+            fmt.Println("Please enter the amount: ")
+            fmt.Scan(&amount)
+            var new_balance = initial_balance - amount
+            fmt.Printf("%v$ has been retrieved from your account.\n", amount)
+            fmt.Printf("Your new balance is %v$.\n", new_balance)
+        default:
+            fmt.Println("You chose to exit.")
+            fmt.Println("Thanks for using our bank!")
+            return
+        }
+
+    }
+}
+```
 
 #### Writing to files
 
+To write data to files we use the `os` package with the `WriteFile` function.
+
+The function has 3 parameters:
+
+- The path of the file as a string
+- The data to be written as a collection of bytes (more on that later)
+- The permissions (e.g. `0644`)
+
+```go
+func write_balace_file(balance float32) {
+    balance_string := fmt.Sprint(balance)
+    os.WriteFile("account-balance.txt", []byte(balance_string), 0644)
+}
+```
+
 #### Reading from files
 
+Reading from files is a bit more complicated. This is the code:
+
+```go
+func read_balance_file() float64 {
+    data, _ := os.ReadFile("account-balance.txt")
+    balance_text := string(data)
+    balance, _ := strconv.ParseFloat(balance_text, 64)
+    return balance
+}
+```
+
+- First, we store the content of the file in the `data` variable. Since the function can also return an error we must handle that with the `_` special variable. More on that on [Handling errors](#handling-errors)
+- Then we need to convert the data to `string`
+- Then, with the helo ov `strconv` package, we convert the string to `float64` so we can return it.
+
 #### Handling errors
+
+We noticed in previous chapter, we can get an error if the file does not exist.
+
+In GO, when compared to other languages, we do not have a `try/catch` or `try/except` statement. Here, the functions are written in such way that the error is returned alongside the value. If there is no value, there should be a default one used.
+
+You should write functions the same.
+
+That's why we used `data, _ := os.ReadFile("account-balance.txt")` before. The `_` tells GO to discard that value because we do not want to make use of it. We can also use it in for loops over more complex data structures when we want to discard a key or value in a key-value pair.
+
+When we want to treat the error, we use something like this:
+
+```go
+data, err := os.ReadFile("account-balance.txt")
+
+if err != nil {
+    fmt.Println("Whoops! There is an error while reading the file:", err)
+}
+```
+
+Now if the file doesn't exist, we will get "Whoops! There is an error while reading the file:  open account-balance.txt: no such file or directory"
+
+**`nil` is one of the data types in GO. It means Null or empty value.**
+
+When writing a function that can return an error, usually the returned error is the last value you return. There is an `errors` package that can handle that. Also, the returned type is `error`:
+
+```go
+func myError() (int, error) {
+    var isError bool = true
+
+    if isError {
+        return 1, errors.New("this is a new error")
+    } else {
+        return 0, nil
+    }
+}
+```
+
+There will be times when you do not want to continue running the application if there is an error. We can use the `return` statement as before or, more profesionally, we can use the built-in `panic()` function.
+
+We can pass the value of `err` or another message as a parameter to the `panic()` function.
+
+The function will print more details than the `err` variable. It will also print the function name and the line number of the file where the error took place.
+
+## Packages
+
+### Splitting code across multiple files
+
+### Splitting files across multiple packages
+
+### Import and use custom packages
+
+## Sources
+
+- [Udemy Course](https://www.udemy.com/course/go-the-complete-guide/)
+- [W3Schools](https://www.w3schools.com/go/)
+- [GO By Example](https://gobyexample.com/) - Here you will find a lot of examples on how to use GO in various scenarios.
+- [Official Documentation](https://go.dev/doc/)
