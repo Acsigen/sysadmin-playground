@@ -600,11 +600,420 @@ The function will print more details than the `err` variable. It will also print
 
 ## Packages
 
-### Splitting code across multiple files
+Let's assume that our code became a little bit messy and we want more structure.
 
-### Splitting files across multiple packages
+For our ATM application, we will move the user greeting and choice section to another file.
 
-### Import and use custom packages
+We create a new file named user-greet.go with the following contents:
+
+```go
+package main
+
+import "fmt"
+
+func greetUser() {
+    fmt.Println("What do you want to do?")
+    fmt.Println("1. Check balance")
+    fmt.Println("2. Deposit money")
+    fmt.Println("3. Withdraw money")
+    fmt.Println("4. Exit")
+}
+```
+
+Now, from the `bank.go` app file we can call the `greetUser()` functio without importing anything. This is because both of them are inside the `main` package.
+
+For bigger, more complex projects we can also use multiple packages to structure our code. This is done when we write utility code such as interacting with the filesystem.
+
+So, for our example, we will put our read and write file functions into another package.
+
+To make use of another package, we usually create a new directory and place the files there.
+
+Now, to import the package into our `bank.go` file, we take the module name from the `go.mod` file and append the path to the directory where the package is.
+
+We currently have the following directory structure:
+
+- /
+  - bank.go
+  - go.mod
+  - user-greet.go
+  - fsinteraction
+    - get-balance.go
+    - write-balance.go
+
+So our import statement would be `example.com/bank/fsinteracion`.
+
+**NOTE: When declaring functions in GO, we have private functions and public functions. Private functions are available only within the package, public functions can be called from outside the package. We can identify the type of the function based on its name. If the name starts with lowercase letter, it is private. If it starts with an uppercase letter, it is public.**
+
+Now, since we moved our write and read functions to another package, we must rename them with the first letter being uppercase so we can call them from the main package.
+
+The call will be something like `fsinteraction.GetBalanceFromFile(accountBalanceFile)`.
+
+We saw how we can create our own packages, but how can we work with external packages?
+
+Since GO standard library comes with a lot of built-in packages, using external ones is not really common. But we can do it by running `go get  github.com/ac999/rossn` and then importing it using the path to the SCM repository (e.g. GitHub or GitLab).
+
+An example is the Romanian SSN Validator which takes a string and checks if it is a valid Romanian SSN (CNP).
+
+```go
+package main
+
+import (
+    "fmt"
+
+    "github.com/ac999/rossn"
+)
+
+func main() {
+    var cnp string = "8230667845951"
+
+    err := rossn.Validate(cnp)
+
+    if err != nil {
+        panic(err)
+    } else {
+        fmt.Println("CNP is valid.")
+    }
+}
+```
+
+We can now see that the `go.mod` file has changed, we now have a line `require github.com/ac999/rossn v1.0.0`. The `v1.0.0` is the tag of the repository that we used.
+
+If we already have a requirement there, we can just run `go get` and it will download the dependencies based on the contents of the `go.mod` file.
+
+## Pointers
+
+If you are not familiar with pointers from C/C++, we will define pointers as variables that store value addresses instead of values.
+
+For an example, let's say we have a variable `age` of type `int` that has the value `32`. When we initialise this variable with `var age int = 32`, the value 32 will be stored inside the RAM at a specific address (e.g. `0xc000018050`).
+
+When we use pointers we do not store the value itself, but the address of that variable from the RAM. so `agePointer = &age` will store the memory address of age and not 32 directly. If we set `agePointer := age`, the variable `agePointer` will get the value of 32 and GO will store it to another new address in RAM. This makes resource management quite inefficient. To void cluttering the RAM with repeated values we use pointers.
+
+Another advantage is that we can direclty mutate values. This means that we can directly edit that value without creating a copy of it. This can lead to less code since we can avoid returning a variable within a function because we use the pointer to set the variable value directly in memory. But it can also lead to less understandable code due to the same functionality.
+
+If we create a pointer that has the reference value of an `int`, the type of the pointer will be `*int`. Which is a special type that points to the memory address of that integer value.
+
+If we print the pointer, we will get the memory address. If we want to print the referenced value, we must use `*` to achieve that `fmt.Println(*agePointer)`. This is called dereferencing.
+
+Example without pointers:
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    age := 32 //regular variable
+    fmt.Println("Age:", age)
+
+    adultYears := getAdultYears(age)
+    fmt.Println("Adult Years:", adultYears)
+}
+
+func getAdultYears(age int) int {
+    return age - 18
+}
+```
+
+The `age` that we used inside the `getAdultYears()` function has the same value as `age` variable but it has another memory address since it is a copy of `age`.
+
+Example with pointers:
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    age := 32 //regular variable
+
+    var agePointer *int = &age
+
+    fmt.Println("Age:", *agePointer)
+
+    adultYears := getAdultYears(agePointer)
+    fmt.Println("Adult Years:", adultYears)
+
+}
+
+func getAdultYears(age *int) int {
+    return *age - 18
+}
+```
+
+Using pointers is worths the effort of managing the pointers only when we work with large amounts of data. When we talk about integers, since it uses extremely little amount of memory, we can use the standard method. **This is an exception when we work in IoT where resources are low.** Pointers are an optimisation not a standard (*this is my own opinion, take it with a grain of salt*).
+
+We talked before about directtly mutating values. Here is an example below:
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    age := 32 //regular variable
+
+    var agePointer *int = &age
+
+    fmt.Println("Age:", *agePointer)
+
+    getAdultYears(agePointer)        // we mutate the variable here
+    fmt.Println("Adult Years:", age) //so we print the mutated variable here
+
+}
+
+func getAdultYears(age *int) {
+    *age -= 18
+}
+```
+
+As you can see, the `getAdultYears` function no longer returns a value, it directly changes the referenced value without needing to copy it. So when we print the `age` variable a second time, after we called the function` age has a new value, but at the same address in memory.
+
+## Structs and Custom Types
+
+GO has more advanced types. One of them is `struct`. It allows us to structure data, to group related data together.
+
+### Creating and Using Structs
+
+We will start with an application that asks a user for some details (e.g. first name, last name, and birthdate) and then prints out the details.
+
+We can do this without structs like this:
+
+```go
+package main
+
+import (
+    "fmt"
+)
+
+func main() {
+    var firstName string = getUserData("Please enter your first name: ")
+    var lastName string = getUserData("Please enter your last name: ")
+    var birthdate string = getUserData("Please enter your birthdate (DD/MM/YYYY): ")
+
+    // ... do something awesome with that gathered data!
+
+    displayUserData(firstName, lastName, birthdate)
+}
+
+func displayUserData(firstName string, lastName string, birthdate string) {
+    fmt.Println(firstName, lastName, birthdate)
+}
+
+func getUserData(promptText string) string {
+    fmt.Print(promptText)
+    var value string
+    fmt.Scan(&value)
+    return value
+}
+```
+
+But when the application will grow in complexity, it is error prone and will no longer be efficient.
+
+To define a struct type we actually define a custom type. We declare these types outside of functions (usually, not all the time) because we want to use them inside multiple functions. To declare a custom type, we use the `type` keyword, followed by the name of the type (as with functions, upper or lower case for the first character will make it public or private), then followed by the type of the custom type we want to create, in our case `struct`. Inside the curly braces, we configure our data fields which are composed of other data types (string, int, etc).
+
+Struct data types can also be nested, as seen bellow with the `time.Time` data type provided by the `time` package.
+
+As with classes from other programming languages, to use a struct, we must initialise an instance of it (see comments in the code below).
+
+```go
+package main
+
+import (
+    "fmt"
+    "time"
+)
+
+type user struct {
+    firstName string
+    lastName  string
+    birthdate string
+    createdAt time.Time //another struct type provided by the time package
+}
+
+func main() {
+    var inputFirstName string = getUserData("Please enter your first name: ")
+    var inputLastName string = getUserData("Please enter your last name: ")
+    var inputBirthdate string = getUserData("Please enter your birthdate (DD/MM/YYYY): ")
+
+    var appUser user = user{} // initialise the instance of user struct. appUser is of type user
+
+    appUser = user{
+        firstName: inputFirstName, //If we define these in the same order as the struct data type, we can ommit the keys and place in only the values
+        lastName:  inputLastName,
+        birthdate: inputBirthdate,
+        createdAt: time.Now(),
+    }
+    // appUser.birthdate = "01/01/1970" //another way of setting the values
+
+    displayUserData(&appUser)
+}
+
+func displayUserData(u *user) {
+    // fmt.Println((*u).firstName, (*u).lastName, (*u).birthdate, (*u).createdAt)
+    /* This notation is actually a shortcut
+        Normally we should've write the line above.
+        But GO allows this shortcut for our sanity.
+    */
+    fmt.Println(u.firstName, u.lastName, u.birthdate, u.createdAt)
+}
+
+func getUserData(promptText string) string {
+    fmt.Print(promptText)
+    var value string
+    fmt.Scan(&value)
+    return value
+}
+
+```
+
+### Adding methods to structs
+
+We can attach functions to structs. That is called a method. We could attach the output function to the struct. GO attaches functions to structs in a little bit more unusual way than other programming languages. Usually, you would have a function inside the class that would display the desired output.
+
+In GO, we literally attach a function to a struct by placing `()` after the `func` keyword and place the name of the local variable and the struct name between the paranthesis, then we remove the arguments of the function since we no longer need them. So our output function looks like this:
+
+```go
+func (u user) speak() {
+    fmt.Println(u.firstName, u.lastName, u.birthdate, u.createdAt)
+}
+```
+
+That type of argument is called a "Receiver" and it is a special type of argument.
+
+To call this method, we just run `appUser.speak()` after we initialised the instance of the struct.
+
+We could also keep the old format of the function:
+
+```go
+func (user) speak(u *user) {
+    fmt.Println(u.firstName, u.lastName, u.birthdate, u.createdAt)
+}
+```
+
+But with this one, when we call the method, we must pass the struct as an argument `appUser.speak(&appUser)`. We do not do that because we can also add methods that change data. So when we call that, we can make use of the parameters of the function to pass in the new data.
+
+**When we write functions that will change data of a struct, it is common to use a pointer to that struct instead of the struct itself to avoid creating copies of that struct with the new data.**
+
+```go
+...
+func main() {
+    ...
+    appUser.speak()
+    appUser.clearName()
+    appUser.changeName("John", "Smith")
+    appUser.speak()
+}
+
+// no need for pointer here
+func (u user) speak() {
+    fmt.Println(u.firstName, u.lastName, u.birthdate, u.createdAt)
+}
+
+// pointer recommended
+func (u *user) clearName() {
+    u.firstName = ""
+    u.lastName = ""
+}
+
+// pointer recommended
+func (u *user) changeName(fname string, lname string) {
+    u.firstName = fname
+    u.lastName = lname
+}
+...
+```
+
+**For more complex structs, it is recommended to place them and their methods into a separate file in the same package. This way it is easier to identify the methods of the struct without cluttering the main logic of the code.**
+
+We can also make use of functions to create constructors. Even though is nothing special about this function, it is a common way to create the structs:
+
+```go
+func newUser(firstName string, lastName string, birthdate string, createdAt time.Time) *user {
+    return &user{
+        firstName,
+        lastName,
+        birthdate,
+        createdAt, //another struct type provided by the time package
+
+    }
+}
+```
+
+*Of course, we can skip the pointers.*
+
+Now, to create a new user, we just run:
+
+```go
+...
+var appUser *user
+appUser = newUser(inputFirstName, inputLastName, inputBirthdate, time.Now())
+...
+```
+
+We can also use these functions for validation.
+
+```go
+func newUser(firstName string, lastName string, birthdate string, createdAt time.Time) (*user, error) {
+    if firstName == "" || lastName == "" {
+        return nil, errors.New("We are missing the First Name or the Last Name")
+    }
+
+    return &user{
+        firstName,
+        lastName,
+        birthdate,
+        createdAt, //another struct type provided by the time package
+
+    }, nil
+}
+```
+
+One more thing. When we configure the struct as a different package, the properties of the struct have the same capabilities as the functions or the struct itself when it comes to private and public properties. So if we want to access `firstName` from outside the package, we must define it as `FirstName`.
+
+We can also use something that is similar to Java's inheritance when we use an existing struct as a starting point for another struct (this is called an embedded struct):
+
+```go
+type user struct {
+    firstName string
+    lastName  string
+    birthdate string
+    createdAt time.Time //another struct type provided by the time package
+
+}
+
+type admin struct {
+    email    string
+    password string
+    user
+}
+
+func newAdmin(email, password string) admin {
+    return admin{
+        email: email,
+        password: password,
+        user: user{
+            firstName: "John",
+            lastName: "Smith",
+            birthdate: "01/01/1970",
+            createdAt: time.now(),
+        },
+    }
+}
+```
+
+There is a feature of structs that helps when we want to place the data into a JSON format (with the `json` package, which automatically parses the tags). It is called a struct tag. It is a metadata that we use for our data. We place the metadata between tickmarks after the type of data.
+
+```go
+type user struct {
+    firstName string `json:"first_name"`
+    lastName  string
+    birthdate string
+    createdAt time.Time //another struct type provided by the time package
+
+}
+```
+
+In a nutshell, structs are the equivalent of **classes** from other programming languages.
 
 ## Sources
 
