@@ -1183,6 +1183,14 @@ func main() {
 
 We do that by adding `[]` after the name of the function and before the `()`. In our case `T` will be any of the type int, float64, or string. So if we pass two ints, it will return `3` if we pass two strings it will return `"12"`. Of course, we cannot match strings with ints, that will return an error.
 
+## Arrays, Slices and Maps
+
+### Arrays
+
+### Slices
+
+### Maps
+
 ## Sources
 
 - [Udemy Course](https://www.udemy.com/course/go-the-complete-guide/)
