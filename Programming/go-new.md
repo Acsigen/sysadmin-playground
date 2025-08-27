@@ -1187,9 +1187,76 @@ We do that by adding `[]` after the name of the function and before the `()`. In
 
 ### Arrays
 
+Well, arrays are basically lists of data. Like in JSON array or YAML list. The purpose of arrays to group data.
+
+Like with other variables, arrays can be defined strongly or inferred. But the shape is a little bit ~weird~ different when compared to other programming languages:
+
+```go
+// Only initialise it
+var productNames [4]string
+// Standard way
+var prices = [4]float64{10.99, 20, 46, 38.99}
+// Inferred way
+var inferredPrices = [...]int{1, 2, 3}
+```
+
+Let's look how to declare the array in a standard way. We have the classic `var prices` which tells the name of the variable, followed by `=` and then we have the size of the array `[4]`, the data type `float64` and a list of items inside the array `{10.99, 20, 46, 38.99}`.
+
+In GO arrays have predefined sizes. When using the inferred way, the size is calculated automatically.
+
+To target a specific value in an array we use its index `prices[2]` will target `46`. We do the same for altering the contents of items (allocated or not) `prices[1] = 2`.
+
+Since arrays have a static length, we cannot append data to them, only update the values.
+
+To append more data, we need a new array with a larger size, set the contents of the new array to be the old array and then append the new data.
+
 ### Slices
 
+Slices are similar to arrays, but are more powerful and flexible. The length of a slice can grow and shrink as you see fit.
+
+They still have a fixed size in the backend, but now we do not get to care about it. A slice in Go is a view into an underlying array. Think of it as a window that lets you see and manipulate a portion of that array. The slice itself doesn't store any data - it just references data in the underlying array. If you append elements beyond the capacity, Go creates a new, larger underlying array and copies the elements over.
+
+Initialising a dynamic sized slice is quite similar to an array but without mentioning the size:
+
+```go
+// Only initialise a dynamic sized slice
+var productNamesSlice = []string{}
+// Standard way
+var pricesSlice = []float64{10.99, 20, 46, 38.99}
+```
+
+We can also create a slice based on an existing array:
+
+```go
+var productNames [4]string = [4]string{"books","newspapers", "DVDs", "CDs"}
+
+// Will create a slice (with a backend of an array) with newspapers and DVDs
+var selectedProducts = productNames[1:3]
+
+// Will create a slice with the first 3 items of the initial array
+var selectedProducts = productNames[:3]
+```
+
+Slices can also be created from other slices since they reference an array in the backend.
+
+There are some builtin functions that work well with arrays:
+
+- `len` - The length of the array
+- `cap` - The capacity of the array
+- `make` - a function that can initialise an array
+- `append` - a function that will append items to an existing array and return the new array
+
+```go
+// Create a slice with make() function
+myslice1 := make([]int, 5, 10)
+myslice1 = append(myslice1, 20, 21)
+```
+
+Is more common to use slices directly than using fixed size arrays.
+
 ### Maps
+
+### Iterating over Arrays, Slices and Maps
 
 ## Sources
 
