@@ -1015,9 +1015,178 @@ type user struct {
 
 In a nutshell, structs are the equivalent of **classes** from other programming languages.
 
+## Interfaces and Generic Code
+
+Interfaces helps us write more flexible code.
+
+In GO, an interface is a type that lists methods without providing their code. You can’t create an instance of an interface directly, but you can make a variable of the interface type to store any value that has the needed methods.
+
+Let's say we want to calculate the perimeter and area of a shape, no matter the shape (circle or rectangle). An interface declaration looks like this:
+
+```go
+// Define the interface
+type geometry interface {
+    area() float64
+    perim() float64
+}
+```
+
+An interface method can also have input parameters but we won't use this for our current example.
+
+We then need to create the structs for a rectangle and a cirlce:
+
+```go
+// Define the rectangle
+type rect struct {
+    width, height float64
+}
+
+// Define the circle
+type circle struct {
+    radius float64
+}
+```
+
+Now we need to define the methods for those interfaces for each type of data (circle and rectangle). We will have a method that calculates the area of the given object and another one that will calculate the perimeter:
+
+```go
+// Area calculation method for a rectangle
+func (r rect) area() float64 {
+    return r.width * r.height
+}
+
+// Perimeter calculation method for a rectangle
+func (r rect) perim() float64 {
+    return 2*r.width + 2*r.height
+}
+
+// Area calculation method for a circle
+func (c circle) area() float64 {
+    return math.Pi * c.radius * c.radius
+}
+
+// Perimeter calculation method for a cirlce
+func (c circle) perim() float64 {
+    return 2 * math.Pi * c.radius
+}
+```
+
+If a variable has an interface type, then we can call methods that are in the named interface.
+
+```go
+// A function that calls the method to calculate the area
+func measureArea(g geometry) float64 {
+    return g.area()
+}
+
+// A function that calls the method to calculate the perimeter
+func measurePerim(g geometry) float64 {
+    return g.perim()
+}
+```
+
+The circle and rect struct types both implement the geometry interface so we can use instances of these structs as arguments to measure.
+
+```go
+func main() {
+    // Initialise the circle and the perimeter
+    r := rect{width: 3, height: 4}
+    c := circle{radius: 5}
+
+    // Calculate the area of a circle
+    fmt.Println("The area is:", measureArea(r))
+
+    // Calculate the perimeter of a rectangle
+    fmt.Println("The perimeter is:", measurePerim(c))
+}
+```
+
+Another way of writing the code without the `measureArea` and `measurePerim` functions, that might make it easier to wrap your brain around the concept, looks like this:
+
+```go
+func main() {
+    // Initialise the geometry as a circle with radius 5
+    var g geometry = circle{radius: 5}
+
+    // calculate the area of the geometry circle
+    fmt.Println(g.area())
+}
+```
+
+Now if we add more shapes and define methods for them that calculate the area and the perimeter, we can use the geometry interface to call those methods. This makes our code more dynamic since the interface doesn't really care what type of data you feed into it as long as there is a method for that shape.
+
+We can also have interfaces that embed other interfaces. But that is more of an advanced subject and beyond the scope of this guide.
+
+There is a special type in GO named `any`. This way, we can do a little trick and perform various actions based on the type of the parameter:
+
+```go
+func printSomething (value interface{}) { // Or use `any` instead of `interface{}`
+    swich value.(type){
+        case int:
+        ...
+        case string:
+        ...
+        default:
+        ...
+    }
+}
+```
+
+The `value.(type)` can be used only with `switch` statement.
+
+One more trick and we're done with interfaces. Since `value.(type)` won't work outside of `switch` statements, we have an alternative for the cases when we want to check if a variable is of a specific type.
+
+```go
+package main
+
+import "fmt"
+
+func checkType(myval any) bool {
+    typedVal, ok := myval.(float64)
+
+    if !ok {
+        return false
+    } else {
+        fmt.Println(typedVal)
+        return true
+    }
+}
+
+func main() {
+    var myval int = 32
+    status := checkType(myval)
+    fmt.Println(status)
+
+}
+```
+
+A short explanation: The `myval.(float64)` will return two values, a float 64 and a bool. `typedVal` will be `0` if the variable is not float64 or it will take the value of the `myval` if it matches. The `ok` variable will be true or false depending on the input parameter of the function.
+
+### Generics
+
+We can define a list of possible acceptable types for a function input parameters. Those are called generics:
+
+```go
+package main
+
+import "fmt"
+
+func add[T int | float64 | string](a T, b T) T {
+    return a + b
+}
+
+func main() {
+    result := add(1, 2)
+    fmt.Println(result)
+}
+```
+
+We do that by adding `[]` after the name of the function and before the `()`. In our case `T` will be any of the type int, float64, or string. So if we pass two ints, it will return `3` if we pass two strings it will return `"12"`. Of course, we cannot match strings with ints, that will return an error.
+
 ## Sources
 
 - [Udemy Course](https://www.udemy.com/course/go-the-complete-guide/)
 - [W3Schools](https://www.w3schools.com/go/)
 - [GO By Example](https://gobyexample.com/) - Here you will find a lot of examples on how to use GO in various scenarios.
 - [Official Documentation](https://go.dev/doc/)
+- [GeeksForGeeks](https://www.geeksforgeeks.org/go-language/interfaces-in-golang/)
