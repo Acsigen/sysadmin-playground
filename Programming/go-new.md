@@ -1252,9 +1252,69 @@ myslice1 := make([]int, 5, 10)
 myslice1 = append(myslice1, 20, 21)
 ```
 
+**WARNING: If we use `make` to create a string array, and the other one or two arguments are `int` e.g. `make([]string, 2, 5)` it will create an empty slice with the first two positions preallocated (empty values) and a capacity of 5. If we skip the 5, the capacity is set automatically. Also, if we use `make` like this, if we use the append right after it, the first 2 spots on the slice will not be occupied by the appended values, but they will be empty and must be set with their index if we want to assign values on those spots and the appended data will go after those spots even though they're empty at first.**
+
 Is more common to use slices directly than using fixed size arrays.
 
+One more thing before moving to Maps. What if we want to append the items of a slice to another slice? There is a special operator in GO for this, is the name of the slice to append followed by `...`:
+
+```go
+myslice0 := make([]int, 50, 100)
+myslice1 := make([]int, 5, 10)
+myslice1 = append(myslice, myslice0...)
+```
+
 ### Maps
+
+A map is another way of grouping data. It is somehow similar to a struct. It acts more like a Python dictionary.
+
+To declare a map we have the standard `var websites = ` then we say `map` followed by square brackets. Inside those brackets we place the type of data for the keys of that map `[string]` then we continue with the type of data for the values of the map `string` and finally, by the contents of the map between curly braces `{"GOOGLE": "google.com", "MSFT": "microsoft.com"}`.
+
+```go
+var websites = map[string]string{"GOOGLE": "google.com", "MSFT": "microsoft.com"}
+fmt.Println(websites)
+```
+
+To access an item of that map, as with list, we use `fmt.Println(websites["GOOGLE"])` but instead of the index, we type the name of the key. To add a new item, we follow the same style.
+
+We can also delete a key with the `delete(websites, "MSFT")` built-in function.
+
+There is one more trick, we can store more complex data in a map if the type of value is `any`:
+
+```go
+var websites = map[string]any{"GOOGL": "google.com", "MSFT": "microsoft.com", "websitesList": []string{"bing.com", "yahoo.com",},}
+// Assert the type of values
+list, ok := websites["websitesList"].([]string)
+if !ok {
+    // Handle the case where the type assertion fails.
+    fmt.Println("websitesList is not a []string")
+    return
+}
+
+// Print the second item in the slice (yahoo.com).
+fmt.Println(list[1])
+```
+
+Of course, we can use `make()` for maps too.
+
+```go
+// Basic empty map
+mymap := make(map[string]float64)
+
+// Preallocated memory map
+mymapPreallocated := make(map[stirng]flaot64, 5) //For maps we get only one more argument, which is the initial length of the map.
+```
+
+**Of course, this method of using `make` with size preallocation (available for slices also), it is used to avoid memory reallocation. This is more of an optimisation rather than a common practice for small programs.**
+
+Even though that maps and structs look similar, there are some things that set them appart:
+
+- In maps we can use any type of key while in structs we cannot
+- With structs you have predefined data structures, with maps, the data structure is dynamic
+
+### Type Aliases
+
+
 
 ### Iterating over Arrays, Slices and Maps
 
