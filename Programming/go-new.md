@@ -1622,6 +1622,20 @@ This will set `startingValue` as `1` and then it will set `numbers` as `[2 3]`. 
 
 **The variadic parameter is a collect all parameter, so we cannot place it first in the list of parameters.**
 
+What if we already have a slice, but we have a variadic function? How do we call that function?
+
+There is the inverse of the collect all parameter when we call the function. It is the name of the slice followed by `....`:
+
+```go
+func main() {
+    otherNumbers := []int{1, 2, 3}
+    anotherSum := sumup(1, otherNumbers...)
+    fmt.Println(anotherSum) //6
+}
+```
+
+## Concurrency
+
 ## Sources
 
 - [Udemy Course](https://www.udemy.com/course/go-the-complete-guide/)
