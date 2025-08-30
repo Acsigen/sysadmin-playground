@@ -1314,9 +1314,313 @@ Even though that maps and structs look similar, there are some things that set t
 
 ### Type Aliases
 
+We can create an alias that can represent a data type such as a map, array or slice. This can help us write code more clearly since defining these data structures is not the prettiest.
 
+```go
+// Define the type anyMap to be a map
+type anyMap map[string]any
+
+// Initialise the websites variable as anymap
+var websites = anyMap{
+    "GOOGL": "google.com",
+    "MSFT":  "microsoft.com",
+    "websitesList": []string{
+        "bing.com",
+        "yahoo.com",
+    },
+}
+```
+
+We can also add custom methods (e.g. like with structs to print data).
 
 ### Iterating over Arrays, Slices and Maps
+
+To iterate over data, we can use the for loop and the range keyword.
+
+For slices and arrays it goes like this:
+
+```go
+package main
+
+import "fmt"
+
+type userList []string
+
+func main() {
+    var users = userList{
+        "Alice",
+        "Bob",
+        "Malory",
+    }
+    for index, value := range users {
+        fmt.Println("At index", index, "we have the value", value)
+    }
+}
+```
+
+Of course, we can discard the index or the value with the `_` operator based on our needs.
+
+For maps we have the following example:
+
+```go
+package main
+
+import "fmt"
+
+type userAndRole map[string]string
+
+func main() {
+    var usersAndRoles = userAndRole{
+        "Alice":  "User",
+        "Bob":    "Manager",
+        "Malory": "Penetration Tester",
+    }
+
+    for key, value := range usersAndRoles {
+        fmt.Println("User", key, "has the role", value)
+    }
+}
+```
+
+## Functions - Advanced
+
+### Using functions as values
+
+In GO, functions are treated like values (I know, that is a valid sentence in English, bear with me).
+
+We can use functions as parameters to other functions in order to avoid duplicate code.
+
+Let's say we have a slice, with 4 integers. We want to write some functions to double each value of the slice and another one to triple the values. In a traditional way of programming, we would call `doubleNumbers` and then `tripleNumbers` functions to do that. Using functions as values helps us write more clean code. An example of the code is found below and we will go through it line by line to explain the concept.
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    numbers := []int{1, 2, 3, 4}
+    doubled := transformNumbers(&numbers, double)
+    tripled := transformNumbers(&numbers, triple)
+    fmt.Println(doubled)
+    fmt.Println(tripled)
+}
+
+func transformNumbers(numbers *[]int, transform func(int) int) []int {
+    xNumbers := []int{}
+    for _, value := range *numbers {
+        xNumbers = append(xNumbers, transform(value))
+    }
+    return xNumbers
+}
+
+func double(number int) int {
+    return number * 2
+}
+
+func triple(number int) int {
+    return number * 3
+}
+```
+
+So. we have a slice with values from 1 to 4. We hhave two functions named `double` and `triple` which takes one int as a parameter and returns it multiplied by 2 or by 3.
+
+We also have the `transformNumbers` function where the magic (or the headache) happends. This function accepts as parameters a pointer to a slice and a function that has an `int` as parameter and returns an `int` (it doesn't care which function as long as it has those properties). The `transformNumbers` also returns a slice of integers.
+
+Inside this function we have:
+
+- The `xNumbers` slice initialisation which will be our returned value
+- A `for` loop which iterates over the values of the `numbers` parameters discarding the index
+  - Here we call the `append` function to add numbers to the new slice. The `append` function has two parameters, `xNumbers` which is the slice to append items into and a function called `transform` which has the parameter of the value from the for loop. **Note that we do not really have a `transform` function defined in our code except for the parameters of the `transformNumbers` function.** We declared it there in-place.
+  - The `transform` function will actually call (or be expanded as) the function that we put as a parameter when we call the `transformNumbers` function
+- The return statement with `xNumbers`
+
+If we go back to the `main` function, after we initialise our slice, we then set values to `doubled` and `tripled` slices. They are slices because the `transformNumbers` returns a slice.
+
+The `transformNumbers` callback (for both `doubled` and `tripled` variables) has the first parameter as a pointer to the `numbers` slice and only the name of the function that actually returns the calculation result without the paranthesis or the parameter for that function. **This is how the `transform` function knows what result to return. This way, the `double` and `triple` parameters act more like an interface to those functions.**
+
+Then we just print the variables.
+
+Of course, we can make it even more harder to undestand by using custom types. So, instead of having the `transform func(int) int` as a parameter, the `transformNumbers` function can get another type that we previously declared.
+
+```go
+type trasformFunc func(int) int
+...
+func transformNumbers(numbers *[]int, transform trasformFunc) []int {
+...
+}
+```
+
+This helps whtn the function that we want to declare there is a little bit more complicated, with a large number of parameters or more return types or items.
+
+But functions can also return other functions. This will be more clear when we will learn about anonymous functions.
+
+```go
+moreNumbers := []int{5, 6, 7, 8}
+transformerFn1 := getTransormerFunction(&numbers)
+transformerFn2 := getTransormerFunction(&moreNumbers)
+transformedNumbers := transformNumbers(&numbers,transformerFn1)
+moreTransformedNumbers := transformNumbers(&moreNumbers,transformerFn2)
+fmt.Println(transformedNumbers)
+fmt.Println(moreTransformedNumbers)
+...
+func getTransormerFunction(numbers *[]int) func(int) int {
+    if (*numbers)[0] == 1 {
+        return double
+    } else {
+        return triple
+    }
+}
+```
+
+The returned value of `getTransformerFunction` will be a function so the `transformerFn1` and `transformerFn2` will actually be functions.
+
+### Anonymous functions
+
+Anonymous functions are a type of functions that are define just in time before you need it and not in advance.
+
+In our previous example, we created `double` and `triple` functions in advance.
+
+Now let's take the following example (which is a shorted version of the previous example):
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    numbers := []int{1, 2, 3}
+
+    transformed := transformNumbers(&numbers, func(number int) int { return number * 2 })
+
+    fmt.Println(transformed)
+}
+
+func transformNumbers(numbers *[]int, transform func(int) int) []int {
+    dNumbers := []int{}
+
+    for _, val := range *numbers {
+        dNumbers = append(dNumbers, transform(val))
+    }
+
+    return dNumbers
+}
+```
+
+We can see, when we initiate the `transformed` variable that, for the second parameters of `transformNumbers` we actually created a function in place which returns a doubled number. This is an anonymous function because it has no name and is declared in place right where we need it.
+
+We cannot call it anywhere else in our code because it doesn't have a name. Of course, when we call `transformNumbers` the function properties that we configured as the second parameter must match the anonymous function (or vice-versa).
+
+Related to the concept of anonymous functions we have the concept of closures.
+
+We can create a function to create a transformer which returns an anonymous function that returns an integer.
+
+The anonymous function will be able to use a parameter of `createTransformer` function besides its own parameters.
+
+```go
+// A function with a parameter that returns a function
+func createTransformer(factor int) func(int) int {
+    // return an anonymous function
+    return func(number int) int {
+        // return a number that uses parameter from parent function
+        return number * factor
+    }
+}
+```
+
+How do we use this?
+
+```go
+numbers := []int{1, 2, 3}
+double := createTransformer(2)
+doubled := transformNumbers(&numbers, double)
+fmt.Println(doubled) //[2 4 6]
+
+triple := createTransformer(3)
+tripled := transformNumbers(&numbers, triple)
+fmt.Println(tripled) //[3 6 9]
+```
+
+### Recursion
+
+If a function calls itself we call that a recursion. An use case is a function that calculates the factorial of a number.
+
+A classic example for the calculation of factorial looks like this:
+
+```go
+func main() {
+    fact := factorial(5)
+    fmt.Println(fact)
+}
+
+func factorial(number int) int {
+    result := 1
+
+    for i := 1; i <= number; i++ {
+        result = result * i
+    }
+    return result
+}
+```
+
+But we can optimise this with recursion. Since GO allows a function to call itself, this will lead to an infinite loop. So when we use recursion, we need to configure an exit condition. We do that with an `if` statement:
+
+```go
+func factorial(number int) int {
+    if number == 0 {
+        return 1
+    } else {
+        return number * factorial(number-1)
+    }
+}
+```
+
+### Variadic Functions
+
+A variadic function is a function that allows any number of parameters.
+
+Let's look at a program that calculates the sum of the given parameters. Usually we would create a slice with the parameters and accept the slice as the parameter of the function. But there are cases where we doon't have a slice defined and we do not want/can to put the numbers in a slice.
+
+```go
+func main() {
+    sum := sumup(1, 2, 3)
+    fmt.Println(sum)
+}
+
+func sumup(numbers ...int) int {
+    sum := 0
+
+    for _, val := range numbers {
+        sum += val
+    }
+
+    return sum
+}
+```
+
+To declare a variadic function, for the parameter we use the name of the parameter then `...` followed by the type of the parameters, in our case `int`. So the function will create a slice for you based on the numbers of parameters as long as they are all integers.
+
+There is one more thing about variadic functions, we can also declare multiple parameters. This way we can handle either multiple types of data or group data.
+
+```go
+func main() {
+    sum := sumup(1, 2, 3)
+    fmt.Println(sum)
+}
+
+func sumup(startingValue int, numbers ...int) int {
+    sum := 0
+
+    for _, val := range numbers {
+        sum += val
+    }
+
+    return sum
+}
+```
+
+This will set `startingValue` as `1` and then it will set `numbers` as `[2 3]`. This means that the returned sum will be `5` because `1` is no longer part of the `numbers` slice.
+
+**The variadic parameter is a collect all parameter, so we cannot place it first in the list of parameters.**
 
 ## Sources
 
