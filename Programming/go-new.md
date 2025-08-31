@@ -554,6 +554,10 @@ func read_balance_file() float64 {
 - Then we need to convert the data to `string`
 - Then, with the helo ov `strconv` package, we convert the string to `float64` so we can return it.
 
+**When working with files do not forget to close them with the `file.Close()` function. it is a common practice to use `defer file.Close()` to let GO decide when is the proper time to close the file. Something similar with the `with open()` statement in Python but asynchronous.**
+
+The `defer file.Close()` function should be called only if we are sure that we did not get an error while opening the file.
+
 #### Handling errors
 
 We noticed in previous chapter, we can get an error if the file does not exist.
@@ -1635,6 +1639,157 @@ func main() {
 ```
 
 ## Concurrency
+
+### Goroutines
+
+As with other programming languages, code in GO, by default, is running on a single thread of execution. So all operations are done in order. If one of the operations takes longer, others will wait for it.
+
+A standard example is here:
+
+```go
+package main
+
+import (
+    "fmt"
+    "time"
+)
+
+func greet(phrase string) {
+    fmt.Println("Hello!", phrase)
+}
+
+func slowGreet(phrase string) {
+    fmt.Println("Hello!", phrase)
+    time.Sleep(3 * time.Second) // simulate a slow, long-taking task
+}
+
+func main() {
+    greet("Nice to meet you!")
+    greet("How are you?")
+    slowGreet("How ... are ... you ...?")
+    greet("I hope you're liking the course!")
+}
+```
+
+The `slowGreet` function will delay the `greet` function since it sleeps 3 seconds.
+
+To run the functions at the same time without waiting for another, we use goroutines. To use a goroutine just place `go` keyword before the function call.
+
+```go
+func main() {
+    go greet("Nice to meet you!")
+    go greet("How are you?")
+    go slowGreet("How ... are ... you ...?")
+    go greet("I hope you're liking the course!")
+}
+```
+
+If we run our code, it will exit almost instantly and no data is printed. That is happening because the function call gets dispatched and it goes on on its own. Like running a command in background.
+
+### Channels
+
+The solution to our problem is to use channels.
+
+A channel is a variable that is being used to work with goroutines.
+
+To configure a channel we need to initiate it, pass it to the function and the function will use a special keyword to transmit data through that channel.
+
+```go
+// We configure the channel as a parameter
+func slowGreet(phrase string, doneChan chan bool) {
+    fmt.Println("Hello!", phrase)
+    time.Sleep(3 * time.Second) // simulate a slow, long-taking task
+    doneChan <- true // We use the <- keyword to pass `true` to the channel
+}
+
+func main() {
+    // Initialise the channel. It expects a bool value for our case
+    done := make(chan bool)
+    go slowGreet("How ... are ... you ...?", done) // we pass it as a parameter
+    <-done // We wait for the data to come out of the channel
+}
+```
+
+The special keyword always shows the flow of data through the channel.
+
+To work with multiple channels and goroutines we could use the same channel for all functions (and goroutines).
+
+```go
+func main() {
+    done := make(chan bool)
+    go greet("Nice to meet you!", done)
+    go greet("How are you?", done)
+    go slowGreet("How ... are ... you ...?", done)
+    go greet("I hope you're liking the course!", done)
+    <-done
+}
+```
+
+The code above will create a race condition. Not all messages will be printed. To fix this, we can either use a channel for each function call, or we can listen for multiple channels. This is not scalable though. We could work with a slice of channels:
+
+```go
+func main() {
+    // Create a slice of channels. We know we have 4 goroutines so the size of the slice is 4
+    dones := make([]chan bool, 4)
+
+    // Create a channel for the first goroutine
+    dones[0] = make(chan bool)
+    go greet("Nice to meet you!", dones[0]) // pass it to the function
+    dones[1] = make(chan bool)
+    go greet("How are you?", dones[1])
+    dones[2] = make(chan bool)
+    go slowGreet("How ... are ... you ...?", dones[2])
+    dones[3] = make(chan bool)
+    go greet("I hope you're liking the course!", dones[3])
+
+    // Iterate over channels and listen to them
+    for _, channel := range dones {
+        <-channel
+    }
+}
+```
+
+This is also not very easy to maintain when code gets more complex. What we can do is use a single channel as with the first version and then, instead of using the same amount of `<-done` based on how many goroutines we have, GO allows us to iterate over `done`:
+
+```go
+func main() {
+    // Create a channel for the first goroutine
+    done := make(chan bool)
+    go greet("Nice to meet you!", done) // pass it to the function
+    go greet("How are you?", done)
+    go slowGreet("How ... are ... you ...?", done)
+    go greet("I hope you're liking the course!", done)
+
+    // Iterate over channels. If we do not need the value, we can skip it completely
+    for range done {
+    }
+}
+```
+
+The program above will exit with an error because GO doesn't know when the goroutines have finished and it won't wait for them.
+
+To address this issue, we can close the channel if we know which of the functions will be the last to send data through that channel. We can close that by typing into the `slowGreet` function `close(doneChannel)`.
+
+**This is good to use only when we know which goroutine is the last one to send data. For most cases the slice method is the best.**
+
+Goroutines do not handle errors and there is no error channel. But we can make one ourselves. We can create a new channel and when the function hits an error we can return an error as the data through that channel.
+
+The issue now is that GO cannot wait for error channels while listening for done channels. What we can do is to use two for loops, but if there is no error, GO will exit with an error because no data is being sent through the error channels.
+
+To handle this we will use the `select` statement. The statement must be placed inside a `for` loop that iterates over all channels.
+
+```go
+for index,_ range taxRates {
+    select {
+        case err := <-errorChans[index]:
+            if err != nil {
+                fmt.Println(err)
+            }
+        case <-doneChans[index]:
+            fmt.Println("Done!")
+    }
+}
+```
 
 ## Sources
 
