@@ -1,4 +1,4 @@
-# Certified Kubernetes Administrator
+# Kubernetes
 
 ## Core Concepts
 
