@@ -721,82 +721,82 @@ As an alternative, the `argparse` module provides a more sophisticated mechanism
 
 Classes are used to define your own data type, such as a student.
 
-Class functions can be used inside a class and can either modify the object or retrieve information about the object.
+We use other data types such as primitives and other complex data types (such as lists and dictionaries, etc.) to build our custom data type that we call a class.
+
+To define a class we do it the following way:
 
 ```python
-# File name is classes.py
-# Define the class
-class student:
-    # Define the initialisation function
-    def __init__(self,name,major,gpa,is_budgeted):
-        # Define attributes
-        # The name of the student object will be the name that we passed in and so on
-        self.name = name
-        self.major = major
-        self.gpa = gpa
-        self.is_budgeted = is_budgeted
-
-    # Define class function
-    def has_failed_exam(self):
-        if self.gpa < 5:
-            return True
-        else:
-            return False
-
-    # Define the class to change the student name
-    def change_name(self,new_name):
-        self.name = new_name
+# Classes usually start with an uppercase letter
+class Dog:
+    # attributes can be set with a variable or without
+    legs: int = 4
+    ears: int = 2
+    breed: str
+    age: int
+    color: str
 ```
 
-To initialise an object, a student, you have the following example.
+Now, from our main area of the code we can use the class like this:
 
 ```python
-# From classes.py file import student class
-from classes import student
+# Import all properties of Dog
+from Dog import *
 
-# Create object student1
-student1 = student("Jim","Chemistry",8.5, False)
+# create a dog
+my_dog = Dog()
 
-# Print data about the student
-print(student1.name)
-
-# Check if student has failed the exam
-print(student1.has_failed_exam())
-
-# Change the student name
-student1.change_name("Bob")
-print(student1.name)
+# Print the number of legs
+print(my_dog.legs)
 ```
 
-### Inheritance
+For OOP, there are four main pillars that we need to know to properly create objects and apply OOP conepts:
 
-A class can inherit the arrtributes of another class.
+- Encapsulation
+- Abstraction
+- Inheritance
+- Polymorphism
+
+To better understand these concepts, we will create a game that allows enemies to fight eachother.
+
+Directory structure:
+
+```text
+- Enemy.py
+- main.py
+```
+
+Inside the `Enemy.py` we define the class:
 
 ```python
-# Import the student class
-from classes import student
-
-# Create High School student which inherits the classes of the student
-class hs_student(student):
-    def has_legal_guardian(self,has_lg):
-        self.has_legal_guardian = has_lg
+class Enemy:
+    type: str
+    health_points: int = 10
+    attack_damage: int = 1
 ```
 
-Create an object from the new class.
+Inside the `main.py` we import the enemy and start work with it:
 
 ```python
-# From inherit_class.py file import hs_student class
-from inherit_class import hs_student
+# Import the class
+from Enemy import *
 
-# Create High School student
-student2 = hs_student("Mike","CS",6,True)
+if __name__ == "__main__":
+    # Create an Enemy
+    enemy = Enemy
+    # Set the name
+    enemy.name = "Roman Gladiator"
+    # Update the damage to match the name
+    enemy.attack_damage = 10
 
-# Define if it has a legal guardian
-student2.has_legal_guardian(True)
-
-# Check if it has a legal guardian
-print(student2.has_legal_guardian)
+    # Call the properties inside a print statement
+    print(f'{enemy.name} has {enemy.health_points} health points and can do an attack of damage {enemy.attack_damage}.')
 ```
+
+### Abstraction
+
+## Tips to make your life easier
+
+TODO: Add the code sample for `if __name__ == "__main__"`.
 
 ## Sources
 
