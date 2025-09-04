@@ -103,7 +103,7 @@ print("Hello World!")
 
 ## Strings
 
-Escape sequences: append the `\` before the character.  
+Escape sequences: append the `\` before the character.
 Example: `\n` stands for new line
 
 ```python
@@ -488,7 +488,7 @@ else:
 if is_blue and is_round:
     print("Blue and round")
 
-# The not() function negates the current state of the variable, making it true so the elif executes    
+# The not() function negates the current state of the variable, making it true so the elif executes
 elif is_blue and not(is_round):
     print("Blue and not round")
 else:
@@ -526,7 +526,7 @@ i = 1
 
 while i<=5:
     print("i = " + str(i))
-    
+
     # i = i+1
     i += 1
 ```
@@ -636,7 +636,7 @@ employee_file = open("read-from-file.txt","r")
 if employee_file.readable() == True:
     print("File is readable and it has the following content")
     print(employee_file.read())
-    
+
     # To read a specific line
     # the function readlines() reads the content of the files as a list so you can access a line with an index
     print(employee_file.readlines()[1])
@@ -670,7 +670,7 @@ import os
 if os.path.exists("demofile.txt"):
   os.remove("demofile.txt")
 else:
-  print("The file does not exist") 
+  print("The file does not exist")
 ```
 
 ### Skip closing files
@@ -751,8 +751,8 @@ print(my_dog.legs)
 
 For OOP, there are four main pillars that we need to know to properly create objects and apply OOP conepts:
 
-- Encapsulation
 - Abstraction
+- Encapsulation
 - Inheritance
 - Polymorphism
 
@@ -782,17 +782,181 @@ from Enemy import *
 
 if __name__ == "__main__":
     # Create an Enemy
-    enemy = Enemy
+    enemy = Enemy()
     # Set the name
-    enemy.name = "Roman Gladiator"
+    enemy.type = "Roman Gladiator"
     # Update the damage to match the name
     enemy.attack_damage = 10
 
     # Call the properties inside a print statement
-    print(f'{enemy.name} has {enemy.health_points} health points and can do an attack of damage {enemy.attack_damage}.')
+    print(f'{enemy.type} has {enemy.health_points} health points and can do an attack of damage {enemy.attack_damage}.')
 ```
 
 ### Abstraction
+
+Abstraction is like an interface that allows a user to pereform the actions that the object allows without understanding what is happening behind the scenes.
+
+So in our code, we can append a function inside our class definition that allows the enemy to talk:
+
+```python
+    ...
+    def talk(self):
+        print('I am an Enemy!')
+```
+
+Inside our main function, we call that function (also known as method) to make the enemy speak:
+
+```python
+from Enemy import *
+
+if __name__ == "__main__":
+    enemy = Enemy()
+    enemy.type = "Roman Gladiator"
+    enemy.attack_damage = 10
+    print(f'{enemy.type} has {enemy.health_points} health points and can do an attack of damage {enemy.attack_damage}.')
+
+    enemy.talk()
+```
+
+Now let's talk about constructors. They are functions that are used to create an initialise an object of a class with or without starting values.
+
+Until now, we created an enemy, then we had to manually set the type or change the attack damage. This doesn't scale too well.
+
+There are three types of constructors:
+
+- Default/Empty Constructors
+- No Argument Constructors
+- Parameter Constructors
+
+**Default/Empty Constructors**: Usually is initialised without any parameter (similar to what we did with out `enemy` variable)
+
+The proper code to define a default/empty constructor looks loke this:
+
+```python
+class Enemy:
+    type: str
+    health_points: int = 10
+    attack_damage: int = 1
+
+    def __init__(self):
+        pass
+    ...
+```
+
+The `__init__` function will tell the object what to do when it is created. We can skip this because it is automatically created if it is not defined. But it is a good practice to define it.
+
+You may notice that we keep see `self` keyword being called inside the class. Well, the `self` keyword is a mandatory parameter for functions inside the class (methods) that allows the function to reference the object itself. Like when you want to mention the `attack_damage` you want to tell python to use the variable of the class, meaning "this" `attack_damage`. The `self` parameter is passed automatically when we call the method, this is why we need to alway use it when we define the function.
+
+**No Argument Constructors**: Similar to Default ones but instead of `pass` the `__init__` function does something (e.g. prints some text):
+
+
+```python
+class Enemy:
+    type: str
+    health_points: int = 10
+    attack_damage: int = 1
+
+    def __init__(self):
+        print('New enemy created with no starting values')
+    ...
+```
+
+**Parameter Constructors**: The `__init__` function will accept parameters and set values based on those parameters:
+
+```python
+class Enemy:
+
+    def __init__(self, type, health_points=10, attack_damage=1):
+        self.type = type
+        self.health_points = health_points
+        self.attack_damage = attack_damage
+```
+
+Inside our main function we will initialise the enemy like this:
+
+```python
+from Enemy import *
+
+if __name__ == "__main__":
+    enemy = Enemy("Roman Gladiator", attack_damage=30, health_points=40)
+    print(f'{enemy.type} has {enemy.health_points} health points and can do an attack of damage {enemy.attack_damage}.')
+
+    enemy.talk()
+    enemy.walk_forward()
+    enemy.attack()
+```
+
+Now we set the values directly when we create an enemy. Of course, they can be changed onced initialised with `enemy.<property> = x`.
+
+### Encapsulation
+
+Encapsulation means bundling of data. By default, classes and their properties are public in Python. This means anyone can change the values and anyone can call any method. To make a method or variable private, we start the name of that variable with double underscore so our code will be:
+
+```python
+class Enemy:
+
+    def __init__(self, enemy_type, health_points=10, attack_damage=1):
+        self.__enemy_type = enemy_type # We made the type private
+        self.health_points = health_points
+        self.attack_damage = attack_damage
+```
+
+But how do we access the type of enemy now? Well, encapsulation helps us here. We can define two more functions to get and set the type of enemy (getters and setters). They have public variables that will set the private ones.
+
+```python
+class Enemy:
+
+    def __init__(self, enemy_type, health_points=10, attack_damage=1):
+        self.__enemy_type = enemy_type
+        self.health_points = health_points
+        self.attack_damage = attack_damage
+
+    def get_enemy_type(self):
+        return self.__enemy_type
+```
+
+Inside main it will be:
+
+```python
+from Enemy import *
+
+if __name__ == "__main__":
+    enemy = Enemy("Roman Gladiator", attack_damage=30, health_points=40)
+    enemy_type = enemy.get_enemy_type()
+    print(f'{enemy_type} has {enemy.health_points} health points and can do an attack of damage {enemy.attack_damage}.')
+
+    enemy.talk()
+    enemy.walk_forward()
+    enemy.attack()
+```
+
+**In a nutshell, encapsulation means that specific properties of an object must be accessed following specific protocols or methods.**
+
+### Inheritance
+
+Inheritance is the process of acquiring properties from one class to other classes. This creates a type of hierarcy between classes (something like parent and child).
+
+We currently have our class Enemy. But we can have two more classes that derive from Enemy. One is Attacker, and another Defender. Both of them will inherit the properties of Enemy but they might have extra properties such as `attack_weapon` or `defend_shield_strength`. This way, we do not need to create the properties of type, health points and damage points each time we create a new type of class. The same is available for methods.
+
+We can also override inherited methods or properties.
+
+Now, we talked before about `self` but how do we call a method or property of the parent class? Well, there is a keyword named `super`, it will allow us to reference the parent class methods.
+
+```python
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+class Student(Person):
+    def __init__(self,name,age,degree):
+        super().__init__(name=name, age=age)
+        self.degree = degree
+```
+
+### Polymorphism
+
+
 
 ## Tips to make your life easier
 
