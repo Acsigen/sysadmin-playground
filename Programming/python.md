@@ -956,7 +956,109 @@ class Student(Person):
 
 ### Polymorphism
 
+Polymorphism means to have many forms.
 
+We have a class Animal which can take many forms such as Dog, Bird, Lion (all of them are classes of type Animal).
+
+```python
+class Animal():
+    def talk(self):
+        print("No sound.")
+
+class Dog(Animal):
+    def talk(self):
+        print("Bark!")
+
+class Bird(Animal):
+    def talk(self):
+        print("Chirp!")
+
+class Lion(Animal):
+    def talk(self):
+        print("Roar!")
+```
+
+Now, let's say we have alist that accepts only animals:
+
+```python
+animals: Animal = []
+
+dog = Dog()
+bird = Bird()
+lion = Lion()
+
+animals.append(dog)
+animals.append(bird)
+animals.append(lion)
+```
+
+Now if we iterate over the list, and call the `talk` method, we will get the sound for each animal.
+
+```python
+for animal in animals:
+    animal.talk()
+```
+
+In our game, we have a battle function that calls `talk` and `attack` methods of enemy class. Then we call the function with a specific enemy.
+
+
+```python
+def battle(Enemy e):
+    e.talk()
+    e.attack()
+
+zombie = Zombie(10,1)
+roman_gladiator = RomanGladiator(10,20)
+
+battle(zombie)
+battle(roman_gladiator)
+```
+
+This is an example of polymorphism.
+
+### Composition
+
+Composition is a way of creating an object composed of one or more objects.
+
+In composition, a class contains other classes as instance variables.
+
+This is known as HAS-A relationship.
+
+An example is a Vehicle class that can have children Car and Truck classes. But the Vehicle class is also composed of an Engine class which can be a variable of the Vehicle class. The engine can start and stop as mathods so when we want to start the car or the truck we would call `car.engine.start_engine()`.
+
+The engine class would look like this:
+
+```python
+class Engine():
+    def __init__(self, engine_type):
+        self.engine_type = engine_type
+
+    def start_engine(self):
+        print("Engine is running.")
+
+    def stop_engine(self):
+        print("Engine has stopped.")
+```
+
+The vehicle class looks like this:
+
+```python
+class Vehicle():
+    def __init__(self, type, for_sale, engine):
+        self.type = type
+        self.for_sale = for_sale
+        self.engine = engine
+```
+
+So our main code would look like this:
+
+```python
+engine = Engine("v6")
+vehicle = Vehicle("Car",True,engine)
+vehicle.engine.start() # This would call the start_engine method of Engine class
+```
+
+Here we have an exampele of HAS-A relationship because Vehicle must have an Engine but the Engine doesn't need to have a Vehicle. This is different from IS-A relationship.
 
 ## Tips to make your life easier
 
