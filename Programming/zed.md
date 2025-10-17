@@ -53,7 +53,12 @@ Currently I do not need any extensions. Everything seems in place for my workflo
     "editor.foreground": "#F2F2F2",
     "editor.line_number": "#777",
     "editor.active_line.background": "#2F2F2F",
-    "editor.gutter.background": "#2F2F2F"
+    "editor.gutter.background": "#2F2F2F",
+    "syntax": {
+      "comment": {
+        "color": "#AAA"
+      }
+    }
   }
 }
 ```
