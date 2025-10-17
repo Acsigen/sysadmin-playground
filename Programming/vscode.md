@@ -25,6 +25,7 @@ This guide is for basic shortcuts and commands related to Visual Studio Code.
 - Find in file: **CTRL + F**
 - Replace in file: **CTRL + H**
 - Autoformat the entire file: **SHIFT + ALT + F**
+- Find a file in the project: **CTRL + P**
 
 ## Settings
 
