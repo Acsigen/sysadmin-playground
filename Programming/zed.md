@@ -20,17 +20,6 @@ Currently I do not need any extensions. Everything seems in place for my workflo
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-  "ssh_connections": [
-    {
-      "host": "acsigen.go.ro",
-      "args": [],
-      "projects": [
-        {
-          "paths": ["/opt/docker-containers/nie-uptime"]
-        }
-      ]
-    }
-  ],
   "telemetry": {
     "diagnostics": false,
     "metrics": false
@@ -53,7 +42,7 @@ Currently I do not need any extensions. Everything seems in place for my workflo
     "editor.foreground": "#F2F2F2",
     "editor.line_number": "#777",
     "editor.active_line.background": "#2F2F2F",
-    "editor.gutter.background": "#2F2F2F",
+    "editor.gutter.background": "#222222",
     "syntax": {
       "comment": {
         "color": "#AAA"
