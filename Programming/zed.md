@@ -20,7 +20,13 @@ Currently I do not need any extensions. Everything seems in place for my workflo
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-
+  "languages": {
+    "Python": {
+      "inlay_hints": {
+        "enabled": true
+      }
+    }
+  },
   "telemetry": {
     "diagnostics": false,
     "metrics": false
@@ -39,14 +45,14 @@ Currently I do not need any extensions. Everything seems in place for my workflo
   "buffer_font_family": "Roboto Mono",
   "buffer_font_fallbacks": [".ZedMono", "Andale Mono"],
   "experimental.theme_overrides": {
-    "editor.foreground": "#F2F2F2",
-    "editor.background": "#222222",
-    "editor.gutter.background": "#222222",
-    "terminal.foreground": "#F2F2F2",
-    "terminal.background": "#222222",
+    // "editor.foreground": "#F2F2F2",
+    // "editor.background": "#222222",
+    // "editor.gutter.background": "#222222",
+    // "terminal.foreground": "#F2F2F2",
+    // "terminal.background": "#222222",
     "syntax": {
       "comment": {
-        "color": "#AAAAAA"
+        "color": "#11881188"
       }
     }
   }
