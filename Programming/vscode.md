@@ -31,21 +31,27 @@ This guide is for basic shortcuts and commands related to Visual Studio Code.
 
 ```json
 {
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.fontFamily": "'Roboto Mono','Cascadia Code',Consolas, 'Courier New', monospace",
-  "editor.fontSize": 16,
-  "editor.accessibilitySupport": "off",
-  "editor.autoClosingBrackets": "beforeWhitespace",
-  "editor.autoClosingQuotes": "beforeWhitespace",
-  "editor.copyWithSyntaxHighlighting": false,
-  "editor.dragAndDrop": false,
-  "update.enableWindowsBackgroundUpdates": false,
-  "telemetry.telemetryLevel": "error",
-  "editor.acceptSuggestionOnEnter": "off"
-  "editor.detectIndentation": false,
-  "workbench.colorCustomizations": {
-      "editor.background": "#222222",
-      "editor.foreground": "#F2F2F2"
+    "chat.agent.enabled": false,
+    "chat.commandCenter.enabled": false,
+    "chat.disableAIFeatures": true,
+    "editor.acceptSuggestionOnEnter": "off",
+    "editor.accessibilitySupport": "off",
+    "editor.autoClosingBrackets": "languageDefined",
+    "editor.autoClosingQuotes": "languageDefined",
+    "editor.copyWithSyntaxHighlighting": false,
+    "editor.dragAndDrop": false,
+    "editor.fontFamily": "'Roboto Mono','Cascadia Code',Consolas, 'Courier New', monospace",
+    "editor.fontSize": 16,
+    "terminal.integrated.fontSize": 16,
+    "editor.wordWrap": "on",
+    "inlineChat.accessibleDiffView": "off",
+    "remote.SSH.experimental.chat": false,
+    "telemetry.telemetryLevel": "error",
+    "terminal.integrated.initialHint": false,
+    "window.zoomLevel": 1,
+    "workbench.colorCustomizations": {
+        "editor.background": "#222222",
+        "editor.foreground": "#F2F2F2"
     }
 }
 ```
