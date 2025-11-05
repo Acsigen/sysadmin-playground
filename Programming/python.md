@@ -1062,7 +1062,25 @@ Here we have an exampele of HAS-A relationship because Vehicle must have an Engi
 
 ## Tips to make your life easier
 
-TODO: Add the code sample for `if __name__ == "__main__"`.
+### Main function
+
+Python runs the code in a top-down method. This means there is no need to actually use a `main()` function. But to better identify your modules from the main area of the code, there is a trick:
+
+```python
+if __name__ == "__main__":
+    print("This will run only if the file is being executed directly from python and not by another file though import")
+```
+
+### Python code distribution
+
+Python code is best suited for Open Source projects since the distribution fo source code is clear. But what do you do when the project is not Open Source? How do you ship your program to your client without handig them the source code?
+
+There are multiple methods. The most straightforward looks like this:
+
+- Before running the code, the python interpreter compiles it to bytecode and creates the same files but with the `.pyc` file extension. Those files can be used with `python3 ./main.pyc` command, just like you would with a regular `.py` file.
+- We can compile the code without actually running it with `python3 -m compileall -b -l .` then distribute our code. Note that if we have multiple directories we must specify the recursion level with `-r` so it can compike files in other directories. Also, the `.pyc` files must be in the same directory structure relative to the `main.pyc` file in order for the program to work.
+
+**Note that even though we said that we compile the code, we are not compiling it like we do it in Go, C/C++ or other compiled programming languages, we just do what Python interpreter does right before running our code. This doesn't really hide our code completely but it's one of the methods.**
 
 ## Sources
 
