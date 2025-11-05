@@ -1082,6 +1082,8 @@ There are multiple methods. The most straightforward looks like this:
 
 **Note that even though we said that we compile the code, we are not compiling it like we do it in Go, C/C++ or other compiled programming languages, we just do what Python interpreter does right before running our code. This doesn't really hide our code completely but it's one of the methods.**
 
+Another popular method is using [PyInstaller](https://pyinstaller.org/en/stable/) package.
+
 ## Sources
 
 - [RoadMap.sh](https://roadmap.sh/python)
