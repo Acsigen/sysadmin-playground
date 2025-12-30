@@ -16,6 +16,8 @@ We can edit partitions using `fdisk`. An alternative is `cfdisk` it's more begin
 
 To edit a device run `fdisk /dev/sdb`, press `m` for help menu and GOOD LUCK! You're gonna need it.
 
+**After altering the partitions with `cfdisk`, run either `resize2fs /dev/sdax` or `growpart /dev/sdax 1` so the filesystem matches the partition size. If you do not do this, the `lsblk` command will show the increased size and `df -h` will show the old, smaller, size.**
+
 ## Create a new filesystem
 
 To create a new filesystem you canm use `mkfs`.
