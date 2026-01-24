@@ -65,3 +65,5 @@
   * [Delete extra large files](Procedures/delete-extra-large-files.md) 
   * [Devices and filesystems](Procedures/devices-and-filesystems.md)
   * [Extend storage space](Procedures/extend-storage.md)
+  * [Reduce microSD wear on RaspberryPi 4B and later](Procedures/reduce-sd-wear.md)
+    * [Script location](Procedures/reduce-sd-wear.sh)
