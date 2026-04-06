@@ -126,7 +126,7 @@ VIM supports plugins. There are a lot of plugins available on [VIM Awesome](http
 
 But sometimes you do not need a plugin to obtain almost the same functionality. As an example, here is how you get a file picker natively in `vim`.
 
-There is a command in `vim` named `:Lex` which opens a file picker on the left side of the screen. But the screen is too large and when you open a file, the side bar closes. We can configure `vim` via `~/.vimrc" with the following options:
+There is a command in `vim` named `:Lex` which opens a file picker on the left side of the screen. But the screen is too large and when you open a file, the side bar closes. We can configure `vim` via `~/.vimrc` with the following options:
 
 ```vimrc
 inoremap <c-b> <Esc>:Lex<cr>:vertical resize 30<cr>
