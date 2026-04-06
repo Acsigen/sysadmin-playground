@@ -120,3 +120,41 @@ Replacing text works like `sed`:
 * ```:qall!``` - quit out of vim without saving neither of the opened files
 * ```ZZ``` - equivalent of :wq, but one character faster
 
+## Customisations
+
+VIM supports plugins. There are a lot of plugins available on [VIM Awesome](https://vimawesome.com/).
+
+But sometimes you do not need a plugin to obtain almost the same functionality. As an example, here is how you get a file picker natively in `vim`.
+
+There is a command in `vim` named `:Lex` which opens a file picker on the left side of the screen. But the screen is too large and when you open a file, the side bar closes. We can configure `vim` via `~/.vimrc" with the following options:
+
+```vimrc
+inoremap <c-b> <Esc>:Lex<cr>:vertical resize 30<cr>
+nnoremap <c-b> <Esc>:Lex<cr>:vertical resize 30<cr>
+```
+
+This allows mapping of CTRL + b (Control + b on a Mac) to show and hide the side bar and resizes it to 30 (Idk the measurement unit).
+
+Also, this is the rest of my `.vimrc` file
+
+```vimrc
+" Enable syntax highlighting
+syntax on
+
+" Show line numbers
+set number
+
+" Convert tabs to spaces
+set expandtab
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+
+
+" Highlight searches as you type
+set incsearch
+set hlsearch
+
+" Auto-indent new lines based on previous line
+set autoindent
+```
