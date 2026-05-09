@@ -19,14 +19,34 @@ In Proxmox node click on Create VM and configure the following settings:
   <img width="724" height="542" alt="image" src="https://github.com/user-attachments/assets/3905ea90-df03-4b36-9193-7edb12bd7263" />
 - Network: No changes needed
 - Click **Finish** after you make sure that **Start after creation** is unchecked.
+- Go to the **Hardware section of the new VM and remove the CD/DVD Drive
+  <img width="839" height="397" alt="image" src="https://github.com/user-attachments/assets/4f8860a1-aa71-4d06-a755-685169d15be8" />
+- Add a **CloudInit Drive**:
+  <img width="299" height="182" alt="image" src="https://github.com/user-attachments/assets/4d74c627-3f0c-4140-81aa-df4d4b63e15d" />
 
 
 ## Grab the image
 
 First, we need to grab the cloud image from Ubuntu. For 26.04 LTS is this URL: <https://cloud-images.ubuntu.com/resolute/current/>. On that page look for the qcow2 format (usually `.img`) and copy the link.
 
-Log into the Proxmox node and run `wget https://cloud-images.ubuntu.com/resolute/current/resolute-server-cloudimg-amd64.img`. This will download the image into the Proxmox node.
+Log into the Proxmox node and run:
+
+```bash
+wget https://cloud-images.ubuntu.com/resolute/current/resolute-server-cloudimg-amd64.img
+```
+
+This will download the image into the Proxmox node.
 
 ## Prepare the image
 
-The `.img` extension is not actually qcow2 format so we need to rename the file so it has the proper extension: `mv resolute-server-cloudimg-amd64.img resolute-server-cloudimg-amd64.qcow2`.
+The `.img` extension is not actually qcow2 format so we need to rename the file so it has the proper extension.
+
+```bash
+mv resolute-server-cloudimg-amd64.img resolute-server-cloudimg-amd64.qcow2
+```
+
+Since the minimum storage recommended by Ubuntu for cloud images is 4Gib, we go a little bit over that when we configure the disk size.
+
+```bash
+qemu img resize resolute-server-cloudimg-amd64.img 5G
+```
