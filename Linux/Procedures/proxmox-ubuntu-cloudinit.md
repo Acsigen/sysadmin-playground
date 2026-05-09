@@ -48,5 +48,43 @@ mv resolute-server-cloudimg-amd64.img resolute-server-cloudimg-amd64.qcow2
 Since the minimum storage recommended by Ubuntu for cloud images is 4Gib, we go a little bit over that when we configure the disk size.
 
 ```bash
-qemu img resize resolute-server-cloudimg-amd64.img 5G
+qemu-img resize resolute-server-cloudimg-amd64.img 5G
 ```
+
+## Import the disk
+
+Now we need to import the disk into the VM. Since `local-lvm` holds the VM disks, we will import the image on that storage sintead of `local` where Proxmox usually holds ISO images.
+
+```bash
+qm importdisk 9001 resolute-server-cloudimg-amd64.qcow2 local-lvm
+```
+
+Let's go back to the Proxmox web interface and go back to the VM. Select Hardware and add a Serial Port. There we should also see an unused disk.
+
+<img width="840" height="378" alt="image" src="https://github.com/user-attachments/assets/7f946335-ba9a-44fb-af84-8e5286e0a71a" />
+
+Click on it, then click Edit and apply the following settings.
+
+<img width="600" height="319" alt="image" src="https://github.com/user-attachments/assets/ab20775e-2ed8-4249-8d2a-6a96dd0d2a57" />
+
+**Activate `SSD emulation` and `Discard` only if your physical disk is an SSD.**
+
+## Make the disk bootable
+
+Now go to **Options** and edit the **Boot Order** to boot from the proper disk
+
+<img width="631" height="261" alt="image" src="https://github.com/user-attachments/assets/10a6b9d4-1b2d-4cca-9155-fcd6d9773b20" />
+
+## Configure CloudInit
+
+Now go to **CloudInit** and configure the parameters according to your needs
+
+<img width="490" height="386" alt="image" src="https://github.com/user-attachments/assets/fdf9bc73-a950-4c01-8abe-e500e4d46cc9" />
+
+## Create a VM template
+
+Once all above steps are done, right click on the VM and click **Convert to template**.
+
+## Create a new VM from the template
+
+Right click on the template and click **Clone**. Configure the parameters and create the VM. Once that is done, if you need to change RAM, CPU and disk, do it from the hardware menu.
