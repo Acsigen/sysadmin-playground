@@ -10,10 +10,15 @@ When you open a repository, you will find `README.md`. That file will be display
 
 The file extension for markdown is `.md`.
 
-```txt
+**To properly view the code click on the `raw` button on the top right corner of this GitHub page.**
+
+---
+
 # Title
 
 ## Heading 1
+
+Headings start with `#` character and you add more `#` for each subheading level.
 
 This is a paragraph. If you want to write another paragraph, leave an empty line between them.  
 If you want to write on a new line but on the same paragraph, use double space at the end of the previous line, like with this one.
@@ -22,17 +27,15 @@ This is a second paragraph.
 
 ### Heading 2
 
-To make text bold **use ** characters before and after the text you want to make bold.**
+To make text bold **use `**` characters before and after the text you want to make bold.**
 
-*For italic use a single * character.*
+*For italic use a single `*` character.*
 
-You can also ~~strikethrough~~ with ~~.
-
-Code snippets can be `inline` or a block by using triple ` with the name of the code language such as bash and end it with another triple ` after the last line of code.
+You can also ~~strikethrough~~ with `~~` before and after the text.
 
 #### Heading 3
 
-TRy not to use more than four, it doesn't make sense.
+Try not to use more than four headings, it doesn't make sense visually.
 
 ## Lists
 
@@ -46,13 +49,14 @@ For unordered list you can use `-` or `*` charater:
     - You can do it again also
 - And continue here
 
-For ordered lists, you must do the numbering manually, proceed as before:
+For ordered lists, you must do the numbering manually, proceed as before but this time with 4 spaces instead of two:
 
 1. First Item
 2. Second Item
-  2.1 Indent one step
-    2.1.1 Indent second step
-3. Back again
+    1. Indent one step
+        1. Indent second step
+    2. Back to one step
+3. Back to root again
 
 Checklist:
 
@@ -85,6 +89,23 @@ Tables are a little bit more complicated at first:
 |Use separators|For each column|
 |The three dashes|Separates headers from the rest of the table|
 
+## Code samples
+
+You can write code chunks in markdown and, if the renderer is able, can make it look like it comes from the IDE (syntax coloring)
+
+A single line of code (inline) looks like this: `echo "Hello, World!"`. It is the text wrapped by the tick character **`**.
+
+A block is wrapped with **```** and optionally followed by the programming language at the top.
+
+```python
+my_list = ["a","b","c"]
+
+for item in my_list:
+    print(item)
+```
+
+Recently, at least GitHub, started rendering mermaid diagrams if you place the diagram in a code block and mark it as mermaid.
+
 ## Other elements
 
 Arrows:
@@ -93,6 +114,7 @@ Arrows:
 - &larr; for left arrow
 - &uarr; for up arrow
 - &darr; for down arrow
-```
+
+---
 
 **Always leave an empty line at the end of the file.**
