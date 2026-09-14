@@ -29,6 +29,8 @@ Check swap info.
 swapon --show
 ```
 
+**2026 update:** I recently found out that `mkswap` can initialise the swap file in a single command with `mkswap --size 1G --file /swapfile`, skipping the `fallocate` command.
+
 ## Make the swap file persistent
 
 Backup ```/etc/fstab``` in case anythig goes wrong
@@ -41,6 +43,12 @@ Add swap file information at the end of ```/etc/fstab```
 
 ```bash
 echo "/swapfile none swap sw 0 0" | sudo tee -a /etc/fstab
+```
+
+or
+
+```bash
+echo "/swapfile none swap defaults 0 0" | sudo tee -a /etc/fstab
 ```
 
 ## Create a temporary partition in RAM
